@@ -1,0 +1,44 @@
+.my-nav, .intro-header {
+    background-color: rgb(0, 153, 76);
+}
+
+.fragment-title {
+    text-align: center;
+}
+
+.btn-rules-action, .btn-activate {
+    border-radius: 10%;
+    padding: 5%;
+}
+
+.rule-fragment{
+    height: 140px;
+    line-height:140px;
+}
+
+.rule-item {
+    box-shadow: 5px 5px 5px 5px #888;
+    margin-bottom: 15px;    
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.rule-info {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.5ex;
+}
+
+.rule-info p {
+    margin-bottom: -2ex;
+    line-height: 100%;
+}
+
+.img-channel {
+    margin: auto;
+}
+
+.img-arrow {
+    display: inline-block;
+    vertical-align: middle;
+}
