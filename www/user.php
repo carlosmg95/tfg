@@ -77,7 +77,7 @@
                                         <label>Username:</label>
                                         <input type="text" class="form-control" placeholder="Username" id="username" required data-validation-required-message="Please enter your username." name="username">
                                     </div>
-                                </div> <!-- field -->
+                                </div>  <!-- field -->
 
                                 <!-- Password -->
                                 <div class="row control-group">
@@ -85,7 +85,7 @@
                                         <label>Password:</label>
                                         <input type="password" class="form-control" placeholder="Password" id="password1" required data-validation-required-message="Please enter your password." name="password">
                                     </div>
-                                </div> <!-- field -->
+                                </div>  <!-- field -->
 
                                 <br>
 
@@ -94,11 +94,11 @@
                                     <div class="form-group col-xs-12">
                                         <button type="submit" class="btn btn-primary" onclick="encode()">Login</button>
                                     </div>
-                                </div> <!-- Button -->
+                                </div>  <!-- Button -->
                             </form>
                         </div>
                     </div>
-                </div> <!-- Login -->
+                </div>  <!-- Login -->
 
                 <!-- Sign Up -->
                 <div class="col-md-6">
@@ -114,7 +114,7 @@
                                         <label>Username:</label>
                                         <input type="text" class="form-control" placeholder="Username" id="username" required data-validation-required-message="Please enter your username." name="username">
                                     </div>
-                                </div> <!-- field -->
+                                </div>  <!-- field -->
 
                                 <!-- Password -->
                                 <div class="row control-group">
@@ -122,7 +122,7 @@
                                         <label>Password:</label>
                                         <input type="password" class="form-control" placeholder="Password" id="password2" required data-validation-required-message="Please enter your password." name="password">
                                     </div>
-                                </div> <!-- field -->
+                                </div>  <!-- field -->
 
                                 <!-- Repeat Password -->
                                 <div class="row control-group">
@@ -130,7 +130,7 @@
                                         <label>Repeat password:</label>
                                         <input type="password" class="form-control" placeholder="Repeat Password" id="repeated_password2" required data-validation-required-message="Please enter again your password." name="repeated_password">
                                     </div>
-                                </div> <!-- field -->
+                                </div>  <!-- field -->
 
                                 <br>
 
@@ -143,7 +143,7 @@
                             </form>
                         </div>
                     </div>
-                </div> <!-- Sign Up -->
+                </div>  <!-- Sign Up -->
             </div>
         </div>  <!-- No session -->
     <?php } else { ?>
@@ -197,9 +197,9 @@
             
             <div class="row">
                 <div class="col-md-1 col-xs-1 col-xs-offset-9 col-md-offset-10">
-                    <form action="./controllers/logout.php">
-                        <button type="submit" class="btn btn-danger btn-logout">Logout</button>
-                    </form>
+                    <button type="button" class="btn btn-danger btn-logout" onclick="location.href='./controllers/logout.php'">
+                        Logout
+                    </button>
                 </div>
             </div>
         </div>  <!-- Session -->

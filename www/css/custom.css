@@ -11,12 +11,18 @@
     padding: 5%;
 }
 
-.rule-fragment{
+.btn-create-channel {
+    border-radius: 24px;
+    margin-bottom: 5%;
+    padding: 5%;
+}
+
+.rule-fragment, .channel-fragment{
     height: 140px;
     line-height:140px;
 }
 
-.rule-item {
+.rule-item, .channel-item {
     box-shadow: 5px 5px 5px 5px #888;
     margin-bottom: 15px;    
     padding-bottom: 15px;
