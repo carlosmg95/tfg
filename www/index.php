@@ -43,8 +43,8 @@
                     <li>
                         <a href="./user.php"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
                     </li>
-                    <li><a href="">Channels</a></li>
-                    <li><a href="">Rules</a></li>
+                    <li><a href="./channels.php">Channels</a></li>
+                    <li><a href="./rules.php">Rules</a></li>
                     <li><a href="">FAQ</a></li>
                 </ul>
             </div>

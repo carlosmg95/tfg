@@ -41,10 +41,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
+                        <a href="./user.php"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
                     </li>
-                    <li><a href="">Channels</a></li>
-                    <li><a href="">Rules</a></li>
+                    <li><a href="./channels.php">Channels</a></li>
+                    <li><a href="./rules.php">Rules</a></li>
                     <li><a href="">FAQ</a></li>
                 </ul>
             </div>
@@ -57,15 +57,20 @@
 
     <!-- Main Content -->
     <?php if(!isset($_SESSION['user'])) { ?>
+
         <!-- No session -->
         <div class="container">
             <div class="row">
                 <!-- Login -->
                 <div class="col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Sign In</div>
+                    <div class="panel <?php if($_REQUEST['error'] === 'userIncorrect') { ?>panel-danger<?php } else { ?>panel-primary<?php } ?>">
+                        <div class="panel-heading">
+                            Sign In<?php if($_REQUEST && $_REQUEST['error'] === 'userIncorrect') { ?>
+                                - Wrong username or password
+                            <?php } ?>
+                        </div>
                         <div class="panel-body">
-                            <form action="./controllers/signin.php" method="post">
+                            <form action="./controllers/signinController.php" method="post">
                                 <!-- Username -->
                                 <div class="row control-group">
                                     <div class="form-group col-xs-12 floating-label-form-group controls">
@@ -97,8 +102,10 @@
 
                 <!-- Sign Up -->
                 <div class="col-md-6">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">Sign Up</div>
+                    <div class="panel <?php if($_REQUEST['error'] === 'userExists') { ?>panel-danger<?php } else { ?>panel-success<?php } ?>">
+                        <div class="panel-heading">
+                            Sign Up<?php if($_REQUEST && $_REQUEST['error'] === 'userExists') { ?> - Username in use<?php } ?>
+                        </div>
                         <div class="panel-body">
                             <form action="./controllers/signupController.php" method="post">
                                 <!-- Username -->
@@ -138,11 +145,64 @@
                     </div>
                 </div> <!-- Sign Up -->
             </div>
-        </div>
+        </div>  <!-- No session -->
     <?php } else { ?>
-        <form action="./controllers/logout.php">
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
+        <!-- logged user -->
+        <div class="container">
+            <div class="row">
+                <h1>My rules:</h1>
+            </div>
+            
+            <!-- Header -->
+            <div class="row">
+                <div class="col-md-2 col-md-offset-2">
+                    <p class="fragment-title">If</p>
+                </div>
+
+                <div class="col-md-2 col-md-offset-1">
+                    <p class="fragment-title">Then</p>
+                </div>
+            </div>
+
+            <!-- Rule Item -->
+            <div class="row rule-item">
+                <div class="col-md-1 col-md-offset-1 rule-fragment">
+                    <button type="button" class="btn btn-primary btn-activate">Active</button>
+                </div>
+                
+                <div class="col-md-2 rule-fragment">
+                    <img class="img img-circle img-responsive img-channel" src="img/presence.png" />
+                </div>
+
+                <div class="col-md-1 rule-fragment">
+                    <img class="img img-circle img-responsive img-arrow" src="img/arrow.png" />
+                </div>
+
+                <div class="col-md-2 rule-fragment">
+                    <img class="img img-circle img-responsive img-channel" src="img/door.png" />
+                </div>
+
+                <div class="col-md-3 rule-fragment rule-info">
+                    <p>If I'm near the door then open it.</p>
+                    <p>Sergio</p>
+                    <p>GSI Lab</p>
+                    <p>11:23 12/12/2016</p>
+                </div>
+
+                <div class="col-md-2 rule-fragment">
+                    <button type="button" class="btn btn-info btn-rules-action">Edit</button>
+                    <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
+                </div>
+            </div>  <!-- row -->
+            
+            <div class="row">
+                <div class="col-md-1 col-xs-1 col-xs-offset-9 col-md-offset-10">
+                    <form action="./controllers/logout.php">
+                        <button type="submit" class="btn btn-danger btn-logout">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>  <!-- Session -->
     <?php } ?>
     
     <hr>
@@ -168,16 +228,20 @@
     <script src="js/sha1.js"></script>
     <script>
         function encode(){
-            var input_pass = $("#password1");
-            input_pass.val(sha1(input_pass.val()));
+            let input_pass = $("#password1");
+            if(input_pass.val().length !== 0) {
+                input_pass.val(sha1(input_pass.val()));
+            }
         }
 
         function confirmPassword() {
-            var input_pass = $('#password2');
-            var input_pass_repeated = $('#repeated_password2');
+            let input_pass = $('#password2');
+            let input_pass_repeated = $('#repeated_password2');
 
-            input_pass.val(sha1(input_pass.val()));
-            input_pass_repeated.val(sha1(input_pass_repeated.val()));
+            if(input_pass.val().length !== 0 && input_pass_repeated.val().length !== 0) {
+                input_pass.val(sha1(input_pass.val()));
+                input_pass_repeated.val(sha1(input_pass_repeated.val()));
+            }
             
             if (input_pass.val() === input_pass_repeated.val()) {
                 return true;

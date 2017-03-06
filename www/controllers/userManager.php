@@ -8,7 +8,7 @@ require_once('./DBHelper.php');
 */
 class UserManager
 {
-    private $db;
+    private $manager;
 
     function __construct($config)
     {
@@ -17,19 +17,33 @@ class UserManager
 
     function connect($config)
     {
-        $this->db = new DBHelper($config);
+        $this->manager = new DBHelper($config);
     }
 
     function createNewUser($username, $password)
     {
         $user = array('username' => $username, 'password' => $password);
 
-        if(/*$this->userExists()*/false) {
+        if($this->userExists($username)) {
             return false;
         } else {
-            $table = $this->db->insert('users', $user);
+            $table = $this->manager->insert('users', $user);
             return true;
         }
+    }
+
+    function login($username, $password)
+    {
+        $filter = ['username' => $username, 'password' => $password];
+        $cursor = $this->manager->find('users', $filter);
+        return !empty($cursor);
+    }
+
+    private function userExists($username)
+    {
+        $filter = ['username' => $username];
+        $cursor = $this->manager->find('users', $filter);
+        return !empty($cursor);
     }
 }
 
