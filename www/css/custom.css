@@ -11,7 +11,7 @@
     padding: 5%;
 }
 
-.btn-create-channel {
+.btn-create-channel, .btn-add {
     border-radius: 24px;
     margin-bottom: 5%;
     padding: 5%;
@@ -47,4 +47,18 @@
 .img-arrow {
     display: inline-block;
     vertical-align: middle;
+}
+
+.action-item, .event-item {
+    margin-bottom: 15px;
+    padding-bottom: 7px;
+}
+
+.action-item:hover, .event-item:hover {
+    box-shadow: 0 0 5px 5px #888;
+    margin-bottom: 15px;
+}
+
+.action-fragment, .event-fragment {
+    margin-bottom: 2px;
 }
