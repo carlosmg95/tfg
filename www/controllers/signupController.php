@@ -8,7 +8,7 @@ $manager = new UserManager($config);
 $username = htmlspecialchars($_POST["username"]);
 $password = $_POST["password"];
 
-if($manager->createNewUser($username, $password)) {
+if(!empty($username) && !is_null($password) && $manager->createNewUser($username, $password)) {
     $_SESSION["user"] = $username;
     header("Location: ../user.php");
 } else {
