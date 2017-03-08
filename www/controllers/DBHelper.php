@@ -40,18 +40,12 @@ class DBHelper
 
     function getByTitle($collection, $title)
     {
-        $result = array();
+        
+        $options = ['projection' => [$title => 1]]; 
 
-        $cursor = $this->find($collection);
-        foreach($cursor as $document) {
-            foreach ($document as $key => $value) {
-                if($key === $title) {
-                    array_push($result, $value);
-                }
-            }
-        }
+        $cursor = $this->find($collection, [], $options);
 
-        return $result;
+        return $cursor;
     }
 
     function insert($collection, $article)
