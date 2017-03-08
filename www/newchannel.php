@@ -26,6 +26,18 @@
 </head>
 
 <body>
+    <?php if(!isset($_SESSION['user'])) { ?>
+        <script type="text/javascript">
+            const alert = confirm('You have to be logged to access this page.')
+            console.log(alert);
+            if(alert) {
+                window.open("./user.php", '_self');
+            } else {
+                window.open("./index.php", '_self');
+            }
+        </script>
+    <?php } ?>
+    
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top my-nav">
         <div class="container-fluid">
