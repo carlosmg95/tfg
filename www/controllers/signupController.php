@@ -1,8 +1,8 @@
 <?php
 
 session_start();
-require_once('./userManager.php');
-$config = "ol";
+require_once('userManager.php');
+$config = [];
 $manager = new UserManager($config);
 
 $username = htmlspecialchars($_POST["username"]);

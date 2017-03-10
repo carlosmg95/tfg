@@ -1,6 +1,6 @@
 <?php
 
-require_once('./DBHelper.php');
+require_once('DBHelper.php');
 //require_once('./mongoconfig.php');
 
 /**
@@ -15,12 +15,12 @@ class UserManager
         $this->connect($config);
     }
 
-    function connect($config)
+    public function connect($config)
     {
         $this->manager = new DBHelper($config);
     }
 
-    function createNewUser($username, $password)
+    public function createNewUser($username, $password)
     {
         $user = array('username' => $username, 'password' => $password);
 
@@ -32,7 +32,7 @@ class UserManager
         }
     }
 
-    function login($username, $password)
+    public function login($username, $password)
     {
         $filter = ['username' => $username, 'password' => $password];
         $cursor = $this->manager->find('users', $filter);

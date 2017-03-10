@@ -77,24 +77,15 @@
             </div>
         </div>
 
-        <!-- Channel item -->
-        <div class="row channel-item">
-            <!-- Channel img -->
-            <div class="col-md-2 col-md-offset-1 channel-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/presence.png" />
-            </div>
+        <?php
 
-            <!-- Channel description -->
-            <div class="col-md-6 channel-fragment">
-                <p><strong>Presence Sensor</strong><br>This channel represents a presence sensor.</p>
-            </div>
+        require_once("./controllers/channelManager.php");
 
-            <!-- Channel bottons -->
-            <div class="col-md-2 channel-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
-        </div>
+        $channelManager = new channelManager([]);
+        $channelManager->viewChannelsHTML();
+
+        ?>
+
     </div>
 
     <hr>

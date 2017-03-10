@@ -31,14 +31,14 @@ class DBHelper
         }
     }
 
-    function find($collection, $filter=[], $options=[])
+    public function find($collection, $filter=[], $options=[])
     {
         $query = new MongoDB\Driver\Query($filter, $options);
         $dbCollection = 'applicationdb.' . $collection;
         return $this->manager->executeQuery($dbCollection, $query)->toArray();
     }
 
-    function getByTitle($collection, $title)
+    public function getByTitle($collection, $title)
     {
         
         $options = ['projection' => [$title => 1]]; 
@@ -48,7 +48,7 @@ class DBHelper
         return $cursor;
     }
 
-    function insert($collection, $article)
+    public function insert($collection, $article)
     {
         $bulk = new MongoDB\Driver\BulkWrite();
 

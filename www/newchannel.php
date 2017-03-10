@@ -71,8 +71,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">New channel</div>
+                <div class="panel <?php if($_REQUEST && $_REQUEST['error']) { ?>panel-danger<?php } else { ?>panel-info<?php } ?>">
+                    <div class="panel-heading">
+                        New channel <?php if($_REQUEST && $_REQUEST['error'] === 'neitherActionNorEvent') { ?>
+                            - You must add an event or action
+                        <?php } else if ($_REQUEST && $_REQUEST['error'] === 'fileExists'){ ?>
+                            -  An image with the same name already exists
+                        <?php } else if ($_REQUEST && $_REQUEST['error'] === 'wrongFile'){ ?>
+                            -  Wrong file
+                        <?php } ?>
+                    </div>
+
                     <div class="panel-body">
                         <form action="./controllers/newChannelController.php" method="post" enctype="multipart/form-data">
                             <!-- Title -->
@@ -173,7 +182,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Title</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<input type='text' name='event-title' id='event-title" + nEvents++ + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control'>" +
+                            "<input type='text' name='event-title" + nEvents + "' id='event-title" + nEvents + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control'>" +
                         "</div>" +
                     "</div>  <!-- title -->" +
 
@@ -181,8 +190,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?a :knows ?b." +
-"?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule' required data-validation-required-message='Please enter a rule for the event.' class='form-control'></textarea>" +
+                            "<textarea placeholder='?a :knows ?b.\n?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule" + nEvents + "' required data-validation-required-message='Please enter a rule for the event.' class='form-control'></textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 
@@ -190,11 +198,12 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvents + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
             );
+            nEvents++;
         }
 
         function addAction() {
@@ -207,7 +216,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Title</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<input type='text' name='action-title' id='action-title" + nActions++ + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control'>" +
+                            "<input type='text' name='action-title" + nActions + "' id='action-title" + nActions + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control'>" +
                         "</div>" +
                     "</div>  <!-- title -->" +
 
@@ -215,7 +224,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
+                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nActions + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 
@@ -223,11 +232,12 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix' required data-validation-required-message='Please enter prefixes for the action.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix" + nActions + "' required data-validation-required-message='Please enter prefixes for the action.''></textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
             );
+            nActions++;
         }
     </script>
 

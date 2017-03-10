@@ -63,7 +63,7 @@
             <div class="row">
                 <!-- Login -->
                 <div class="col-md-6">
-                    <div class="panel <?php if($_REQUEST['error'] === 'userIncorrect') { ?>panel-danger<?php } else { ?>panel-primary<?php } ?>">
+                    <div class="panel <?php if($_REQUEST && $_REQUEST['error'] === 'userIncorrect') { ?>panel-danger<?php } else { ?>panel-primary<?php } ?>">
                         <div class="panel-heading">
                             Sign In<?php if($_REQUEST && $_REQUEST['error'] === 'userIncorrect') { ?>
                                 - Wrong username or password
