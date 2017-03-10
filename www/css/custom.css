@@ -50,6 +50,11 @@
     margin: auto;
 }
 
+.img-circle {
+    height: 128px;
+    width: 128px;
+}
+
 .img-arrow {
     display: inline-block;
     vertical-align: middle;

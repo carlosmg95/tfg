@@ -40,7 +40,6 @@ class DBHelper
 
     public function getByTitle($collection, $title)
     {
-        
         $options = ['projection' => [$title => 1], 'sort' => [$title => 1]]; 
 
         $cursor = $this->find($collection, [], $options);

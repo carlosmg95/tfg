@@ -175,7 +175,7 @@
                 </div>
 
                 <div class="col-md-1 rule-fragment">
-                    <img class="img img-circle img-responsive img-arrow" src="img/arrow.png" />
+                    <img class="img img-responsive img-arrow" src="img/arrow.png" />
                 </div>
 
                 <div class="col-md-2 rule-fragment">

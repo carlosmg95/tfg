@@ -35,6 +35,16 @@ class ChannelManager
 
     public function removeChannelByTitle($title)
     {
+        $filter = ['title' => $title];
+        $options = ['projection' => ['image' => 1]];
+        $image = $this->manager->find('channels', $filter, $options)[0]->image;
+        $array_name = explode('/', $image);
+        $name = end($array_name);
+        if($name !== 'channel.png') {
+            $name = './img/' . $name;
+            unlink($name);
+        }
+
         return $this->manager->remove('channels', 'title', $title);
     }
 
