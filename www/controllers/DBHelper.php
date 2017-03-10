@@ -41,7 +41,7 @@ class DBHelper
     public function getByTitle($collection, $title)
     {
         
-        $options = ['projection' => [$title => 1]]; 
+        $options = ['projection' => [$title => 1], 'sort' => [$title => 1]]; 
 
         $cursor = $this->find($collection, [], $options);
 
@@ -61,5 +61,14 @@ class DBHelper
 
         $dbCollection = 'applicationdb.' . $collection;
         $result = $this->manager->executeBulkWrite($dbCollection, $bulk);
+    }
+
+    public function remove($collection, $title, $value)
+    {
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->delete([$title => $value], ['limit' => 0]);
+        $dbCollection = 'applicationdb.' . $collection;
+
+        return $this->manager->executeBulkWrite($dbCollection, $bulk);
     }
 }

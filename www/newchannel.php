@@ -118,7 +118,7 @@
                                 </div>
                             </div>  <!-- Image -->
 
-                            <!-- Add bottons -->
+                            <!-- Add buttons -->
                             <div class="row">
                                 <div class="col-md-3 col-md-offset-8">
                                     <button type="button" onclick="addEvent()" class="btn btn-success btn-add">Add event</button>
@@ -169,54 +169,26 @@
     <script src="js/clean-blog.min.js"></script>
 
     <script type="text/javascript">
-        nEvents = 1;
-        nActions = 1;
-
-        function addEvent() {
-            let eventsList = $("#events-list");
-            eventsList.append(
-                "<!-- Event item -->" +
-                "<div class='col-md-6 event-item'>" +
-                    "<h2>Event</h2>" +
-                    "<!-- Event title -->" +
-                    "<div class='row event-fragment'>" +
-                        "<div class='col-md-3'><strong>Title</strong></div>" +
-                        "<div class='col-md-9'>" +
-                            "<input type='text' name='event-title" + nEvents + "' id='event-title" + nEvents + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control'>" +
-                        "</div>" +
-                    "</div>  <!-- title -->" +
-
-                    "<!-- Event rule -->" +
-                    "<div class='row event-fragment'>" +
-                        "<div class='col-md-3'><strong>Rule</strong></div>" +
-                        "<div class='col-md-9'>" +
-                            "<textarea placeholder='?a :knows ?b.\n?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule" + nEvents + "' required data-validation-required-message='Please enter a rule for the event.' class='form-control'></textarea>" +
-                        "</div>" +
-                    "</div>  <!-- Rule -->" +
-
-                    "<!-- Event prefix -->" +
-                    "<div class='row event-fragment'>" +
-                        "<div class='col-md-3'><strong>Prefix</strong></div>" +
-                        "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvents + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
-                        "</div>" +
-                    "</div>  <!-- Prefix -->" +
-                "</div>  <!-- Item -->"
-            );
-            nEvents++;
-        }
+        nEvents = 0;
+        nActions = 0;
 
         function addAction() {
             let actionsList = $("#actions-list");
+            nAction = ++nActions;
             actionsList.append(
                 "<!-- Action item -->" +
-                "<div class='col-md-6 action-item'>" +
+                "<div class='col-md-6 action-item' id='action" + nAction + "'>" +
+                    "<button type='button' class='btn btn-danger btn-remove' onclick='removeAction(" + nAction + ")'>" +
+                        "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>" +
+                    "</button>" +
+
                     "<h2>Action</h2>" +
+
                     "<!-- Action title -->" +
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Title</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<input type='text' name='action-title" + nActions + "' id='action-title" + nActions + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control'>" +
+                            "<input type='text' name='action-title" + nAction + "' id='action-title" + nAction + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control'>" +
                         "</div>" +
                     "</div>  <!-- title -->" +
 
@@ -224,7 +196,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nActions + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
+                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nAction + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 
@@ -232,12 +204,61 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix" + nActions + "' required data-validation-required-message='Please enter prefixes for the action.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix" + nAction + "' required data-validation-required-message='Please enter prefixes for the action.''></textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
             );
-            nActions++;
+        }
+
+        function addEvent() {
+            let eventsList = $("#events-list");
+            nEvent = ++nEvents;
+            eventsList.append(
+                "<!-- Event item -->" +
+                "<div class='col-md-6 event-item' id='event" + nEvent + "'>" +
+                    "<button type='button' class='btn btn-danger btn-remove' onclick='removeEvent(" + nEvent + ")'>" +
+                        "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>" +
+                    "</button>" +
+
+                    "<h2>Event</h2>" +
+
+                    "<!-- Event title -->" +
+                    "<div class='row event-fragment'>" +
+                        "<div class='col-md-3'><strong>Title</strong></div>" +
+                        "<div class='col-md-9'>" +
+                            "<input type='text' name='event-title" + nEvent + "' id='event-title" + nEvent + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control'>" +
+                        "</div>" +
+                    "</div>  <!-- title -->" +
+
+                    "<!-- Event rule -->" +
+                    "<div class='row event-fragment'>" +
+                        "<div class='col-md-3'><strong>Rule</strong></div>" +
+                        "<div class='col-md-9'>" +
+                            "<textarea placeholder='?a :knows ?b.\n?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule" + nEvent + "' required data-validation-required-message='Please enter a rule for the event.' class='form-control'></textarea>" +
+                        "</div>" +
+                    "</div>  <!-- Rule -->" +
+
+                    "<!-- Event prefix -->" +
+                    "<div class='row event-fragment'>" +
+                        "<div class='col-md-3'><strong>Prefix</strong></div>" +
+                        "<div class='col-md-9'>" +
+                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
+                        "</div>" +
+                    "</div>  <!-- Prefix -->" +
+                "</div>  <!-- Item -->"
+            );
+            nEvents++;
+        }
+
+        function removeAction(nAction) {
+            const id = "#action" + nAction;
+            $(id).remove();
+        }
+
+        function removeEvent(nEvent) {
+            const id = "#event" + nEvent;
+            $(id).remove();
         }
     </script>
 

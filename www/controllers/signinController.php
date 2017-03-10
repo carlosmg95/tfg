@@ -5,7 +5,7 @@ require_once('userManager.php');
 $config = [];
 $manager = new UserManager($config);
 
-$username = htmlspecialchars($_POST["username"]);
+$username = strtolower(htmlspecialchars($_POST["username"]));
 $password = $_POST["password"];
 
 if($manager->login($username, $password)) {

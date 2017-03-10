@@ -1,5 +1,4 @@
 <?php
-
 require_once('DBHelper.php');
 //require_once('./mongoconfig.php');
 
@@ -34,6 +33,11 @@ class ChannelManager
         $table = $this->manager->insert('channels', $channel);
     }
 
+    public function removeChannelByTitle($title)
+    {
+        return $this->manager->remove('channels', 'title', $title);
+    }
+
     public function viewChannelsHTML()
     {
         $options = ['sort' => ['title' => 1]];
@@ -43,6 +47,16 @@ class ChannelManager
             $image = $channel->image;
             $title = $channel->title;
             $description = $channel->description;
+            $buttons = '';
+
+            if(isset($_SESSION['user']) && $_SESSION['user'] === 'admin') {
+                $buttons = '
+                <!-- Channel buttons -->
+                <div class="col-md-2 channel-fragment">
+                    <button type="button" class="btn btn-info btn-rules-action">Edit</button>
+                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleteChannel.php?channelTitle=' . $title . '\'">Delete</button>
+                </div>';
+            }
 
             echo '
             <!-- Channel item -->
@@ -57,11 +71,7 @@ class ChannelManager
                     <p><strong>' . $title . '</strong><br>' . $description . '.</p>
                 </div>
 
-                <!-- Channel bottons -->
-                <div class="col-md-2 channel-fragment">
-                    <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                    <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-                </div>
+                ' . $buttons . '            
             </div>
             ';
         }

@@ -17,6 +17,12 @@
     padding: 5%;
 }
 
+.btn-remove {
+    border-radius: 50%;
+    float: right;
+    padding: 0.5px;
+}
+
 .rule-fragment, .channel-fragment{
     height: 140px;
     line-height:140px;
