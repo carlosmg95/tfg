@@ -35,8 +35,10 @@
                 window.open("./index.php", '_self');
             }
         </script>
+    <?php } elseif ($_SESSION['user'] !== 'admin') { ?>
+        <script type="text/javascript">window.open("./index.php", '_self');</script>
     <?php } ?>
-    
+
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top my-nav">
         <div class="container-fluid">
@@ -72,19 +74,17 @@
             <div class="col-md-12">
                 <div class="panel <?php if (isset($_REQUEST['error'])) { ?>panel-danger<?php } else { ?>panel-info<?php } ?>">
                     <div class="panel-heading">
-                        New channel <?php if(isset($_REQUEST['error']) && $_REQUEST['error'] === 'neitherActionNorEvent') { ?>
+                        Edit channel<?php if(isset($_REQUEST['error']) && $_REQUEST['error'] === 'neitherActionNorEvent') { ?>
                             -  You must add an event or action
-                        <?php } elseif (isset($_REQUEST['error']) && $_REQUEST['error'] === 'fileExists'){ ?>
-                            -  An image with the same name already exists
-                        <?php } elseif (isset($_REQUEST['error']) && $_REQUEST['error'] === 'wrongFile'){ ?>
-                            -  Wrong file
-                        <?php } elseif (isset($_REQUEST['error']) && $_REQUEST['error'] === 'channelExists'){ ?>
+                        <?php } elseif (isset($_REQUEST['error']) && $_REQUEST['error'] === 'channelExists') { ?>
                             -  Channel exists
                         <?php } ?>
                     </div>
 
                     <div class="panel-body">
-                        <form action="./controllers/newChannelController.php" method="post" enctype="multipart/form-data">
+                        <form action="./controllers/editChannelController.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="old-title" id="old-title" value="">
+
                             <!-- Title -->
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
@@ -110,14 +110,6 @@
                             </div>  <!-- field -->
 
                             <br>
-
-                            <!-- Image -->
-                            <div class="row control-group"">
-                                <div class="form-group col-xs-12 controls">
-                                    <label>Image:</label>
-                                    <input type="file" name="image" id="image">
-                                </div>
-                            </div>  <!-- Image -->
 
                             <!-- Add buttons -->
                             <div class="row">
@@ -173,7 +165,7 @@
         nEvents = 0;
         nActions = 0;
 
-        function addAction() {
+        function addAction(title, rule, prefix) {
             let actionsList = $("#actions-list");
             nAction = ++nActions;
             actionsList.append(
@@ -189,7 +181,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Title</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<input type='text' name='action-title" + nAction + "' id='action-title" + nAction + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control'>" +
+                            "<input type='text' name='action-title" + nAction + "' id='action-title" + nAction + "' placeholder='Turn on' required data-validation-required-message='Please enter a title for the action.' class='form-control' value='" + title + "'>" +
                         "</div>" +
                     "</div>  <!-- title -->" +
 
@@ -197,7 +189,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nAction + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
+                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nAction + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'>" + rule + "</textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 
@@ -205,14 +197,14 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix" + nAction + "' required data-validation-required-message='Please enter prefixes for the action.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>.' class='form-control' rows='4' name='action-prefix" + nAction + "' required data-validation-required-message='Please enter prefixes for the action.'>" + prefix + "</textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
             );
         }
 
-        function addEvent() {
+        function addEvent(title, rule, prefix) {
             let eventsList = $("#events-list");
             nEvent = ++nEvents;
             eventsList.append(
@@ -228,7 +220,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Title</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<input type='text' name='event-title" + nEvent + "' id='event-title" + nEvent + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control'>" +
+                            "<input type='text' name='event-title" + nEvent + "' id='event-title" + nEvent + "' placeholder='New tweet' required data-validation-required-message='Please enter a title for the event.' class='form-control' value='" + title + "'>" +
                         "</div>" +
                     "</div>  <!-- title -->" +
 
@@ -236,7 +228,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?a :knows ?b.\n?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule" + nEvent + "' required data-validation-required-message='Please enter a rule for the event.' class='form-control'></textarea>" +
+                            "<textarea placeholder='?a :knows ?b.\n?a!:age math:lessThan #PARAM_1#' rows='4' name='event-rule" + nEvent + "' required data-validation-required-message='Please enter a rule for the event.' class='form-control'>" + rule + "</textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 
@@ -244,7 +236,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.'>" + prefix + "</textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
@@ -260,6 +252,63 @@
             const id = "#event" + nEvent;
             $(id).remove();
         }
+
+        <?php
+
+        require_once("./controllers/channelManager.php");
+        $channelManager = new channelManager([]);
+        $channel = $channelManager->getChannel(htmlspecialchars($_REQUEST['channelTitle']));
+
+        if (isset($channel['events'])) {
+            foreach ($channel['events'] as $value) { 
+                $rule = preg_split('/[\r\n]+/', $value['rule']);
+                $prefix = preg_split('/[\r\n]+/', $value['prefix']);
+
+                $str_rule = '';
+                foreach ($rule as $value_rule) {
+                    $str_rule = $str_rule . $value_rule . '\r\n';
+                }
+
+                $str_prefix = '';
+                foreach ($prefix as $value_prefix) {
+                    $str_prefix = $str_prefix . $value_prefix . '\r\n';
+                } ?>
+
+                addEvent(
+                    '<?php echo $value['title'] ?>',
+                    '<?php echo $str_rule ?>',
+                    '<?php echo $str_prefix ?>'
+                );
+            <?php }
+        }
+
+        if (isset($channel['actions'])) {
+            foreach ($channel['actions'] as $value) {
+                $rule = preg_split('/[\r\n]+/', $value['rule']);
+                $prefix = preg_split('/[\r\n]+/', $value['prefix']);
+
+                $str_rule = '';
+                foreach ($rule as $value_rule) {
+                    $str_rule = $str_rule . $value_rule . '\r\n';
+                }
+
+                $str_prefix = '';
+                foreach ($prefix as $value_prefix) {
+                    $str_prefix = $str_prefix . $value_prefix . '\r\n';
+                } ?>
+
+                addAction(
+                    '<?php echo $value['title'] ?>',
+                    '<?php echo $str_rule ?>',
+                    '<?php echo $str_prefix ?>'
+                );
+            <?php }
+        } ?>
+
+        $("input#old-title").val("<?php echo htmlspecialchars_decode($channel['title']) ?>");
+        $("input#title").val("<?php echo htmlspecialchars_decode($channel['title']) ?>");
+        $("input#description").val("<?php echo htmlspecialchars_decode($channel['description']) ?>");
+        $("input#nicename").val("<?php echo htmlspecialchars_decode($channel['nicename']) ?>");
     </script>
 </body>
 </html>

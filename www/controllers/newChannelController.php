@@ -40,9 +40,10 @@ foreach ($_POST as $key => $value) {
 
 if(empty($events) && empty($actions)) {
     header("Location: ../newchannel.php?error=neitherActionNorEvent");
-} else {
-    $manager->newChannel($title, $description, $nicename, $moved_file, $events, $actions);
+} elseif ($manager->createNewChannel($title, $description, $nicename, $moved_file, $events, $actions)) {
     header("Location: ../channels.php");
+} else {
+    header("Location: ../newchannel.php?error=channelExists");
 }
 
 

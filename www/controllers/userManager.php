@@ -15,7 +15,7 @@ class UserManager
         $this->connect($config);
     }
 
-    public function connect($config)
+    private function connect($config)
     {
         $this->manager = new DBHelper($config);
     }

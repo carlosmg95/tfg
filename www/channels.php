@@ -28,8 +28,7 @@
 <body>
     <?php if(!isset($_SESSION['user'])) { ?>
         <script type="text/javascript">
-            const alert = confirm('You have to be logged to access this page.')
-            console.log(alert);
+            const alert = confirm('You have to be logged to access this page.');
             if(alert) {
                 window.open("./user.php", '_self');
             } else {
