@@ -102,9 +102,9 @@
 
                 <!-- Sign Up -->
                 <div class="col-md-6">
-                    <div class="panel <?php if($_REQUEST['error'] === 'userExists') { ?>panel-danger<?php } else { ?>panel-success<?php } ?>">
+                    <div class="panel <?php if (isset($_REQUEST['error']) && $_REQUEST['error'] === 'userExists') { ?>panel-danger<?php } else { ?>panel-success<?php } ?>">
                         <div class="panel-heading">
-                            Sign Up<?php if($_REQUEST && $_REQUEST['error'] === 'userExists') { ?> - Username in use<?php } ?>
+                            Sign Up<?php if(isset($_REQUEST['error']) && $_REQUEST['error'] === 'userExists') { ?> - Username in use<?php } ?>
                         </div>
                         <div class="panel-body">
                             <form action="./controllers/signupController.php" method="post">

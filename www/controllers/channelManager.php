@@ -1,4 +1,5 @@
 <?php
+
 require_once('DBHelper.php');
 //require_once('./mongoconfig.php');
 
@@ -178,6 +179,39 @@ class ChannelManager
         return $channel;        
     }
 
+    public function getChannelsList()
+    {
+        $channels = $this->manager->getByTitle('channels', 'title');
+        $channels_list = array();
+        foreach ($channels as $channel) {
+            array_push($channels_list, $channel->title);
+        }
+
+        return $channels_list;
+    }
+
+    public function getEvents($title) {
+        $filter = ['title' => $title];
+        $options = ['projection' => ['events' => 1]];
+        $events = $this->manager->find('channels', $filter, $options)[0]->events;
+        $array_events = array();
+        foreach ($events as $event) {
+           array_push($array_events, $event->title);
+        }
+        return $array_events;        
+    }
+
+    public function getActions($title) {
+        $filter = ['title' => $title];
+        $options = ['projection' => ['actions' => 1]];
+        $actions = $this->manager->find('channels', $filter, $options)[0]->actions;
+        $array_actions = array();
+        foreach ($actions as $action) {
+           array_push($array_actions, $action->title);
+        }
+        return $array_actions;        
+    }
+
     public function removeChannel($title)
     {
         $filter = ['title' => $title];
@@ -227,6 +261,44 @@ class ChannelManager
                 </div>
 
                 ' . $buttons . '            
+            </div>
+            ';
+        }
+    }
+
+    public function viewChannelsIconHTML()
+    {
+        $options = ['sort' => ['title' => 1]];
+        $channels = $this->manager->find('channels', [], $options);
+
+        foreach ($channels as $channel) {
+            $image = $channel->image;
+            $title = $channel->title;
+            $hasAction = '';
+            $hasEvent = '';
+            if (!empty($channel->actions)) {
+                $hasAction = 'hasAction';
+            }
+            if (!empty($channel->events)) {
+                $hasEvent = 'hasEvent';
+            }
+
+            echo '
+            <!-- Channel icon item -->
+            <div class="col-md-2 channel-icon-item">
+                <!-- Image -->
+                <div class ="row">
+                    <div class="col-md-12">
+                        <img class="img img-circle img-responsive img-channel draggable ' . $hasAction . ' ' . $hasEvent . '" id="' . $title . '" src="' . $image . '" />
+                    </div>
+                </div>  <!-- Image -->
+
+                <!-- Title -->
+                <div class ="row">
+                    <div class="col-md-12 rule-fragment rule-info">
+                        <p>' . $title . '</p>
+                    </div>
+                </div>  <!-- Title -->
             </div>
             ';
         }

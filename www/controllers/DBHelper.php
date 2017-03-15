@@ -71,11 +71,11 @@ class DBHelper
         return $this->manager->executeBulkWrite($dbCollection, $bulk);
     }
 
-    public function update($collection, $title, $old_title_value, $article)
+    public function update($collection, $title, $title_value, $article)
     {
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->update(
-            [$title => $old_title_value],
+            [$title => $title_value],
             ['$set' => $article]
         );
         $dbCollection = 'applicationdb.' . $collection;
