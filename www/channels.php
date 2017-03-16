@@ -80,7 +80,7 @@
 
         require_once("./controllers/channelManager.php");
 
-        $channelManager = new channelManager([]);
+        $channelManager = new ChannelManager([]);
         $channelManager->viewChannelsHTML();
 
         ?>

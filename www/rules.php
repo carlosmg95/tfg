@@ -86,99 +86,14 @@
             </div>
         </div>
 
-        <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
-            
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/presence.png" />
-            </div>
+        <?php
 
-            <div class="col-md-1 rule-fragment">
-                <img class="img img-responsive img-arrow" src="img/arrow.png" />
-            </div>
+        require_once("./controllers/ruleManager.php");
 
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/door.png" />
-            </div>
+        $ruleManager = new RuleManager([]);
+        $ruleManager->viewRulesHTML();
 
-            <div class="col-md-3 rule-fragment rule-info">
-                <p>If I'm near the door then open it.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:23 12/12/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
-        </div>  <!-- row -->
-
-        <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
-            
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/door.png" />
-            </div>
-
-            <div class="col-md-1 rule-fragment">
-                <img class="img img-responsive img-arrow" src="img/arrow.png" />
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/tv.png" />
-            </div>
-
-            <div class="col-md-3 rule-fragment rule-info">
-                <p>If the door is opened, then switch on TV.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:56 12/01/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
-        </div>  <!-- row -->
-
-        <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
-            
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/tv.png" />
-            </div>
-
-            <div class="col-md-1 rule-fragment">
-                <img class="img img-responsive img-arrow" src="img/arrow.png" />
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/NotificationModule.png" />
-            </div>
-
-            <div class="col-md-3 rule-fragment rule-info">
-                <p>If the TV is on, then show a Notification.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:23 12/12/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
-        </div>  <!-- row -->
-    </div>
+        ?>
 
     <hr>
 

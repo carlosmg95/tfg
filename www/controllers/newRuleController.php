@@ -13,7 +13,7 @@ $action_title = $_POST['Action'];
 $event_channel = $_POST['Event-channel'];
 $event_title = $_POST['Event'];
 
-$manager->createNewRule(
+$success = $manager->createNewRule(
     $rule_title,
     $rule_description,
     $rule_place,
@@ -23,5 +23,9 @@ $manager->createNewRule(
     $event_channel,
     $event_title
 );
+
+if (!$succes) {
+    header('Location: ../index.php');
+}
 
 ?>

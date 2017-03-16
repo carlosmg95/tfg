@@ -32,12 +32,22 @@ class UserManager
         }
     }
 
-    public function insertRules($rule_title, $username)
+    public function importRule($rule_title, $username)
     {
-        $file = fopen("archivo.txt", "w");
         $filter = ['username' => $username];
         $user = $this->manager->find('users', $filter)[0];
-        fwrite($file, implode('-',$user) ."" . PHP_EOL);
+        $imported_rules = $user->imported_rules;
+        array_push($imported_rules, $rule_title);
+
+        $edited_user = array('imported_rules' => $imported_rules);
+
+        $this->manager->update('users', 'username', $username, $edited_user);
+    }
+
+    public function insertRule($rule_title, $username)
+    {
+        $filter = ['username' => $username];
+        $user = $this->manager->find('users', $filter)[0];
         $imported_rules = $user->imported_rules;
         array_push($imported_rules, $rule_title);
         $created_rules = $user->created_rules;
@@ -46,7 +56,6 @@ class UserManager
         $edited_user = array('imported_rules' => $imported_rules, 'created_rules' => $created_rules);
 
         $this->manager->update('users', 'username', $username, $edited_user);
-        fclose($file);
     }
 
     public function login($username, $password)

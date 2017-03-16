@@ -71,7 +71,7 @@
         <!-- Boxes -->
         <div class="row new-rule">
             <!-- Event Box -->
-            <div class="col-md-2 col-md-offset-3 col-xs-12 rule-fragment">
+            <div class="col-md-2 col-md-offset-3 col-xs-12 new-rule-box">
                 <h3 style="text-align: center;">If</h3>
                 <div class="event-box droppable-event"></div>
             </div>  <!-- Event -->
@@ -82,7 +82,7 @@
             </div>  <!-- Arrow -->
 
             <!-- Action Box -->
-            <div class="col-md-2 col-md-offset-1 col-xs-12 rule-fragment">
+            <div class="col-md-2 col-md-offset-1 col-xs-12 new-rule-box">
                 <h3 style="text-align: center;">Then</h3>
                 <div class="action-box droppable-action"></div>
             </div>  <!-- Action -->
