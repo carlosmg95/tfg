@@ -152,7 +152,11 @@
             <div class="row">
                 <h1>My rules:</h1>
             </div>
-            
+
+            <div class="row">
+                <h3>Imported rules:</h3>
+            </div>
+
             <!-- Header -->
             <div class="row">
                 <div class="col-md-2 col-md-offset-2">
@@ -164,37 +168,34 @@
                 </div>
             </div>
 
-            <!-- Rule Item -->
-            <div class="row rule-item">
-                <div class="col-md-1 col-md-offset-1 rule-fragment">
-                    <button type="button" class="btn btn-primary btn-activate">Active</button>
-                </div>
-                
-                <div class="col-md-2 rule-fragment">
-                    <img class="img img-circle img-responsive img-channel" src="img/presence.png" />
+            <?php
+
+            require_once('controllers/ruleManager.php');
+            $rule_manager = new RuleManager([]);
+
+            $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'imported_rules');
+
+            ?>
+
+            <hr>
+
+            <div class="row">
+                <h3>Created rules:</h3>
+            </div>
+
+            <!-- Header -->
+            <div class="row">
+                <div class="col-md-2 col-md-offset-2">
+                    <p class="fragment-title">If</p>
                 </div>
 
-                <div class="col-md-1 rule-fragment">
-                    <img class="img img-responsive img-arrow" src="img/arrow.png" />
+                <div class="col-md-2 col-md-offset-1">
+                    <p class="fragment-title">Then</p>
                 </div>
-
-                <div class="col-md-2 rule-fragment">
-                    <img class="img img-circle img-responsive img-channel" src="img/door.png" />
-                </div>
-
-                <div class="col-md-3 rule-fragment rule-info">
-                    <p>If I'm near the door then open it.</p>
-                    <p>Sergio</p>
-                    <p>GSI Lab</p>
-                    <p>11:23 12/12/2016</p>
-                </div>
-
-                <div class="col-md-2 rule-fragment">
-                    <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                    <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-                </div>
-            </div>  <!-- row -->
+            </div>
             
+            <?php $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'created_rules'); ?>
+
             <div class="row">
                 <div class="col-md-1 col-xs-1 col-xs-offset-9 col-md-offset-10">
                     <button type="button" class="btn btn-danger btn-logout" onclick="location.href='./controllers/logout.php'">

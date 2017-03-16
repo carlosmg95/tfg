@@ -10,14 +10,14 @@ require_once('userManager.php');
 */
 class RuleManager
 {
-    private $channelManager;
+    private $channel_manager;
     private $manager;
-    private $userManager;
+    private $user_manager;
 
     function __construct($config)
     {
-        $this->channelManager = new ChannelManager($config);
-        $this->userManager = new UserManager($config);
+        $this->channel_manager = new ChannelManager($config);
+        $this->user_manager = new UserManager($config);
         $this->connect($config);
     }
 
@@ -43,7 +43,7 @@ class RuleManager
             'action_title' => $action_title
         );
 
-        $this->userManager->insertRule($rule_title, $author);
+        $this->user_manager->insertRule($rule_title, $author);
         $this->manager->insert('rules', $rule);
 
         return true;
@@ -56,14 +56,108 @@ class RuleManager
         return !empty($cursor);
     }
 
+    public function viewRulesHTMLByUser($username, $kind) {
+        $filter = ['username' => $username];
+        $options = ['projection' => [$kind => 1]];
+        $rules_title = $this->manager->find('users', $filter, $options)[0]->$kind;
+
+        foreach ($rules_title as $rule_title) {
+            $filter = ['title' => $rule_title];
+            $rule = $this->manager->find('rules', $filter)[0];
+
+            $event_channel = $this->channel_manager->getChannel($rule->event_channel);
+            $action_channel = $this->channel_manager->getChannel($rule->action_channel);
+
+            $event_img = $event_channel['image'];
+            $event_title = $rule->event_title;
+            $action_img = $action_channel['image'];
+            $action_title = $rule->action_title;
+            $title = $rule->title;
+            $description = $rule->description;
+            $author = $rule->author;
+            $place = $rule->place;
+            $date = date_format(new DateTime($rule->createdAt), 'H:m d/m/Y');
+            $buttons = '';
+            $deleteButton = '';
+
+            if (isset($_SESSION['user']) && ($_SESSION['user'] === 'admin' || $_SESSION['user'] === $author)) {
+                $buttons = '
+                <!-- Rule buttons -->
+                <div class="col-md-2 rule-fragment">
+                    <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editchannel.php?channelTitle=' . $title . '\'">Edit</button>
+                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deletechannel.php?channelTitle=' . $title . '\'">Delete</button>
+                </div>';
+            }
+
+            if ($kind === "imported_rules") {
+                $deleteButton = '<button type="button" class="btn btn-primary btn-activate">Remove</button>';
+            }
+
+            echo '
+                <!-- Rule Item -->
+                <div class="row rule-item">
+                    <!-- Rule title -->
+                    <div class="col-md-12">
+                        <h2 style="text-align:center;">' . $title . '</h2>
+                    </div>  <!-- Title -->
+
+                    <!-- Remove button -->
+                    <div class="col-md-1 col-md-offset-1 rule-fragment">
+                        ' . $deleteButton . '
+                    </div>  <!-- Remove -->
+
+                    <?php } ?>
+                    
+                    <!-- Event info -->
+                    <div class="col-md-2 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="' . $event_img . '" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">' . $event_title . '</h4>
+                        </div>
+                    </div>  <!-- Info -->
+
+                    <div class="col-md-1 rule-fragment">
+                        <img class="img img-responsive img-arrow" src="img/arrow.png" />
+                    </div>
+
+                    <!-- Action info -->
+                    <div class="col-md-2 rule-fragment">
+                        <!-- Action-channel image -->
+                        <img class="img img-circle img-responsive img-channel" src="' . $action_img . '" />
+
+                        <!-- Action title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">' . $action_title . '</h4>
+                        </div>
+                    </div>  <!-- Info -->
+
+                    <!-- Rule info -->
+                    <div class="col-md-3 rule-fragment rule-info">
+                        <p>' . $description . '.</p>
+                        <p>' . $author . '</p>
+                        <p>' . $place . '</p>
+                        <p>' . $date . '</p>
+                    </div>  <!-- Info -->
+
+                    ' . $buttons . '
+                </div>  <!-- row -->
+            ';
+        }
+    }
+
     public function viewRulesHTML()
     {
         $options = ['sort' => ['title' => 1]];
         $rules = $this->manager->find('rules', [], $options);
 
         foreach ($rules as $rule) {
-            $event_channel = $this->channelManager->getChannel($rule->event_channel);
-            $action_channel = $this->channelManager->getChannel($rule->action_channel);
+            $event_channel = $this->channel_manager->getChannel($rule->event_channel);
+            $action_channel = $this->channel_manager->getChannel($rule->action_channel);
 
             $event_img = $event_channel['image'];
             $event_title = $rule->event_title;
@@ -76,7 +170,7 @@ class RuleManager
             $date = date_format(new DateTime($rule->createdAt), 'H:m d/m/Y');
             $buttons = '';
 
-            if (isset($_SESSION['user']) && $_SESSION['user'] === 'admin') {
+            if (isset($_SESSION['user']) && ($_SESSION['user'] === 'admin' || $_SESSION['user'] === $author)) {
                 $buttons = '
                 <!-- Rule buttons -->
                 <div class="col-md-2 rule-fragment">
