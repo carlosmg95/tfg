@@ -76,20 +76,18 @@
                     <div class="panel-heading">
                         Edit channel<?php if(isset($_REQUEST['error']) && $_REQUEST['error'] === 'neitherActionNorEvent') { ?>
                             -  You must add an event or action
-                        <?php } elseif (isset($_REQUEST['error']) && $_REQUEST['error'] === 'channelExists') { ?>
-                            -  Channel exists
                         <?php } ?>
                     </div>
 
                     <div class="panel-body">
                         <form action="./controllers/editChannelController.php" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="old-title" id="old-title" value="">
+                            <input id="channelTitle" name="title" hidden>
 
                             <!-- Title -->
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
                                     <label>Title:</label>
-                                    <input type="text" class="form-control" placeholder="Title" id="title" required data-validation-required-message="Please enter a title." name="title">
+                                    <p id="title" style="font-size: 20px;"></p>
                                 </div>
                             </div>  <!-- field -->
 
@@ -305,8 +303,8 @@
             <?php }
         } ?>
 
-        $("input#old-title").val("<?php echo htmlspecialchars_decode($channel['title']) ?>");
-        $("input#title").val("<?php echo htmlspecialchars_decode($channel['title']) ?>");
+        $("input#channelTitle").val("<?php echo htmlspecialchars_decode($channel['title']) ?>");
+        $("p#title").html("<?php echo htmlspecialchars_decode($channel['title']) ?>");
         $("input#description").val("<?php echo htmlspecialchars_decode($channel['description']) ?>");
         $("input#nicename").val("<?php echo htmlspecialchars_decode($channel['nicename']) ?>");
     </script>

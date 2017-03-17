@@ -97,12 +97,8 @@ class ChannelManager
         return $this->manager->remove('channels', 'title', $channel_title);
     }
 
-    public function editChannel($old_title, $title, $description, $nicename, $events, $actions)
+    public function editChannel($title, $description, $nicename, $events, $actions)
     {
-        if ($old_title !== $title && $this->channelExists($title)) {
-            return false;
-        }
-
         $events_aux = array();
         $actions_aux = array();
 
@@ -139,14 +135,13 @@ class ChannelManager
         }
 
         $channel = array(
-            'title' => $title,
             'description' => $description,
             'nicename' => $nicename,
             'events' => $events_aux,
             'actions' => $actions_aux
         );
 
-        $this->manager->update('channels', 'title', $old_title, $channel);
+        $this->manager->update('channels', 'title', $title, $channel);
 
         return true;
     }
