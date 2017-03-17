@@ -49,6 +49,26 @@ class RuleManager
         return true;
     }
 
+    public function deleteRule($rule_title)
+    {
+        $users = $this->user_manager->getUsersList();
+        foreach ($users as $username) {
+            if ($username === $this->getAuthor($rule_title)) {
+                $this->user_manager->deleteRule($rule_title, $username);
+            }
+            $this->user_manager->removeRule($rule_title, $username);
+        }
+        return $this->manager->remove('rules', 'title', $rule_title);
+    }
+
+    public function getAuthor($rule_title)
+    {
+        $filter = ['title' => $rule_title];
+        $options = ['projection' => ['author' =>1]];
+        $author = $this->manager->find('rules', $filter, $options)[0]->author;
+        return $author;
+    }
+
     private function ruleExists($title)
     {
         $filter = ['title' => $title];
@@ -85,12 +105,15 @@ class RuleManager
                 <!-- Rule buttons -->
                 <div class="col-md-2 rule-fragment">
                     <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editchannel.php?channelTitle=' . $title . '\'">Edit</button>
-                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deletechannel.php?channelTitle=' . $title . '\'">Delete</button>
+                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleterule.php?ruleTitle=' . $title . '\'">Delete</button>
                 </div>';
             }
 
             if ($kind === "imported_rules") {
-                $deleteButton = '<button type="button" class="btn btn-primary btn-activate">Remove</button>';
+                $deleteButton = '
+                    <button type="button" class="btn btn-primary btn-activate" onclick="window.location=\'./removerule.php?ruleTitle=' . $title . '\'">
+                        Remove
+                    </button>';
             }
 
             echo '
@@ -175,7 +198,7 @@ class RuleManager
                 <!-- Rule buttons -->
                 <div class="col-md-2 rule-fragment">
                     <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editchannel.php?channelTitle=' . $title . '\'">Edit</button>
-                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deletechannel.php?channelTitle=' . $title . '\'">Delete</button>
+                    <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleterule.php?ruleTitle=' . $title . '\'">Delete</button>
                 </div>';
             }
             echo '
@@ -188,7 +211,9 @@ class RuleManager
 
                     <!-- Import button -->
                     <div class="col-md-1 col-md-offset-1 rule-fragment">
-                        <button type="button" class="btn btn-primary btn-activate">Import</button>
+                        <button type="button" class="btn btn-primary btn-activate" onclick="window.location=\'./importrule.php?ruleTitle=' . $title . '\'">
+                            Import
+                        </button>
                     </div>  <!-- Import -->
                     
                     <!-- Event info -->

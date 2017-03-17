@@ -26,14 +26,42 @@ class UserManager
 
         if($this->userExists($username)) {
             return false;
-        } else {
-            $table = $this->manager->insert('users', $user);
-            return true;
         }
+        $table = $this->manager->insert('users', $user);
+        return true;
+    }
+
+    public function deleteRule($rule_title, $username)
+    {
+        $filter = ['username' => $username];
+        $user = $this->manager->find('users', $filter)[0];
+        $created_rules = $user->created_rules;
+        $new_created_rules = array();
+        foreach ($created_rules as $rule) {
+            if ($rule_title !== $rule) {
+                array_push($new_created_rules, $rule);
+            }
+        }
+
+        $edited_user = array('created_rules' => $new_created_rules);
+
+        $this->manager->update('users', 'username', $username, $edited_user);
+    }
+
+    public function getUsersList(){
+        $users = $this->manager->getByTitle('users', 'username');
+        $users_list = array();
+        foreach ($users as $user) {
+            array_push($users_list, $user->username);
+        }
+        return $users_list;
     }
 
     public function importRule($rule_title, $username)
     {
+        if ($this->ruleImported($rule_title, $username)) {
+            return false;
+        }
         $filter = ['username' => $username];
         $user = $this->manager->find('users', $filter)[0];
         $imported_rules = $user->imported_rules;
@@ -42,6 +70,8 @@ class UserManager
         $edited_user = array('imported_rules' => $imported_rules);
 
         $this->manager->update('users', 'username', $username, $edited_user);
+
+        return true;
     }
 
     public function insertRule($rule_title, $username)
@@ -63,6 +93,37 @@ class UserManager
         $filter = ['username' => $username, 'password' => $password];
         $cursor = $this->manager->find('users', $filter);
         return !empty($cursor);
+    }
+
+    public function removeRule($rule_title, $username)
+    {
+        if (!$this->ruleImported($rule_title, $username)) {
+            return false;
+        }
+        $filter = ['username' => $username];
+        $user = $this->manager->find('users', $filter)[0];
+        $imported_rules = $user->imported_rules;
+        $new_imported_rules = array();
+        foreach ($imported_rules as $rule) {
+            if ($rule_title !== $rule) {
+                array_push($new_imported_rules, $rule);
+            }
+        }
+
+        $edited_user = array('imported_rules' => $new_imported_rules);
+
+        $this->manager->update('users', 'username', $username, $edited_user);
+
+        return true;
+    }
+
+    private function ruleImported($rule_title, $username)
+    {
+        $filter = ['username' => $username];
+        $options = ['projection' => ['imported_rules' => 1]];
+        $imported_rules = $this->manager->find('users', $filter, $options)[0]->imported_rules;
+
+        return in_array($rule_title, $imported_rules);
     }
 
     private function userExists($username)

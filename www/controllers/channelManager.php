@@ -82,6 +82,21 @@ class ChannelManager
         return true;
     }
 
+    public function deleteChannel($channel_title)
+    {
+        $filter = ['title' => $channel_title];
+        $options = ['projection' => ['image' => 1]];
+        $image = $this->manager->find('channels', $filter, $options)[0]->image;
+        $array_name = explode('/', $image);
+        $name = end($array_name);
+        if ($name !== 'channel.png') {
+            $name = './img/' . $name;
+            unlink($name);
+        }
+
+        return $this->manager->remove('channels', 'title', $channel_title);
+    }
+
     public function editChannel($old_title, $title, $description, $nicename, $events, $actions)
     {
         if ($old_title !== $title && $this->channelExists($title)) {
@@ -210,21 +225,6 @@ class ChannelManager
            array_push($array_actions, $action->title);
         }
         return $array_actions;        
-    }
-
-    public function removeChannel($title)
-    {
-        $filter = ['title' => $title];
-        $options = ['projection' => ['image' => 1]];
-        $image = $this->manager->find('channels', $filter, $options)[0]->image;
-        $array_name = explode('/', $image);
-        $name = end($array_name);
-        if ($name !== 'channel.png') {
-            $name = './img/' . $name;
-            unlink($name);
-        }
-
-        return $this->manager->remove('channels', 'title', $title);
     }
 
     public function viewChannelsHTML()
