@@ -89,13 +89,15 @@
         </div>
 
         <div class="row">
-            <button type="button" onclick="submit()" class="btn btn-success" style="float: right;">Send</button>
+            <button type="button" onclick="submit()" class="btn btn-success" id="send" style="float: right;">Send</button>
         </div>
 
         <!-- Options dialog -->
-        <div id="action-options-dialog"></div>
-        <div id="event-options-dialog"></div>
-        <div id="rule-options-dialog"></div>
+        <div id="myModal" class="modal">
+            <div id="action-options-dialog" class="modal-content"></div>
+            <div id="event-options-dialog" class="modal-content"></div>
+            <div id="rule-options-dialog" class="modal-content"></div>
+        </div>
     </div>
 
     <hr>
@@ -199,9 +201,17 @@
 
             $('#action-options-dialog').dialog({
                 autoOpen: false,
+                modal: true,
+                width: 500,
+                height: 130,
                 show: {
                     effect: 'puff',
                     duration: 1000
+                },
+                buttons: {
+                    'Save': function() {
+                        $(this).dialog( "close" );
+                    }
                 },
                 hide: {
                     effect: 'explode',
@@ -211,9 +221,17 @@
 
             $('#event-options-dialog').dialog({
                 autoOpen: false,
+                modal: true,
+                width: 500,
+                height: 130,
                 show: {
                     effect: 'puff',
                     duration: 1000
+                },
+                buttons: {
+                    'Save': function() {
+                        $(this).dialog( "close" );
+                    }
                 },
                 hide: {
                     effect: 'explode',
@@ -223,20 +241,23 @@
 
             $('#rule-options-dialog').dialog({
                 autoOpen: false,
+                modal: true,
                 show: {
                     effect: 'puff',
                     duration: 1000
                 },
+                buttons: {
+                    'Save': function() {
+                        $(this).dialog( "close" );
+                    }
+                },
                 hide: {
                     effect: 'explode',
                     duration: 1000
-                }
-            });
-
-            $("#rule-options-dialog").dialog({
+                },
                 close: function(event, ui) {
                     $.post({
-                        type: "POST",
+                        type: 'POST',
                         url: './controllers/newRuleController.php',
                         data: {
                             'Rule-title' : $('input#title').val(),
@@ -254,11 +275,11 @@
                     });
                 }
             });
-
         });
 
 
         function submit() {
+            $('button#send').attr('onclick', '');
             $('#action-options-dialog').dialog('close');
             $('#event-options-dialog').dialog('close');
             $('#rule-options-dialog').append('' +

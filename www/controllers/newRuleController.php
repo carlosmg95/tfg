@@ -2,7 +2,7 @@
 
 require_once('ruleManager.php');
 $config = [];
-$manager = new RuleManager($config);
+$rule_manager = new RuleManager($config);
 
 $rule_title = htmlspecialchars($_POST['Rule-title']);
 $rule_description = htmlspecialchars($_POST['Rule-description']);
@@ -13,7 +13,7 @@ $action_title = htmlspecialchars($_POST['Action']);
 $event_channel = htmlspecialchars($_POST['Event-channel']);
 $event_title = htmlspecialchars($_POST['Event']);
 
-$success = $manager->createNewRule(
+$success = $rule_manager->createNewRule(
     $rule_title,
     $rule_description,
     $rule_place,

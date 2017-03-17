@@ -43,6 +43,10 @@ class RuleManager
             'action_title' => $action_title
         );
 
+        if (in_array('', $rule)) {
+            return false;
+        }
+
         $this->user_manager->insertRule($rule_title, $author);
         $this->manager->insert('rules', $rule);
 
