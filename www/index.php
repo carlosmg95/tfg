@@ -10,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EWETasker</title>
 
+    <!-- favicon -->
+    <link rel="shortcut icon" href="./img/logo.ico" />
+
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
