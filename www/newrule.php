@@ -292,20 +292,20 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let actionsChannel = new Array();
-                    let eventsChannel = new Array();
+                    let actionChannels = new Array();
+                    let eventChannels = new Array();
 
                     for (var i in $('.event-box > img')) {
                         if(!$('.event-box > img')[i].id){
                             break;
                         }
-                        eventsChannel.push($('.event-box > img')[i].id);
+                        eventChannels.push($('.event-box > img')[i].id);
                     }
                     for (var i in $('.action-box > img')) {
                         if(!$('.action-box > img')[i].id){
                             break;
                         }
-                        actionsChannel.push($('.action-box > img')[i].id);
+                        actionChannels.push($('.action-box > img')[i].id);
                     }
                     $.post({
                         type: 'POST',
@@ -315,10 +315,10 @@
                             'Rule-place' : $('input#place').val(),
                             'Rule-description' : $('input#description').val(),
                             'Author' : '<?php echo $_SESSION['user'] ?>',
-                            'Event-channel': eventsChannel,
-                            'Action-channel': actionsChannel,
-                            'Event' : events,
-                            'Action' : actions
+                            'Event-channels': eventChannels,
+                            'Action-channels': actionChannels,
+                            'Events' : events,
+                            'Actions' : actions
                         },
                         success: function(output){
                             window.open('./rules.php', '_self');

@@ -8,6 +8,6 @@ $user_manager = new UserManager($config);
 $rule_title = $_GET['ruleTitle'];
 
 $user_manager->importRule($rule_title, $_SESSION['user']);
-header('Location: ../rules.php');
+header('Location: ' . $_SERVER["HTTP_REFERER"]);
 
 ?>

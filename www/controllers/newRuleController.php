@@ -8,20 +8,20 @@ $rule_title = htmlspecialchars($_POST['Rule-title']);
 $rule_description = htmlspecialchars($_POST['Rule-description']);
 $rule_place = htmlspecialchars($_POST['Rule-place']);
 $author = $_POST['Author'];
-$action_channel = $_POST['Action-channel'];
-$action_title = $_POST['Action'];
-$event_channel = $_POST['Event-channel'];
-$event_title = $_POST['Event'];
+$action_channels = $_POST['Action-channels'];
+$action_titles = $_POST['Actions'];
+$event_channels = $_POST['Event-channels'];
+$event_titles = $_POST['Events'];
 
 $success = $rule_manager->createNewRule(
     $rule_title,
     $rule_description,
     $rule_place,
     $author,
-    $action_channel,
-    $action_title,
-    $event_channel,
-    $event_title
+    $action_channels,
+    $action_titles,
+    $event_channels,
+    $event_titles
 );
 
 if (!$succes) {

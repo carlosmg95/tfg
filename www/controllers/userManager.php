@@ -117,7 +117,7 @@ class UserManager
         return true;
     }
 
-    private function ruleImported($rule_title, $username)
+    public function ruleImported($rule_title, $username)
     {
         $filter = ['username' => $username];
         $options = ['projection' => ['imported_rules' => 1]];
