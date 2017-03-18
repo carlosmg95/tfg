@@ -90,8 +90,8 @@
 
         require_once("./controllers/ruleManager.php");
 
-        $ruleManager = new RuleManager([]);
-        $ruleManager->viewRulesHTML();
+        $rule_manager = new RuleManager([]);
+        $rule_manager->viewRulesHTML();
 
         ?>
 

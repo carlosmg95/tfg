@@ -23,12 +23,12 @@
     padding: 0.5px;
 }
 
-.rule-fragment, .channel-fragment, .new-rule-box {
-    line-height:140px;
+.channel-icon-item {
+    padding-bottom: 50px;
 }
 
-.new-rule-box {
-    height: 150px;
+.rule-fragment, .channel-fragment, .new-rule-box {
+    line-height:140px;
 }
 
 .rule-item, .channel-item {
@@ -81,12 +81,13 @@
     background: linear-gradient(50deg, gray, white);
     border-radius: 30%;
     border-style: solid;
-    height: 100%;
+    height: 150px;
+    margin-bottom: 5px;
     width: auto;
 }
 
 .new-rule {
-    height: 200px;
+    padding-bottom: 100px;
 }
 
 .modal {
@@ -110,4 +111,8 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+}
+
+select {
+    width: 100%;
 }

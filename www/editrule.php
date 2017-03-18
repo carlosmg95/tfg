@@ -71,7 +71,7 @@
         <!-- Boxes -->
         <div class="row new-rule">
             <!-- Event Box -->
-            <div class="col-md-2 col-md-offset-3 col-xs-12 new-rule-box events">
+            <div class="col-md-2 col-md-offset-3 col-xs-12 new-rule-box">
                 <h3 style="text-align: center;">If</h3>
                 <div class="event-box droppable-event"></div>
             </div>  <!-- Event -->
@@ -82,7 +82,7 @@
             </div>  <!-- Arrow -->
 
             <!-- Action Box -->
-            <div class="col-md-2 col-md-offset-1 col-xs-12 new-rule-box actions">
+            <div class="col-md-2 col-md-offset-1 col-xs-12 new-rule-box">
                 <h3 style="text-align: center;">Then</h3>
                 <div class="action-box droppable-action"></div>
             </div>  <!-- Action -->
@@ -140,10 +140,6 @@
         $(function() {
             let eventsFunctions = new Array();
             let actionsFunctions = new Array();
-
-            let actions = new Array();
-            let events = new Array();
-
             <?php foreach ($channelManager->getChannelsList() as $channel_title) { ?>
                 actionsFunctions['<?php echo $channel_title?>'] = function() {
                     let fieldset = '' +
@@ -220,22 +216,6 @@
                 hide: {
                     effect: 'explode',
                     duration: 1000
-                },
-                close: function(event, ui) {
-                    actions.push($('select#action').val());
-                    $('.actions').append('<div class="action-box droppable-action new-droppable-action"></div>');
-                    $('.new-droppable-action').droppable({
-                        accept: '.hasAction',
-                        drop: function(event, ui) {
-                            $('#event-options-dialog').dialog('close');
-                            $(this).append(ui.draggable.prop('outerHTML'));
-                            $(this).droppable({ disabled: true });
-                            let select = actionsFunctions[ui.draggable.prop('id')];
-                            $('#action-options-dialog').html(select);
-                            $('#action-options-dialog').attr('title', 'Actions');
-                            $('#action-options-dialog').dialog('open');
-                        }
-                    });
                 }
             });
 
@@ -256,22 +236,6 @@
                 hide: {
                     effect: 'explode',
                     duration: 1000
-                },
-                close: function(event, ui) {
-                    events.push($('select#event').val());
-                    $('.events').append('<div class="event-box droppable-event new-droppable-event"></div>');
-                    $('.new-droppable-event').droppable({
-                        accept: '.hasEvent',
-                        drop: function(event, ui) {
-                            $('#action-options-dialog').dialog('close');
-                            $(this).append(ui.draggable.prop('outerHTML'));
-                            $(this).droppable({ disabled: true });
-                            let select = eventsFunctions[ui.draggable.prop('id')];
-                            $('#event-options-dialog').html(select);
-                            $('#event-options-dialog').attr('title', 'Events');
-                            $('#event-options-dialog').dialog('open');
-                        }
-                    });
                 }
             });
 
@@ -292,21 +256,6 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let actionsChannel = new Array();
-                    let eventsChannel = new Array();
-
-                    for (var i in $('.event-box > img')) {
-                        if(!$('.event-box > img')[i].id){
-                            break;
-                        }
-                        eventsChannel.push($('.event-box > img')[i].id);
-                    }
-                    for (var i in $('.action-box > img')) {
-                        if(!$('.action-box > img')[i].id){
-                            break;
-                        }
-                        actionsChannel.push($('.action-box > img')[i].id);
-                    }
                     $.post({
                         type: 'POST',
                         url: './controllers/newRuleController.php',
@@ -315,10 +264,10 @@
                             'Rule-place' : $('input#place').val(),
                             'Rule-description' : $('input#description').val(),
                             'Author' : '<?php echo $_SESSION['user'] ?>',
-                            'Event-channel': eventsChannel,
-                            'Action-channel': actionsChannel,
-                            'Event' : events,
-                            'Action' : actions
+                            'Event-channel': $('.event-box > img').prop('id'),
+                            'Action-channel': $('.action-box > img').prop('id'),
+                            'Event' : $('select#event').val(),
+                            'Action' : $('select#action').val()
                         },
                         success: function(output){
                             window.open('./rules.php', '_self');

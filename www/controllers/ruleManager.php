@@ -102,19 +102,19 @@ class RuleManager
             $place = $rule->place;
             $date = date_format(new DateTime($rule->createdAt), 'H:m d/m/Y');
             $buttons = '';
-            $deleteButton = '';
+            $removeButton = '';
 
             if (isset($_SESSION['user']) && ($_SESSION['user'] === 'admin' || $_SESSION['user'] === $author)) {
                 $buttons = '
                 <!-- Rule buttons -->
                 <div class="col-md-2 rule-fragment">
-                    <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editchannel.php?channelTitle=' . $title . '\'">Edit</button>
+                    <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editrule.php?ruleTitle=' . $title . '\'">Edit</button>
                     <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleterule.php?ruleTitle=' . $title . '\'">Delete</button>
                 </div>';
             }
 
             if ($kind === "imported_rules") {
-                $deleteButton = '
+                $removeButton = '
                     <button type="button" class="btn btn-primary btn-activate" onclick="window.location=\'./removerule.php?ruleTitle=' . $title . '\'">
                         Remove
                     </button>';
@@ -130,7 +130,7 @@ class RuleManager
 
                     <!-- Remove button -->
                     <div class="col-md-1 col-md-offset-1 rule-fragment">
-                        ' . $deleteButton . '
+                        ' . $removeButton . '
                     </div>  <!-- Remove -->
 
                     <?php } ?>
@@ -201,7 +201,7 @@ class RuleManager
                 $buttons = '
                 <!-- Rule buttons -->
                 <div class="col-md-2 rule-fragment">
-                    <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editchannel.php?channelTitle=' . $title . '\'">Edit</button>
+                    <button type="button" class="btn btn-info btn-rules-action" onclick="window.location=\'./editrule.php?ruleTitle=' . $title . '\'">Edit</button>
                     <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleterule.php?ruleTitle=' . $title . '\'">Delete</button>
                 </div>';
             }
