@@ -1,7 +1,10 @@
 <?php
 
 session_start();
-require_once('controllers/ruleManager.php');
+
+use EweTasker\Manager\RuleManager;
+include_once('controllers/ruleManager.php');
+
 $config = [];
 $rule_manager = new RuleManager($config);
 

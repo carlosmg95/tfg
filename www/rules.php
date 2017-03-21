@@ -91,7 +91,8 @@
 
         <?php
 
-        require_once("./controllers/ruleManager.php");
+        use Ewetasker\Manager\RuleManager;
+        include_once("./controllers/ruleManager.php");
 
         $rule_manager = new RuleManager([]);
         $rule_manager->viewRulesHTML();

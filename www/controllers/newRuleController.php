@@ -1,6 +1,9 @@
 <?php
 
-require_once('ruleManager.php');
+
+use Ewetasker\Manager\RuleManager;
+include_once('ruleManager.php');
+
 $config = [];
 $rule_manager = new RuleManager($config);
 

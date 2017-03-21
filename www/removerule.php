@@ -1,7 +1,10 @@
 <?php
 
 session_start();
-require_once('controllers/userManager.php');
+
+use Ewetasker\Manager\UserManager;
+include_once('controllers/userManager.php');
+
 $config = [];
 $user_manager = new UserManager($config);
 

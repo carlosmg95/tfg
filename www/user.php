@@ -1,5 +1,6 @@
 <?php
-    session_start()
+    session_start();
+    use Ewetasker\Manager\RuleManager;
 ?>
 
 <!DOCTYPE html>
@@ -173,7 +174,8 @@
 
             <?php
 
-            require_once('controllers/ruleManager.php');
+            include_once('./controllers/ruleManager.php');
+
             $rule_manager = new RuleManager([]);
 
             $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'imported_rules');

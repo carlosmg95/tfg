@@ -256,8 +256,10 @@
 
         <?php
 
-        require_once("./controllers/channelManager.php");
-        $channelManager = new channelManager([]);
+        use Ewetasker\Manager\ChannelManager;
+        include_once("./controllers/channelManager.php");
+
+        $channelManager = new ChannelManager([]);
         $channel = $channelManager->getChannel(htmlspecialchars($_REQUEST['channelTitle']));
 
         if (isset($channel['events'])) {

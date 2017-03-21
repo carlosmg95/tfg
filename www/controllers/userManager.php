@@ -1,6 +1,10 @@
 <?php
 
-require_once('DBHelper.php');
+namespace Ewetasker\Manager;
+
+use Ewetasker\Manager\DBHelper;
+
+include_once('DBHelper.php');
 //require_once('./mongoconfig.php');
 
 /**

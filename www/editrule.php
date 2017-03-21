@@ -110,9 +110,10 @@
         <div class="row">
         <?php
 
-        require_once("./controllers/channelManager.php");
+        use Ewetasker\Manager\ChannelManager;
+        include_once("./controllers/channelManager.php");
 
-        $channelManager = new channelManager([]);
+        $channelManager = new ChannelManager([]);
         $channelManager->viewChannelsIconHTML();
 
         ?>

@@ -1,5 +1,7 @@
 <?php
 
+namespace Ewetasker\Manager;
+
 /**
 * 
 */
@@ -16,11 +18,11 @@ class DBHelper
     private function connect($config)
     {
         try{
-            if (!class_exists('MongoDB\Driver\Manager')){
-                echo ("The MongoDB PECL extension has not been installed or enabled");
+            if (!class_exists('\MongoDB\Driver\Manager')){
+                echo ("The \MongoDB PECL extension has not been installed or enabled");
                 return false;
             }
-            $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");/*
+            $manager = new \MongoDB\Driver\Manager("mongodb://localhost:27017");/*
                 $config['connection_string'],
                 array('username' => $config['username'], 'password' => $config['password'])
             );*/
@@ -33,7 +35,7 @@ class DBHelper
 
     public function find($collection, $filter=[], $options=[])
     {
-        $query = new MongoDB\Driver\Query($filter, $options);
+        $query = new \MongoDB\Driver\Query($filter, $options);
         $dbCollection = 'applicationdb.' . $collection;
         return $this->manager->executeQuery($dbCollection, $query)->toArray();
     }
@@ -49,13 +51,13 @@ class DBHelper
 
     public function insert($collection, $article)
     {
-        $bulk = new MongoDB\Driver\BulkWrite();
+        $bulk = new \MongoDB\Driver\BulkWrite();
 
         $_article = array();
         foreach ($article as $title => $value) {
             $_article[$title] = $value;
         }
-        $_article['createdAt'] = date_format(new DateTime(), 'Y-m-d H:i:s');
+        $_article['createdAt'] = date_format(new \DateTime(), 'Y-m-d H:i:s');
         $bulk->insert($_article);
 
         $dbCollection = 'applicationdb.' . $collection;
@@ -64,7 +66,7 @@ class DBHelper
 
     public function remove($collection, $title, $value)
     {
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->delete([$title => $value], ['limit' => 0]);
         $dbCollection = 'applicationdb.' . $collection;
 
@@ -73,7 +75,7 @@ class DBHelper
 
     public function update($collection, $title, $title_value, $article)
     {
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->update(
             [$title => $title_value],
             ['$set' => $article]

@@ -1,7 +1,10 @@
 <?php
 
 session_start();
-require_once('channelManager.php');
+
+use Ewetasker\Manager\ChannelManager;
+include_once('channelManager.php');
+
 $config = [];
 $manager = new ChannelManager($config);
 
