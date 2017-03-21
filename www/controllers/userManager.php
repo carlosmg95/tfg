@@ -26,7 +26,13 @@ class UserManager
 
     public function createNewUser($username, $password)
     {
-        $user = array('username' => $username, 'password' => $password, 'imported_rules' => [], 'created_rules' => []);
+        $user = array(
+            'username' => $username,
+            'password' => $password,
+            'imported_rules' => [],
+            'created_rules' => [],
+            'chat_id' => ''
+        );
 
         if($this->userExists($username)) {
             return false;
@@ -128,6 +134,11 @@ class UserManager
         $imported_rules = $this->manager->find('users', $filter, $options)[0]->imported_rules;
 
         return in_array($rule_title, $imported_rules);
+    }
+
+    public function setTelegramId($username, $chat_id)
+    {
+        return $this->manager->update('users', 'username', $username, ['chat_id' => $chat_id]);
     }
 
     private function userExists($username)
