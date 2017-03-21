@@ -67,6 +67,15 @@ class UserManager
         return $users_list;
     }
 
+    public function getImportedRules($title, $title_value)
+    {
+        $filter = [$title => $title_value];
+        $options = ['projection' => ['imported_rules' => 1]];
+        $rules_list = $this->manager->find('users', $filter, $options)[0]->imported_rules;
+
+        return $rules_list;
+    }
+
     public function importRule($rule_title, $username)
     {
         if ($this->ruleImported($rule_title, $username)) {
