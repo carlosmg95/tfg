@@ -202,7 +202,13 @@
             <?php $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'created_rules'); ?>
 
             <div class="row">
-                <div class="col-md-1 col-xs-1 col-xs-offset-9 col-md-offset-10">
+                <div class="col-md-2 col-xs-2">
+                    <button type="button" class="btn btn-info btn-telegram" onclick="location.href='./settelegramid.php'">
+                        Set Telegram Id
+                    </button>
+                </div>
+
+                <div class="col-md-1 col-xs-1 col-xs-offset-5 col-md-offset-8">
                     <button type="button" class="btn btn-danger btn-logout" onclick="location.href='./controllers/logout.php'">
                         Logout
                     </button>
