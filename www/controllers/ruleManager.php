@@ -1,8 +1,14 @@
 <?php
 
-require_once('channelManager.php');
-require_once('DBHelper.php');
-require_once('userManager.php');
+namespace Ewetasker\Manager;
+
+use Ewetasker\Manager\ChannelManager;
+use Ewetasker\Manager\DBHelper;
+use Ewetasker\Manager\UserManager;
+
+include_once('channelManager.php');
+include_once('DBHelper.php');
+include_once('userManager.php');
 //require_once('./mongoconfig.php');
 
 /**
@@ -97,7 +103,7 @@ class RuleManager
         $description = $rule->description;
         $author = $rule->author;
         $place = $rule->place;
-        $date = date_format(new DateTime($rule->createdAt), 'H:m d/m/Y');
+        $date = date_format(new \DateTime($rule->createdAt), 'H:m d/m/Y');
         $buttons = '';
 
         if (isset($_SESSION['user']) && ($_SESSION['user'] === 'admin' || $_SESSION['user'] === $author)) {
