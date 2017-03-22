@@ -156,6 +156,15 @@ class RuleManager
         ';
     }
 
+    public function getRulesList(){
+        $rules = $this->manager->getByTitle('rules', 'title');
+        $rules_list = array();
+        foreach ($rules as $rule) {
+            array_push($rules_list, $rule->title);
+        }
+        return $rules_list;
+    }
+
     private function ruleExists($title)
     {
         $filter = ['title' => $title];

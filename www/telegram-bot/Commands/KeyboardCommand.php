@@ -1,101 +1,75 @@
 <?php
-
-/*
+/**
  * This file is part of the TelegramBot package.
  *
  * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * written by Marco Boretto <marco.bore@gmail.com>
-*/
-namespace Longman\TelegramBot\Commands;
-
+ */
+namespace Longman\TelegramBot\Commands\UserCommands;
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Commands\Command;
-use Longman\TelegramBot\Entities\Update;
-
-use Longman\TelegramBot\Entities\ReplyKeyboardMarkup;
-use Longman\TelegramBot\Entities\ReplyKeyboardHide;
-use Longman\TelegramBot\Entities\ForceReply;
-
-class KeyboardCommand extends Command
+/**
+ * User "/keyboard" command
+ */
+class KeyboardCommand extends UserCommand
 {
+    /**#@+
+     * {@inheritdoc}
+     */
     protected $name = 'keyboard';
-    protected $description = 'Show a custom keybord with reply markup';
+    protected $description = 'Show a custom keyboard with reply markup';
     protected $usage = '/keyboard';
-    protected $version = '0.0.5';
-    protected $enabled = true;
-
+    protected $version = '0.2.0';
+    /**#@-*/
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
-        $update = $this->getUpdate();
-        $message = $this->getMessage();
-        $message_id = $message->getMessageId();
-
-        $chat_id = $message->getChat()->getId();
-        $text = $message->getText(true);
-
-        $data = array();
-        $data['chat_id'] = $chat_id;
-        $data['text'] = 'Press a Button:';
-        #$data['reply_to_message_id'] = $message_id;
-
-
-
-        #Keyboard examples
-        $keyboards = array();
-
-        //0
-        $keyboard[] = ['7','8','9'];
-        $keyboard[] = ['4','5','6'];
-        $keyboard[] = ['1','2','3'];
-        $keyboard[] = [' ','0',' '];
-       
-        $keyboards[] = $keyboard;
-        unset($keyboard);
-
-        //1
-        $keyboard[] = ['7','8','9','+'];
-        $keyboard[] = ['4','5','6','-'];
-        $keyboard[] = ['1','2','3','*'];
-        $keyboard[] = [' ','0',' ','/'];
-
-        $keyboards[] = $keyboard;
-        unset($keyboard);
-
-
-        //2
-        $keyboard[] = ['A'];
-        $keyboard[] = ['B'];
-        $keyboard[] = ['C'];
-
-        $keyboards[] = $keyboard;
-        unset($keyboard);
-
-
-
-        //3
-        $keyboard[] = ['A'];
-        $keyboard[] = ['B'];
-        $keyboard[] = ['C','D'];
-
-        $keyboards[] = $keyboard;
-        unset($keyboard);
-
-
-        $reply_keyboard_markup = new ReplyKeyboardMarkup(
-            [
-                'keyboard' => $keyboards[1] ,
-                'resize_keyboard' => true,
-                'one_time_keyboard' => false,
-                'selective' => false
-            ]
+        //Keyboard examples
+        /** @var Keyboard[] $keyboards */
+        $keyboards = [];
+        //Example 0
+        $keyboards[] = new Keyboard(
+            ['7', '8', '9'],
+            ['4', '5', '6'],
+            ['1', '2', '3'],
+            [' ', '0', ' ']
         );
-        #echo $json;
-        $data['reply_markup'] = $reply_keyboard_markup;
-
-        $result = Request::sendMessage($data);
-        return $result;
+        //Example 1
+        $keyboards[] = new Keyboard(
+            ['7', '8', '9', '+'],
+            ['4', '5', '6', '-'],
+            ['1', '2', '3', '*'],
+            [' ', '0', ' ', '/']
+        );
+        //Example 2
+        $keyboards[] = new Keyboard('A', 'B', 'C');
+        //Example 3
+        $keyboards[] = new Keyboard(
+            ['text' => 'A'],
+            'B',
+            ['C', 'D']
+        );
+        //Example 4 (bots version 2.0)
+        $keyboards[] = new Keyboard([
+            ['text' => 'Send my contact', 'request_contact' => true],
+            ['text' => 'Send my location', 'request_location' => true],
+        ]);
+        //Return a random keyboard.
+        $keyboard = $keyboards[mt_rand(0, count($keyboards) - 1)]
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(true)
+            ->setSelective(false);
+        $chat_id = $this->getMessage()->getChat()->getId();
+        $data = [
+            'chat_id'      => $chat_id,
+            'text'         => 'Press a Button:',
+            'reply_markup' => $keyboard,
+        ];
+        return Request::sendMessage($data);
     }
 }

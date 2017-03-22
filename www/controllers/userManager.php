@@ -58,6 +58,15 @@ class UserManager
         $this->manager->update('users', 'username', $username, $edited_user);
     }
 
+    public function getUsernameByChatId($chat_id)
+    {
+        $filter = ['chat_id' => $chat_id];
+        $options = ['projection' => ['username' => 1]];
+        $username = $this->manager->find('users', $filter, $options)[0]->username;
+
+        return $username;
+    }
+
     public function getUsersList(){
         $users = $this->manager->getByTitle('users', 'username');
         $users_list = array();

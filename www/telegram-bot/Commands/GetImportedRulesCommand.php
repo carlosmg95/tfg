@@ -1,19 +1,10 @@
 <?php
-/**
- * This file is part of the TelegramBot package.
- *
- * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-//use Longman\TelegramBot\Commands\Command;
+use Ewetasker\Manager\UserManager;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Ewetasker\Manager\UserManager;
 /**
  * User "/getimportedrules" command
  */
@@ -38,9 +29,9 @@ class GetImportedRulesCommand extends UserCommand
         $rules_list = $this->getImportedRules($chat_id);
         $text = '';
         foreach ($rules_list as $value) {
-            $text = $text . $value . PHP_EOL;
+            $text .= $value . PHP_EOL;
         }
-        $text    = $text ? $text : 'You don\'t have imported rules.';
+        $text = $text ? $text : 'You don\'t have imported rules.';
 
         $data = [
             'chat_id' => $chat_id,
