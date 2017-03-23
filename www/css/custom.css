@@ -11,7 +11,7 @@
     padding: 5%;
 }
 
-.btn-create-channel, .btn-add, .btn-create-rule {
+.btn-create-channel, .btn-add, .btn-create-rule, .btn-telegram-id {
     border-radius: 24px;
     margin-bottom: 5%;
     padding: 5%;

@@ -1,0 +1,8 @@
+{
+    "name": "carlosmg95/ewetasker",
+    "type": "project",
+    "require": {
+        "php": ">=5.5.0",
+        "longman/telegram-bot": "*"
+    }
+}
