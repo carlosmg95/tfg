@@ -32,7 +32,7 @@ class RuleManager
         $this->manager = new DBHelper($config);
     }
 
-    public function createNewRule($rule_title, $rule_description, $rule_place, $author, $action_channels, $action_titles, $event_channels, $event_titles)
+    public function createNewRule($rule_title, $rule_description, $rule_place, $author, $action_channels, $action_titles, $event_channels, $event_titles, $rule)
     {
         if ($this->ruleExists($rule_title)) {
             return false;
@@ -46,7 +46,8 @@ class RuleManager
             'event_channels' => $event_channels,
             'event_titles' => $event_titles,
             'action_channels' => $action_channels,
-            'action_titles' => $action_titles
+            'action_titles' => $action_titles,
+            'rule' => $rule
         );
 
         if (in_array('', $rule)) {

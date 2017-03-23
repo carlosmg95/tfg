@@ -150,6 +150,24 @@ class ChannelManager
         return true;
     }
 
+    public function getRulesAndPrefix($title)
+    {
+        $channel = $this->getChannel($title);
+        $actions = array();
+        $events = array();
+
+        foreach ($channel['actions'] as $action) {
+            $actions[$action['title']]['rule'] = $action['rule'];
+            $actions[$action['title']]['prefix'] = $action['prefix'];
+        }
+        foreach ($channel['events'] as $event) {
+            $events[$event['title']]['rule'] = $event['rule'];
+            $events[$event['title']]['prefix'] = $event['prefix'];
+        }
+
+        return array('actions' => $actions, 'events' => $events);
+    }
+
     public function getChannel($title)
     {
         $filter = ['title' => $title];
