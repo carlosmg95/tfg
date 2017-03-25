@@ -157,7 +157,38 @@ class RuleManager
         ';
     }
 
-    public function getRulesList(){
+    public function getRule($title)
+    {
+        $filter = ['title' => $title];
+        $array_rule = $this->manager->find('rules', $filter)[0];
+
+        $title = $array_rule->title;
+        $description = $array_rule->description;
+        $place = $array_rule->place;
+        $author = $array_rule->author;
+        $event_channels = $array_rule->event_channels;
+        $event_titles = $array_rule->event_titles;
+        $action_channels = $array_rule->action_channels;
+        $action_titles = $array_rule->action_titles;
+        $rule = $array_rule->rule;
+
+        $rule = array(
+            'title' => $title,
+            'description' => $description,
+            'place' => $place,
+            'author' => $author,
+            'event_channels' => $event_channels,
+            'event_titles' => $event_titles,
+            'action_channels' => $action_channels,
+            'action_titles' => $action_titles,
+            'rule' => $rule
+        );
+
+        return $rule;
+    }
+
+    public function getRulesList()
+    {
         $rules = $this->manager->getByTitle('rules', 'title');
         $rules_list = array();
         foreach ($rules as $rule) {

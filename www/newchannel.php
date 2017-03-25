@@ -247,7 +247,7 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
