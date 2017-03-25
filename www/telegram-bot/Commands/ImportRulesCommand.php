@@ -6,9 +6,8 @@ use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\ForceReply;
 use Longman\TelegramBot\Entities\Update;
-use Longman\TelegramBot\Entities\Keyboard;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 /**
  * User "/importrules" command
  */
@@ -20,19 +19,19 @@ class ImportRulesCommand extends UserCommand
     protected $name = 'importRules';
     protected $description = 'A command that allow import rules';
     protected $usage = '/importrules';
-    protected $version = '0.5.0';
+    protected $version = '1.0.0';
     /**#@-*/
 
-    private function createKeyboard($items, $layout)
+    private function createKeyboard($items, $layout, $chat_id)
     {
-        $keyboard = array();
+        $keyboard = [];
         $line_index = 0;
 
         foreach ($items as $item) {
             if(empty($keyboard[$line_index])) {
                 $keyboard[$line_index] = [];
             }
-            array_push($keyboard[$line_index], $item);
+            $keyboard[$line_index][] = ['text' => $item, 'callback_data' => $item . '<-->' . $chat_id];
             if (count($keyboard[$line_index]) === $layout) {
                 $line_index++;
             }
@@ -56,14 +55,13 @@ class ImportRulesCommand extends UserCommand
                 'text' => 'There aren\'t rules to import.'
             ];
         } else {
-            $keyboard = $this->createKeyboard($rules_list, 2);
-            $keyboard = new Keyboard(...$keyboard);
-            $keyboard = $keyboard->setResizeKeyboard(true)->setOneTimeKeyboard(false)->setSelective(false);
+            $keyboard = $this->createKeyboard($rules_list, 2, $chat_id);
+            $inline_keyboard = new InlineKeyboard(...$keyboard);
 
             $data = [
                 'chat_id' => $chat_id,
-                'text' => 'Choose a rule.',
-                'reply_markup' => $keyboard
+                'text' => 'Choose a rule' . PHP_EOL . PHP_EOL . '⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇️',
+                'reply_markup' => $inline_keyboard
             ];
         }
         

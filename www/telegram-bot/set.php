@@ -5,7 +5,7 @@ $loader = require $dir.'/vendor/autoload.php';
 
 $API_KEY = '298993971:AAE5u4Std_5l6aEZDpuVjo-QO3IsszBOiFY';
 $BOT_NAME = 'ewetasker_bot';
-$link = 'https://e655308a.ngrok.io/telegram-bot/hook.php';
+$link = 'https://d3592d30.ngrok.io/telegram-bot/hook.php';
 try {
     // create Telegram API object
     $telegram = new Longman\TelegramBot\Telegram($API_KEY, $BOT_NAME);
