@@ -135,7 +135,7 @@ function parseResponse($input, $response){
     foreach ($lines_with_actions as $line) {
         $response = preg_split("/[\s,]+/", trim($line));
         $action['channel'] = str_replace(':', '', strstr($response[0], ':'));
-        $action['action'] = str_replace(':', '', strstr($response[2], ':'));
+        $action['action'] = str_replace([':', '.'], '', strstr($response[2], ':'));
         $action['parameter'] = '';
         if (array_key_exists($action['channel'], $parameters)) {
             $action['parameter'] = $parameters[$action['channel']];
