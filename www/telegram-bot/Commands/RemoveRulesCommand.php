@@ -2,23 +2,22 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 /**
- * User "/importrules" command
+ * User "/removerules" command
  */
-class ImportRulesCommand extends UserCommand
+class RemoveRulesCommand extends UserCommand
 {
     /**#@+
      * {@inheritdoc}
      */
-    protected $name = 'importRules';
-    protected $description = 'A command that allow import rules';
-    protected $usage = '/importrules';
+    protected $name = 'removerules';
+    protected $description = 'A command that allow remove rules';
+    protected $usage = '/removerules';
     protected $version = '1.0.0';
     /**#@-*/
 
@@ -31,7 +30,7 @@ class ImportRulesCommand extends UserCommand
             if(empty($keyboard[$line_index])) {
                 $keyboard[$line_index] = [];
             }
-            $keyboard[$line_index][] = ['text' => $item, 'callback_data' => $item . '<-->' . $chat_id . '<-->import'];
+            $keyboard[$line_index][] = ['text' => $item, 'callback_data' => $item . '<-->' . $chat_id . '<-->remove'];
             if (count($keyboard[$line_index]) === $layout) {
                 $line_index++;
             }
@@ -47,12 +46,12 @@ class ImportRulesCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $rules_list = $this->getNoImportedRules($chat_id);
+        $rules_list = $this->getImportedRules($chat_id);
 
         if (empty($rules_list)) {
             $data = [
                 'chat_id' => $chat_id,
-                'text' => 'There aren\'t rules to import.'
+                'text' => 'You don\'t have imported rules.'
             ];
         } else {
             $keyboard = $this->createKeyboard($rules_list, 1, $chat_id);
@@ -60,7 +59,7 @@ class ImportRulesCommand extends UserCommand
 
             $data = [
                 'chat_id' => $chat_id,
-                'text' => 'Choose a rule' . PHP_EOL . PHP_EOL . '⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇️',
+                'text' => 'Choose a rule to remove' . PHP_EOL . PHP_EOL . '⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇️',
                 'reply_markup' => $inline_keyboard
             ];
         }
@@ -69,22 +68,12 @@ class ImportRulesCommand extends UserCommand
         return Request::sendMessage($data);
     }
 
-    private function getNoImportedRules($chat_id)
-    {
-        include_once('../controllers/ruleManager.php');
+    private function getImportedRules($chat_id)
+    {;
         include_once('../controllers/userManager.php');
         $user_manager = new UserManager([]);
-        $rules_manager = new RuleManager([]);
-        $rules_list = $rules_manager->getRulesList();
-        $no_rules_list = array();
-        $username = $user_manager->getUsernameByChatId((string) $chat_id);
+        $imported_rules_list = $user_manager->getImportedRules('chat_id', (string) $chat_id);
 
-        foreach ($rules_list as $rule) {
-            if (!$user_manager->ruleImported($rule, $username)) {
-                array_push($no_rules_list, $rule);
-            }
-        }
-
-        return $no_rules_list;
+        return $imported_rules_list;
     }
 }
