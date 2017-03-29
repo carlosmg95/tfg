@@ -19,6 +19,16 @@ class ChannelManager
         $this->connect($config);
     }
 
+    public function actionHasParameter($channel_title, $action_title)
+    {
+        $channel = $this->getChannel($channel_title);
+        foreach ($channel['actions'] as $action) {
+            if ($action['title'] === $action_title) {
+                return $action['parameter'] !== '';
+            }
+        }
+    }
+
     private function channelExists($title)
     {
         $filter = ['title' => $title];
@@ -48,6 +58,12 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $events_aux[$nEvents]['rule'] = $value;
+                if (!strpos($value, '#')) {
+                    $events_aux[$nEvents]['parameter'] = '';
+                } else {
+                    $parameter = str_replace('#', '', strstr($value, '#'));
+                    $events_aux[$nEvents]['parameter'] = trim($parameter);
+                }
                 $nAux++;
             } else {
                 $events_aux[$nEvents]['prefix'] = $value;
@@ -64,6 +80,12 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $actions_aux[$nActions]['rule'] = $value;
+                if (!strpos($value, '#')) {
+                    $actions_aux[$nActions]['parameter'] = '';
+                } else {
+                    $parameter = str_replace('#', '', strstr($value, '#'));
+                    $actions_aux[$nActions]['parameter'] = trim($parameter);
+                }
                 $nAux++;
             } else {
                 $actions_aux[$nActions]['prefix'] = $value;
@@ -150,6 +172,16 @@ class ChannelManager
         return true;
     }
 
+    public function eventHasParameter($channel_title, $event_title)
+    {
+        $channel = $this->getChannel($channel_title);
+        foreach ($channel['events'] as $event) {
+            if ($event['title'] === $event_title) {
+                return $event['parameter'] !== '';
+            }
+        }
+    }
+
     public function getRulesAndPrefix($title)
     {
         $channel = $this->getChannel($title);
@@ -187,6 +219,7 @@ class ChannelManager
         foreach ($events as $event) {
             $events_aux[$nEvents]['title'] = $event->title;
             $events_aux[$nEvents]['rule'] = $event->rule;
+            $events_aux[$nEvents]['parameter'] = $event->parameter;
             $events_aux[$nEvents]['prefix'] = $event->prefix;
             $nEvents++;
         }
@@ -195,6 +228,7 @@ class ChannelManager
         foreach ($actions as $action) {
             $actions_aux[$nActions]['title'] = $action->title;
             $actions_aux[$nActions]['rule'] = $action->rule;
+            $actions_aux[$nActions]['parameter'] = $action->parameter;
             $actions_aux[$nActions]['prefix'] = $action->prefix;
             $nActions++;
         }

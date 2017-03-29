@@ -147,15 +147,21 @@
 
             let actions = new Array();
             let events = new Array();
+            let parametersActions = new Array();
+            let parametersEvents = new Array();
 
             <?php foreach ($channelManager->getChannelsList() as $channel_title) { ?>
                 actionsFunctions['<?php echo $channel_title?>'] = function() {
                     let fieldset = '' +
                     '<fieldset>' +
                         '<select name="action" id="action">' +
-                    <?php foreach ($channelManager->getActions($channel_title) as $action_title) { ?>
+                    <?php foreach ($channelManager->getActions($channel_title) as $action_title) { 
+                        if ($channelManager->actionHasParameter($channel_title, $action_title)) { ?>
+                            '<option><?php echo $action_title ?> [Need parameter]</option>' +
+                        <?php } else { ?>
                             '<option><?php echo $action_title ?></option>' +
-                    <?php } ?>
+                        <?php }
+                    } ?>
                         '</select>' +
                     '</fieldset>';
                     return fieldset;
@@ -167,9 +173,13 @@
                     let fieldset = '' +
                     '<fieldset>' +
                         '<select name="event" id="event">' +
-                    <?php foreach ($channelManager->getEvents($channel_title) as $event_title) { ?>
+                    <?php foreach ($channelManager->getEvents($channel_title) as $event_title) {
+                        if ($channelManager->eventHasParameter($channel_title, $event_title)) { ?>
+                            '<option><?php echo $event_title ?> [Need parameter]</option>' +
+                        <?php } else { ?>
                             '<option><?php echo $event_title ?></option>' +
-                    <?php } ?>
+                        <?php }
+                    } ?>
                         '</select>' +
                     '</fieldset>';
                     return fieldset;
@@ -226,7 +236,13 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    actions.push($('select#action').val());
+                    let parameter = '';
+                    const value = $('select#action').val().replace(/\[Need parameter\]$/, '').trim();
+                    if ($('select#action').val().match(/\[Need parameter\]$/)) {
+                        parameter = prompt('Set parameter:','');
+                    }
+                    actions.push(value);
+                    parametersActions.push(parameter);
                     $('.actions').append('<div class="action-box droppable-action new-droppable-action"></div>');
                     $('.new-droppable-action').droppable({
                         accept: '.hasAction',
@@ -262,7 +278,13 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    events.push($('select#event').val());
+                    let parameter = '';
+                    const value = $('select#event').val().replace(/\[Need parameter\]$/, '').trim();
+                    if ($('select#event').val().match(/\[Need parameter\]$/)) {
+                        parameter = prompt('Set parameter:','');
+                    }
+                    events.push(value);
+                    parametersEvents.push(parameter);
                     $('.events').append('<div class="event-box droppable-event new-droppable-event"></div>');
                     $('.new-droppable-event').droppable({
                         accept: '.hasEvent',
@@ -322,7 +344,9 @@
                             'Event-channels': eventChannels,
                             'Action-channels': actionChannels,
                             'Events' : events,
-                            'Actions' : actions
+                            'Actions' : actions,
+                            'Parameters-actions' : parametersActions,
+                            'Parameters-events' : parametersEvents
                         },
                         success: function(output){
                             window.open('./rules.php', '_self');

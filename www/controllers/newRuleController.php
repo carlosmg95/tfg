@@ -15,15 +15,21 @@ $rule_place = htmlspecialchars($_POST['Rule-place']);
 $author = $_POST['Author'];
 $action_channels = $_POST['Action-channels'];
 $action_titles = $_POST['Actions'];
+$actions_parameters = $_POST['Parameters-actions'];
 $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
+$events_parameters = $_POST['Parameters-events'];
 
 $i = 0;
 $action_rules = '';
 $action_prefixes = '';
 foreach ($action_channels as $channel_title) {
     $info = $channel_manager->getRulesAndPrefix($channel_title);
-    $action_rules .= $info['actions'][$action_titles[$i]]['rule'] . PHP_EOL;
+    $action_rule = $info['actions'][$action_titles[$i]]['rule'];
+    if ($actions_parameters[$i] !== '') {
+        $action_rule = preg_replace('/(#+\w+#)/', '"' . $actions_parameters[$i] . '"', $action_rule);
+    }
+    $action_rules .= $action_rule . PHP_EOL;
     $action_prefixes .= $info['actions'][$action_titles[$i]]['prefix'] . PHP_EOL;
     $i++;
 }
@@ -33,8 +39,12 @@ $event_rules = '';
 $event_prefixes = '';
 foreach ($event_channels as $channel_title) {
     $info = $channel_manager->getRulesAndPrefix($channel_title);
-    $event_rules .= $info['events'][$event_titles[$i]]['rule'] . PHP_EOL;
-    $event_prefixes .= $info['events'][$event_titles[$i]]['prefix'] . PHP_EOL;
+    $event_rule = $info['events'][$event_titles[$i]]['rule'];
+    if ($events_parameters[$i] !== '') {
+        $event_rule = preg_replace('/(#+\w+#)/', '"' . $events_parameters[$i] . '"', $event_rule);
+    }
+    $event_rules .= $event_rule . PHP_EOL;
+    $event_prefixes .= $info['events'][$event_titles[$i]]['prefix']. PHP_EOL;
     $i++;
 }
 
