@@ -1,5 +1,13 @@
 <?php
-    session_start()
+    session_start();
+
+    use Ewetasker\Manager\ChannelManager;
+    use Ewetasker\Manager\RuleManager;
+    include_once('./controllers/channelManager.php');
+    include_once('./controllers/ruleManager.php');
+
+    $channel_manager = new ChannelManager([]);
+    $rule_manager = new RuleManager([]);
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +79,39 @@
 
     <!-- Main content -->
     <div class="container">
+        <!-- Values -->
+        <div class="row">
+            <!-- Title -->
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Title:</label>
+                    <input type="text" class="form-control" placeholder="Title" id="title" required data-validation-required-message="Please enter a title." name="title">
+                </div>
+            </div>  <!-- field -->
+
+            <!-- Place -->
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Place:</label>
+                    <?php foreach ($rule_manager->getPlaces() as $place) { ?>
+                    <input type="radio" name="place" value="<?php echo $place ?>" id="<?php echo $place ?>"> <?php echo $place ?><br>
+                    <?php } ?>
+                    <div class="input-group">
+                        <input type="radio" name="place">
+                        <input type="text" placeholder=" New place" name="place" required data-validation-required-message="Please enter a place.">
+                    </div>  <!-- input group -->
+                </div>
+            </div>  <!-- field -->
+
+            <!-- Description -->
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Description:</label>
+                    <input type="text" class="form-control" placeholder="Description" id="description" required data-validation-required-message="Please enter a description." name="description">
+                </div>
+            </div>  <!-- field -->
+        </div>  <!-- Values -->
+        
         <!-- Boxes -->
         <div class="row new-rule">
             <!-- Event Box -->
@@ -89,7 +130,7 @@
                 <h3 style="text-align: center;">Then</h3>
                 <div class="action-box droppable-action"></div>
             </div>  <!-- Action -->
-        </div>
+        </div>  <!-- Boxes -->
 
         <div class="row">
             <button type="button" onclick="submit()" class="btn btn-success" id="send" style="float: right;">Send</button>
@@ -99,7 +140,6 @@
         <div id="myModal" class="modal">
             <div id="action-options-dialog" class="modal-content"></div>
             <div id="event-options-dialog" class="modal-content"></div>
-            <div id="rule-options-dialog" class="modal-content"></div>
         </div>
     </div>
 
@@ -110,11 +150,7 @@
         <div class="row">
         <?php
 
-        use Ewetasker\Manager\ChannelManager;
-        include_once('./controllers/channelManager.php');
-
-        $channelManager = new ChannelManager([]);
-        $channelManager->viewChannelsIconHTML();
+        $channel_manager->viewChannelsIconHTML();
 
         ?>
         </div>        
@@ -150,13 +186,13 @@
             let parametersActions = new Array();
             let parametersEvents = new Array();
 
-            <?php foreach ($channelManager->getChannelsList() as $channel_title) { ?>
+            <?php foreach ($channel_manager->getChannelsList() as $channel_title) { ?>
                 actionsFunctions['<?php echo $channel_title?>'] = function() {
                     let fieldset = '' +
                     '<fieldset>' +
                         '<select name="action" id="action">' +
-                    <?php foreach ($channelManager->getActions($channel_title) as $action_title) { 
-                        if ($channelManager->actionHasParameter($channel_title, $action_title)) { ?>
+                    <?php foreach ($channel_manager->getActions($channel_title) as $action_title) { 
+                        if ($channel_manager->actionHasParameter($channel_title, $action_title)) { ?>
                             '<option><?php echo $action_title ?> [Need parameter]</option>' +
                         <?php } else { ?>
                             '<option><?php echo $action_title ?></option>' +
@@ -168,13 +204,13 @@
                 }
             <?php } ?>
 
-            <?php foreach ($channelManager->getChannelsList() as $channel_title) { ?>
+            <?php foreach ($channel_manager->getChannelsList() as $channel_title) { ?>
                 eventsFunctions['<?php echo $channel_title?>'] = function() {
                     let fieldset = '' +
                     '<fieldset>' +
                         '<select name="event" id="event">' +
-                    <?php foreach ($channelManager->getEvents($channel_title) as $event_title) {
-                        if ($channelManager->eventHasParameter($channel_title, $event_title)) { ?>
+                    <?php foreach ($channel_manager->getEvents($channel_title) as $event_title) {
+                        if ($channel_manager->eventHasParameter($channel_title, $event_title)) { ?>
                             '<option><?php echo $event_title ?> [Need parameter]</option>' +
                         <?php } else { ?>
                             '<option><?php echo $event_title ?></option>' +
@@ -301,93 +337,56 @@
                 }
             });
 
-            $('#rule-options-dialog').dialog({
-                autoOpen: false,
-                modal: true,
-                show: {
-                    effect: 'puff',
-                    duration: 1000
-                },
-                buttons: {
-                    'Save': function() {
-                        $(this).dialog( "close" );
-                    }
-                },
-                hide: {
-                    effect: 'explode',
-                    duration: 1000
-                },
-                close: function(event, ui) {
-                    let actionChannels = new Array();
-                    let eventChannels = new Array();
+            submit = function() {
+                let actionChannels = new Array();
+                let eventChannels = new Array();
+                let place;
 
-                    for (var i in $('.event-box > img')) {
-                        if(!$('.event-box > img')[i].id){
-                            break;
-                        }
-                        eventChannels.push($('.event-box > img')[i].id);
+                for (let i in $('.event-box > img')) {
+                    if(!$('.event-box > img')[i].id){
+                        break;
                     }
-                    for (var i in $('.action-box > img')) {
-                        if(!$('.action-box > img')[i].id){
-                            break;
-                        }
-                        actionChannels.push($('.action-box > img')[i].id);
-                    }
-                    $.post({
-                        type: 'POST',
-                        url: './controllers/newRuleController.php',
-                        data: {
-                            'Rule-title' : $('input#title').val(),
-                            'Rule-place' : $('input#place').val(),
-                            'Rule-description' : $('input#description').val(),
-                            'Author' : '<?php echo $_SESSION['user'] ?>',
-                            'Event-channels': eventChannels,
-                            'Action-channels': actionChannels,
-                            'Events' : events,
-                            'Actions' : actions,
-                            'Parameters-actions' : parametersActions,
-                            'Parameters-events' : parametersEvents
-                        },
-                        success: function(output){
-                            window.open('./rules.php', '_self');
-                        }
-                    });
+                    eventChannels.push($('.event-box > img')[i].id);
                 }
-            });
+                for (let i in $('.action-box > img')) {
+                    if(!$('.action-box > img')[i].id){
+                        break;
+                    }
+                    actionChannels.push($('.action-box > img')[i].id);
+                }
+
+                let placeButton = $('input[name=place]');
+                for (let i in placeButton) {
+                    if (placeButton[i].checked) {
+                        if (placeButton[i] === placeButton[placeButton.length - 2]) {
+                            place = placeButton[placeButton.length - 1].value;
+                        } else {
+                            place = placeButton[i].value;
+                        }
+                        break;
+                    }
+                }
+                $.post({
+                    type: 'POST',
+                    url: './controllers/newRuleController.php',
+                    data: {
+                        'Rule-title' : $('input#title').val(),
+                        'Rule-place' : place,
+                        'Rule-description' : $('input#description').val(),
+                        'Author' : '<?php echo $_SESSION['user'] ?>',
+                        'Event-channels': eventChannels,
+                        'Action-channels': actionChannels,
+                        'Events' : events,
+                        'Actions' : actions,
+                        'Parameters-actions' : parametersActions,
+                        'Parameters-events' : parametersEvents
+                    },
+                    success: function(output){
+                        window.open('./rules.php', '_self');
+                    }
+                });
+            }
         });
-
-
-        function submit() {
-            $('button#send').attr('onclick', '');
-            $('#action-options-dialog').dialog('close');
-            $('#event-options-dialog').dialog('close');
-            $('#rule-options-dialog').append('' +
-                '<!-- Title -->' +
-                '<div class="row control-group">' +
-                    '<div class="form-group col-xs-12 floating-label-form-group controls">' +
-                        '<label>Title:</label>' +
-                        '<input type="text" class="form-control" placeholder="Title" id="title" required data-validation-required-message="Please enter a title." name="title">' +
-                    '</div>' +
-                '</div>  <!-- field -->' +
-
-                '<!-- Place -->' +
-                '<div class="row control-group">' +
-                    '<div class="form-group col-xs-12 floating-label-form-group controls">' +
-                        '<label>Place:</label>' +
-                        '<input type="text" class="form-control" placeholder="Place" id="place" required data-validation-required-message="Please enter a place." name="place">' +
-                    '</div>' +
-                '</div>  <!-- field -->' +
-
-                '<!-- Description -->' +
-                '<div class="row control-group">' +
-                    '<div class="form-group col-xs-12 floating-label-form-group controls">' +
-                        '<label>Description:</label>' +
-                        '<input type="text" class="form-control" placeholder="Description" id="description" required data-validation-required-message="Please enter a description." name="description">' +
-                    '</div>' +
-                '</div>  <!-- field -->'
-            );
-            $('#rule-options-dialog').dialog('open');
-        }
     </script>
 </body>
 </html>

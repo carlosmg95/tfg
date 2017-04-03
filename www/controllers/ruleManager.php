@@ -80,6 +80,18 @@ class RuleManager
         return $author;
     }
 
+    public function getPlaces()
+    {
+        $channels = $this->manager->find('rules');
+        $places = array();
+        foreach ($channels as $channel) {
+            if (!in_array($channel->place, $places)) {
+                array_push($places, $channel->place);
+            }
+        }
+        return $places;
+    }
+
     private function getRuleHTML($rule, $imported)
     {
         if ($imported) {
