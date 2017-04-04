@@ -3,8 +3,10 @@
 namespace Ewetasker\Manager;
 
 use Ewetasker\Manager\DBHelper;
+use Ewetasker\Manager\RuleManager;
 
 include_once('DBHelper.php');
+include_once('ruleManager.php');
 //require_once('./mongoconfig.php');
 
 /**
@@ -26,13 +28,16 @@ class UserManager
 
     public function createNewUser($username, $password)
     {
+        $rule_manager = new RuleManager([]);
         $user = array(
             'username' => $username,
             'password' => $password,
-            'imported_rules' => [],
+            'imported_rules' => $rule_manager->getAdminRulesList(),
             'created_rules' => [],
             'chat_id' => ''
         );
+
+        unset($rule_manager);
 
         if($this->userExists($username)) {
             return false;
@@ -102,6 +107,13 @@ class UserManager
         return true;
     }
 
+    public function importRuleToAll($rule_title)
+    {
+        foreach ($this->getUsersList() as $username) {
+            $this->importRule($rule_title, $username);
+        }
+    }
+
     public function insertRule($rule_title, $username)
     {
         $filter = ['username' => $username];
@@ -125,7 +137,9 @@ class UserManager
 
     public function removeRule($rule_title, $username)
     {
-        if (!$this->ruleImported($rule_title, $username)) {
+        $rule_manager = new RuleManager([]);
+        $rule = $rule_manager->getRule($rule_title);
+        if (!$this->ruleImported($rule_title, $username) || $rule['description'] === 'ADMIN RULE') {
             return false;
         }
         $filter = ['username' => $username];

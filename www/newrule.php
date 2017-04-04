@@ -111,7 +111,7 @@
                 </div>
             </div>  <!-- field -->
         </div>  <!-- Values -->
-        
+
         <!-- Boxes -->
         <div class="row new-rule">
             <!-- Event Box -->
@@ -356,11 +356,14 @@
                 }
 
                 let placeButton = $('input[name=place]');
-                for (let i in placeButton) {
+                let newPlace;
+                for (let i in placeButton) {                    
                     if (placeButton[i].checked) {
                         if (placeButton[i] === placeButton[placeButton.length - 2]) {
+                            newPlace = prompt('Set sensorID:','');;
                             place = placeButton[placeButton.length - 1].value;
                         } else {
+                            newPlace = '';
                             place = placeButton[i].value;
                         }
                         break;
@@ -372,6 +375,7 @@
                     data: {
                         'Rule-title' : $('input#title').val(),
                         'Rule-place' : place,
+                        'New-place' : newPlace,
                         'Rule-description' : $('input#description').val(),
                         'Author' : '<?php echo $_SESSION['user'] ?>',
                         'Event-channels': eventChannels,

@@ -16,14 +16,10 @@ include_once('userManager.php');
 */
 class RuleManager
 {
-    private $channel_manager;
     private $manager;
-    private $user_manager;
 
     function __construct($config)
     {
-        $this->channel_manager = new ChannelManager($config);
-        $this->user_manager = new UserManager($config);
         $this->connect($config);
     }
 
@@ -34,7 +30,12 @@ class RuleManager
 
     public function createNewRule($rule_title, $rule_description, $rule_place, $author, $action_channels, $action_titles, $event_channels, $event_titles, $rule)
     {
+        $user_manager = new UserManager([]);
+
         if ($this->ruleExists($rule_title)) {
+            return false;
+        }
+        if ($rule_description === 'ADMIN RULE' && $author !== 'admin') {
             return false;
         }
 
@@ -54,22 +55,38 @@ class RuleManager
             return false;
         }
 
-        $this->user_manager->insertRule($rule_title, $author);
+        $user_manager->insertRule($rule_title, $author);
         $this->manager->insert('rules', $rule);
+
+        unset($user_manager);
 
         return true;
     }
 
     public function deleteRule($rule_title)
     {
-        $users = $this->user_manager->getUsersList();
+        $user_manager = new UserManager([]);
+        $users = $user_manager->getUsersList();
         foreach ($users as $username) {
             if ($username === $this->getAuthor($rule_title)) {
-                $this->user_manager->deleteRule($rule_title, $username);
+                $user_manager->deleteRule($rule_title, $username);
             }
-            $this->user_manager->removeRule($rule_title, $username);
+            $user_manager->removeRule($rule_title, $username);
         }
+        unset($user_manager);
         return $this->manager->remove('rules', 'title', $rule_title);
+    }
+
+    public function getAdminRulesList()
+    {
+        $admin_rules = array();
+        foreach ($this->getRulesList() as $rule_title) {
+            $rule = $this->getRule($rule_title);
+            if ($rule['description'] === 'ADMIN RULE') {
+                array_push($admin_rules, $rule_title);
+            }
+        }
+        return $admin_rules;
     }
 
     public function getAuthor($rule_title)
@@ -82,18 +99,50 @@ class RuleManager
 
     public function getPlaces()
     {
-        $channels = $this->manager->find('rules');
+        $rules = $this->manager->find('rules');
         $places = array();
-        foreach ($channels as $channel) {
-            if (!in_array($channel->place, $places)) {
-                array_push($places, $channel->place);
+        foreach ($rules as $rule) {
+            if (!in_array($rule->place, $places)) {
+                array_push($places, $rule->place);
             }
         }
         return $places;
     }
 
+    public function getRule($title)
+    {
+        $filter = ['title' => $title];
+        $array_rule = $this->manager->find('rules', $filter)[0];
+
+        $title = $array_rule->title;
+        $description = $array_rule->description;
+        $place = $array_rule->place;
+        $author = $array_rule->author;
+        $event_channels = $array_rule->event_channels;
+        $event_titles = $array_rule->event_titles;
+        $action_channels = $array_rule->action_channels;
+        $action_titles = $array_rule->action_titles;
+        $rule = $array_rule->rule;
+
+        $rule = array(
+            'title' => $title,
+            'description' => $description,
+            'place' => $place,
+            'author' => $author,
+            'event_channels' => $event_channels,
+            'event_titles' => $event_titles,
+            'action_channels' => $action_channels,
+            'action_titles' => $action_titles,
+            'rule' => $rule
+        );
+
+        return $rule;
+    }
+
     private function getRuleHTML($rule, $imported)
     {
+        $channel_manager = new ChannelManager([]);
+
         if ($imported) {
             $importButton = 'remove';
         } else {
@@ -104,10 +153,10 @@ class RuleManager
         $action_channels = array();
         $event_channels = array();
         foreach ($action_channels_name as $action_channel) {
-            array_push($action_channels, $this->channel_manager->getChannel($action_channel));
+            array_push($action_channels, $channel_manager->getChannel($action_channel));
         }
         foreach ($event_channels_name as $event_channel) {
-            array_push($event_channels, $this->channel_manager->getChannel($event_channel));
+            array_push($event_channels, $channel_manager->getChannel($event_channel));
         }
 
         $actions = $this->viewEventsHTML($action_channels, $rule->action_titles);
@@ -127,6 +176,9 @@ class RuleManager
                 <button type="button" class="btn btn-danger btn-rules-action" onclick="window.location=\'./deleterule.php?ruleTitle=' . $title . '\'">Delete</button>
             </div>';
         }
+
+        unset($channel_manager);
+
         echo '
             <!-- Rule Item -->
             <div class="row rule-item">
@@ -167,36 +219,6 @@ class RuleManager
                 ' . $buttons . '
             </div>  <!-- row -->
         ';
-    }
-
-    public function getRule($title)
-    {
-        $filter = ['title' => $title];
-        $array_rule = $this->manager->find('rules', $filter)[0];
-
-        $title = $array_rule->title;
-        $description = $array_rule->description;
-        $place = $array_rule->place;
-        $author = $array_rule->author;
-        $event_channels = $array_rule->event_channels;
-        $event_titles = $array_rule->event_titles;
-        $action_channels = $array_rule->action_channels;
-        $action_titles = $array_rule->action_titles;
-        $rule = $array_rule->rule;
-
-        $rule = array(
-            'title' => $title,
-            'description' => $description,
-            'place' => $place,
-            'author' => $author,
-            'event_channels' => $event_channels,
-            'event_titles' => $event_titles,
-            'action_channels' => $action_channels,
-            'action_titles' => $action_titles,
-            'rule' => $rule
-        );
-
-        return $rule;
     }
 
     public function getRulesList()
@@ -276,15 +298,20 @@ class RuleManager
 
     public function viewRulesHTML()
     {
+        $user_manager = new UserManager([]);
         $options = ['sort' => ['title' => 1]];
         $rules = $this->manager->find('rules', [], $options);
 
         foreach ($rules as $rule) {
-            $this->getRuleHTML($rule, $this->user_manager->ruleImported($rule->title, $_SESSION['user']));
+            if ($rule->description !== 'ADMIN RULE') {
+                $this->getRuleHTML($rule, $user_manager->ruleImported($rule->title, $_SESSION['user']));
+            }            
         }
+        unset($user_manager);
     }
 
     public function viewRulesHTMLByUser($username, $kind) {
+        $user_manager = new UserManager([]);
         $filter = ['username' => $username];
         $options = ['projection' => [$kind => 1]];
         $rules_title = $this->manager->find('users', $filter, $options)[0]->$kind;
@@ -293,8 +320,11 @@ class RuleManager
             $filter = ['title' => $rule_title];
             $rule = $this->manager->find('rules', $filter)[0];
 
-            $this->getRuleHTML($rule, $this->user_manager->ruleImported($rule->title, $username));
+            if ($rule->description !== 'ADMIN RULE') {
+                $this->getRuleHTML($rule, $user_manager->ruleImported($rule->title, $username));
+            }
         }
+        unset($user_manager);
     }
 }
 

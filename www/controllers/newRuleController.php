@@ -2,16 +2,20 @@
 
 use Ewetasker\Manager\ChannelManager;
 use Ewetasker\Manager\RuleManager;
+use Ewetasker\Manager\UserManager;
 include_once('channelManager.php');
 include_once('ruleManager.php');
+include_once('userManager.php');
 
 $config = [];
 $channel_manager = new ChannelManager($config);
 $rule_manager = new RuleManager($config);
+$user_manager = new UserManager($config);
 
 $rule_title = htmlspecialchars($_POST['Rule-title']);
 $rule_description = htmlspecialchars($_POST['Rule-description']);
 $rule_place = htmlspecialchars($_POST['Rule-place']);
+$new_place = $_POST['New-place'];
 $author = $_POST['Author'];
 $action_channels = $_POST['Action-channels'];
 $action_titles = $_POST['Actions'];
@@ -64,7 +68,28 @@ $success = $rule_manager->createNewRule(
     $rule
 );
 
-if (!$succes) {
+if ((bool) $new_place) {
+    $action_channels = ['((((CAMBIAR)))))'];
+    $action_titles = ['((((CAMBIAR)))))'];
+    $event_channels = ['presence'];
+    $event_titles = ['Presence Detected At Distance Less Than'];
+    $rule = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix string: <http://www.w3.org/2000/10/swap/string#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .\n@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .\n{\n\t?event rdf:type ewe-presence:PresenceDetectedAtDistance.\n\t?event ewe:sensorID ?sensorID.\n\t?sensorID string:equalIgnoringCase \"" . $new_place . "\".\n\t?event!ewe:distance math:lessThan \"1\".\n}\n=>\n{\n\t(((((CAMBIAR)))))\n}.";
+
+    $rule_manager->createNewRule(
+        'Import rules ' . $rule_place,
+        'ADMIN RULE',
+        $rule_place,
+        'admin',
+        $action_channels,
+        $action_titles,
+        $event_channels,
+        $event_titles,
+        $rule
+    );
+    $user_manager->importRuleToAll('Import rules ' . $rule_place);
+}
+
+if (!$success) {
     header('Location: ../index.php');
 }
 

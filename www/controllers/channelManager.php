@@ -58,11 +58,12 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $events_aux[$nEvents]['rule'] = $value;
-                if (!strpos($value, '#')) {
-                    $events_aux[$nEvents]['parameter'] = '';
-                } else {
-                    $parameter = str_replace('#', '', strstr($value, '#'));
-                    $events_aux[$nEvents]['parameter'] = trim($parameter);
+                $events_aux[$nEvents]['parameter'] = [];
+                while (strpos($value, '#')) {
+                    $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
+                    $param = strstr($param_aux, '#', true);
+                    array_push($events_aux[$nEvents]['parameter'], $param);
+                    $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
             } else {
@@ -80,11 +81,12 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $actions_aux[$nActions]['rule'] = $value;
-                if (!strpos($value, '#')) {
-                    $actions_aux[$nActions]['parameter'] = '';
-                } else {
-                    $parameter = str_replace('#', '', strstr($value, '#'));
-                    $actions_aux[$nActions]['parameter'] = trim($parameter);
+                $actions_aux[$nActions]['parameter'] = [];
+                while (strpos($value, '#')) {
+                    $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
+                    $param = strstr($param_aux, '#', true);
+                    array_push($events_aux[$nActions]['parameter'], $param);
+                    $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
             } else {
@@ -286,6 +288,7 @@ class ChannelManager
         foreach ($channels as $channel) {
             $image = $channel->image;
             $title = $channel->title;
+            $nicename = $channel->nicename;
             $description = $channel->description;
             $buttons = '';
 
@@ -308,7 +311,7 @@ class ChannelManager
 
                 <!-- Channel description -->
                 <div class="col-md-6 channel-fragment">
-                    <p><strong>' . $title . '</strong><br>' . $description . '.</p>
+                    <p><strong>' . $nicename . '</strong><br>' . $description . '.</p>
                 </div>
 
                 ' . $buttons . '            
@@ -325,6 +328,7 @@ class ChannelManager
         foreach ($channels as $channel) {
             $image = $channel->image;
             $title = $channel->title;
+            $nicename = $channel->nicename;
             $hasAction = '';
             $hasEvent = '';
             if (!empty($channel->actions)) {
@@ -347,7 +351,7 @@ class ChannelManager
                 <!-- Title -->
                 <div class ="row">
                     <div class="col-md-12 rule-fragment rule-info">
-                        <p>' . $title . '</p>
+                        <p>' . $nicename . '</p>
                     </div>
                 </div>  <!-- Title -->
             </div>
