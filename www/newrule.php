@@ -192,8 +192,8 @@
                     '<fieldset>' +
                         '<select name="action" id="action">' +
                     <?php foreach ($channel_manager->getActions($channel_title) as $action_title) { 
-                        if ($channel_manager->actionHasParameter($channel_title, $action_title)) { ?>
-                            '<option><?php echo $action_title ?> [Need parameter]</option>' +
+                        if ((bool) $channel_manager->actionHasParameter($channel_title, $action_title)) { ?>
+                            '<option class="<?php echo implode(' ', $channel_manager->actionHasParameter($channel_title, $action_title)) ?>"><?php echo $action_title ?> [Need parameter]</option>' +
                         <?php } else { ?>
                             '<option><?php echo $action_title ?></option>' +
                         <?php }
@@ -210,8 +210,8 @@
                     '<fieldset>' +
                         '<select name="event" id="event">' +
                     <?php foreach ($channel_manager->getEvents($channel_title) as $event_title) {
-                        if ($channel_manager->eventHasParameter($channel_title, $event_title)) { ?>
-                            '<option><?php echo $event_title ?> [Need parameter]</option>' +
+                        if ((bool) $channel_manager->eventHasParameter($channel_title, $event_title)) { ?>
+                            '<option class="<?php echo implode(' ', $channel_manager->eventHasParameter($channel_title, $event_title)) ?>"><?php echo $event_title ?> [Need parameter]</option>' +
                         <?php } else { ?>
                             '<option><?php echo $event_title ?></option>' +
                         <?php }
@@ -272,10 +272,13 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let parameter = '';
+                    let parameter = [];
                     const value = $('select#action').val().replace(/\[Need parameter\]$/, '').trim();
                     if ($('select#action').val().match(/\[Need parameter\]$/)) {
-                        parameter = prompt('Set parameter:','');
+                        parameterClass = $('select#action').children().attr('class').split(' ');
+                        for (let i in parameterClass) {
+                            parameter.push(prompt('Set parameter:', parameterClass[i]));
+                        }
                     }
                     actions.push(value);
                     parametersActions.push(parameter);
@@ -314,10 +317,13 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let parameter = '';
+                    let parameter = [];
                     const value = $('select#event').val().replace(/\[Need parameter\]$/, '').trim();
                     if ($('select#event').val().match(/\[Need parameter\]$/)) {
-                        parameter = prompt('Set parameter:','');
+                        parameterClass = $('select#event').children().attr('class').split(' ');
+                        for (let i in parameterClass) {
+                            parameter.push(prompt('Set parameter:', parameterClass[i]));
+                        }
                     }
                     events.push(value);
                     parametersEvents.push(parameter);
@@ -360,7 +366,7 @@
                 for (let i in placeButton) {                    
                     if (placeButton[i].checked) {
                         if (placeButton[i] === placeButton[placeButton.length - 2]) {
-                            newPlace = prompt('Set sensorID:','');;
+                            newPlace = prompt('Set sensorID of the place:','');;
                             place = placeButton[placeButton.length - 1].value;
                         } else {
                             newPlace = '';

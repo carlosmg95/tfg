@@ -24,7 +24,7 @@ class ChannelManager
         $channel = $this->getChannel($channel_title);
         foreach ($channel['actions'] as $action) {
             if ($action['title'] === $action_title) {
-                return $action['parameter'] !== '';
+                return $action['parameters'];
             }
         }
     }
@@ -58,11 +58,11 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $events_aux[$nEvents]['rule'] = $value;
-                $events_aux[$nEvents]['parameter'] = [];
+                $events_aux[$nEvents]['parameters'] = [];
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    array_push($events_aux[$nEvents]['parameter'], $param);
+                    array_push($events_aux[$nEvents]['parameters'], $param);
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
@@ -81,11 +81,11 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $actions_aux[$nActions]['rule'] = $value;
-                $actions_aux[$nActions]['parameter'] = [];
+                $actions_aux[$nActions]['parameters'] = [];
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    array_push($events_aux[$nActions]['parameter'], $param);
+                    array_push($actions_aux[$nActions]['parameters'], $param);
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
@@ -179,7 +179,7 @@ class ChannelManager
         $channel = $this->getChannel($channel_title);
         foreach ($channel['events'] as $event) {
             if ($event['title'] === $event_title) {
-                return $event['parameter'] !== '';
+                return $event['parameters'];
             }
         }
     }
@@ -221,7 +221,7 @@ class ChannelManager
         foreach ($events as $event) {
             $events_aux[$nEvents]['title'] = $event->title;
             $events_aux[$nEvents]['rule'] = $event->rule;
-            $events_aux[$nEvents]['parameter'] = $event->parameter;
+            $events_aux[$nEvents]['parameters'] = $event->parameters;
             $events_aux[$nEvents]['prefix'] = $event->prefix;
             $nEvents++;
         }
@@ -230,7 +230,7 @@ class ChannelManager
         foreach ($actions as $action) {
             $actions_aux[$nActions]['title'] = $action->title;
             $actions_aux[$nActions]['rule'] = $action->rule;
-            $actions_aux[$nActions]['parameter'] = $action->parameter;
+            $actions_aux[$nActions]['parameters'] = $action->parameters;
             $actions_aux[$nActions]['prefix'] = $action->prefix;
             $nActions++;
         }
@@ -347,7 +347,7 @@ class ChannelManager
                         <img class="img img-circle img-responsive img-channel draggable ' . $hasAction . ' ' . $hasEvent . '" id="' . $title . '" src="' . $image . '" />
                     </div>
                 </div>  <!-- Image -->
-
+                
                 <!-- Title -->
                 <div class ="row">
                     <div class="col-md-12 rule-fragment rule-info">
