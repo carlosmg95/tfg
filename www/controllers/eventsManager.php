@@ -35,13 +35,10 @@ $rules = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .
 @prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#> .
-@prefix ov: <http://vocab.org/open/#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#> .
-@prefix ov: <http://vocab.org/open/#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ewe-wifi: <http://gsi.dit.upm.es/ontologies/ewe-wifi/ns/#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#> .
+@prefix ov: <http://vocab.org/open/#> .
 {
 ?event rdf:type ewe-presence:PresenceDetectedAtDistance.
 ?event ewe:sensorID ?sensorID.
@@ -50,12 +47,10 @@ $rules = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 }
 =>
 {
-ewe-twitter:Twitter rdf:type ewe-twitter:PostTweet.
 ewe-wifi:Wifi rdf:type ewe-wifi:ON .
-ewe-twitter:Twitter rdf:type ewe-twitter:MD;
-ov:message "hola".
-}.
-';
+ewe-twitter:Twitter rdf:type ewe-twitter:PostTweet;
+ov:message "hola, muy buenas".
+}.';
 
 $response = evaluateEvent($input_event, $rules);
 
@@ -163,16 +158,20 @@ function parseResponse($input, $response){
     $actionsJson['actions'] = array();
     $parameters = array();
     foreach ($lines_with_parameters as $line) {
-        $response = preg_split("/[\s,]+/", trim($line));
+        $response = preg_split("/[\s]+/", trim($line));
         $channel = str_replace(':', '', strstr($response[0], ':'));
-        $parameter = str_replace(array('".', '"'), '', strstr($response[2], '"'));
+        $parameter = '';
+        for ($i = 2; $i < count($response); $i++) { 
+            $parameter .= $response[$i] . ' ';  # It is neccesary if the parameter is a string with spaces.
+        }
+        $parameter = trim($parameter);
+        $parameter = str_replace(array('".', '"'), '', strstr($parameter, '"'));
         if (!array_key_exists($channel, $parameters)) {
             $parameters[$channel] = array();
         }
         array_push($parameters[$channel], $parameter);
     }
     foreach ($lines_with_actions as $line) {
-        //echo 'line: ' . $line . PHP_EOL;
         $response = preg_split("/[\s,]+/", trim($line));
         $action['channel'] = str_replace(':', '', strstr($response[0], ':'));
         $action['action'] = str_replace([':', '.'], '', strstr($response[2], ':'));

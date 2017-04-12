@@ -24,10 +24,32 @@ $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
 $events_parameters = $_POST['Parameters-events'];
 
+// The actions has two foreach because this way the rules that don't need parameters are colocated at the end of the rule. It is important in eventManager.
 $i = 0;
 $action_rules = '';
 $action_prefixes = '';
 foreach ($action_channels as $channel_title) {
+    if (!$channel_manager->actionHasParameter($channel_title, $action_titles[$i])) {
+        $i++;
+        continue;
+    }
+    $info = $channel_manager->getRulesAndPrefix($channel_title);
+    $action_rule = $info['actions'][$action_titles[$i]]['rule'];
+    if ($actions_parameters[$i] !== []) {
+        foreach ($actions_parameters[$i] as $parameter) {
+            $action_rule = preg_replace('/(#+\w+#)/', '"' . $parameter . '"', $action_rule, 1);
+        }
+    }
+    $action_rules .= $action_rule . PHP_EOL;
+    $action_prefixes .= $info['actions'][$action_titles[$i]]['prefix'] . PHP_EOL;
+    $i++;
+}
+$i = 0;
+foreach ($action_channels as $channel_title) {
+    if ($channel_manager->actionHasParameter($channel_title, $action_titles[$i])) {
+        $i++;
+        continue;
+    }
     $info = $channel_manager->getRulesAndPrefix($channel_title);
     $action_rule = $info['actions'][$action_titles[$i]]['rule'];
     if ($actions_parameters[$i] !== []) {

@@ -275,9 +275,17 @@
                     let parameter = [];
                     const value = $('select#action').val().replace(/\[Need parameter\]$/, '').trim();
                     if ($('select#action').val().match(/\[Need parameter\]$/)) {
-                        parameterClass = $('select#action').children().attr('class').split(' ');
-                        for (let i in parameterClass) {
-                            parameter.push(prompt('Set parameter:', parameterClass[i]));
+                        for (let i in $('select#action').children()) {
+                            if ($('select#action').children()[i].innerHTML === $('select#action').val()) {
+                                let parameterClass = $('select#action').children()[i].outerHTML;
+                                parameterClass = parameterClass.replace(/<option class=\"/, '');
+                                parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
+                                parameterClass = parameterClass.split(' ');
+                                for (let i in parameterClass) {
+                                    parameter.push(prompt('Set parameter:', parameterClass[i]));
+                                }
+                                break;
+                            }
                         }
                     }
                     actions.push(value);
@@ -320,9 +328,17 @@
                     let parameter = [];
                     const value = $('select#event').val().replace(/\[Need parameter\]$/, '').trim();
                     if ($('select#event').val().match(/\[Need parameter\]$/)) {
-                        parameterClass = $('select#event').children().attr('class').split(' ');
-                        for (let i in parameterClass) {
-                            parameter.push(prompt('Set parameter:', parameterClass[i]));
+                        for (let i in $('select#event').children()) {
+                            if ($('select#event').children()[i].innerHTML === $('select#event').val()) {
+                                let parameterClass = $('select#event').children()[i].outerHTML;
+                                parameterClass = parameterClass.replace(/<option class=\"/, '');
+                                parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
+                                parameterClass = parameterClass.split(' ');
+                                for (let i in parameterClass) {
+                                    parameter.push(prompt('Set parameter:', parameterClass[i]));
+                                }
+                                break;
+                            }
                         }
                     }
                     events.push(value);

@@ -65,6 +65,9 @@ class RuleManager
 
     public function deleteRule($rule_title)
     {
+        if (in_array($rule_title, $this->getAdminRulesList())) {
+            return false;
+        }
         $user_manager = new UserManager([]);
         $users = $user_manager->getUsersList();
         foreach ($users as $username) {
