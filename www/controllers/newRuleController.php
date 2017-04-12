@@ -77,7 +77,7 @@ if ((bool) $new_place) {
     $action_titles = ['((((CAMBIAR)))))'];
     $event_channels = ['presence'];
     $event_titles = ['Presence Detected At Distance Less Than'];
-    $rule = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix string: <http://www.w3.org/2000/10/swap/string#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .\n@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .\n{\n\t?event rdf:type ewe-presence:PresenceDetectedAtDistance.\n\t?event ewe:sensorID ?sensorID.\n\t?sensorID string:equalIgnoringCase \"" . $new_place . "\".\n\t?event!ewe:distance math:lessThan \"1\".\n}\n=>\n{\n\t(((((CAMBIAR)))))\n}.";
+    $rule = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix string: <http://www.w3.org/2000/10/swap/string#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .\n@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .\n{\n\t?event rdf:type ewe-presence:PresenceDetectedAtDistance.\n\t?event ewe:sensorID ?sensorID.\n\t?sensorID string:equalIgnoringCase \"" . $new_place . "\".\n\t?event!ewe:distance math:lessThan \"3\".\n}\n=>\n{\n\t(((((CAMBIAR)))))\n}.";
 
     $rule_manager->createNewRule(
         'Import rules ' . $rule_place,
