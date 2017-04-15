@@ -24,35 +24,14 @@ $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
 $events_parameters = $_POST['Parameters-events'];
 
-// The actions has two foreach because this way the rules that don't need parameters are colocated at the end of the rule. It is important in eventManager.
 $i = 0;
 $action_rules = '';
 $action_prefixes = '';
 foreach ($action_channels as $channel_title) {
-    if (!$channel_manager->actionHasParameter($channel_title, $action_titles[$i])) {
-        $i++;
-        continue;
-    }
     $info = $channel_manager->getRulesAndPrefix($channel_title);
     $action_rule = $info['actions'][$action_titles[$i]]['rule'];
     if ($actions_parameters[$i] !== []) {
-        foreach ($actions_parameters[$i] as $parameter) {
-            $action_rule = preg_replace('/(#+\w+#)/', '"' . $parameter . '"', $action_rule, 1);
-        }
-    }
-    $action_rules .= $action_rule . PHP_EOL;
-    $action_prefixes .= $info['actions'][$action_titles[$i]]['prefix'] . PHP_EOL;
-    $i++;
-}
-$i = 0;
-foreach ($action_channels as $channel_title) {
-    if ($channel_manager->actionHasParameter($channel_title, $action_titles[$i])) {
-        $i++;
-        continue;
-    }
-    $info = $channel_manager->getRulesAndPrefix($channel_title);
-    $action_rule = $info['actions'][$action_titles[$i]]['rule'];
-    if ($actions_parameters[$i] !== []) {
+        $action_rule = preg_replace('/#000#/', $channel_manager->getN($channel_title), $action_rule);
         foreach ($actions_parameters[$i] as $parameter) {
             $action_rule = preg_replace('/(#+\w+#)/', '"' . $parameter . '"', $action_rule, 1);
         }
@@ -95,11 +74,11 @@ $success = $rule_manager->createNewRule(
 );
 
 if ((bool) $new_place) {
-    $action_channels = ['((((CAMBIAR)))))'];
-    $action_titles = ['((((CAMBIAR)))))'];
+    $action_channels = ['twitter'];
+    $action_titles = ['Post a tweet'];
     $event_channels = ['presence'];
     $event_titles = ['Presence Detected At Distance Less Than'];
-    $rule = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix string: <http://www.w3.org/2000/10/swap/string#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .\n@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .\n{\n\t?event rdf:type ewe-presence:PresenceDetectedAtDistance.\n\t?event ewe:sensorID ?sensorID.\n\t?sensorID string:equalIgnoringCase \"" . $new_place . "\".\n\t?event!ewe:distance math:lessThan \"3\".\n}\n=>\n{\n\t(((((CAMBIAR)))))\n}.";
+    $rule = "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix string: <http://www.w3.org/2000/10/swap/string#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .\n@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#> .\n@prefix ov: <http://vocab.org/open/#> .\n{\n\t?event rdf:type ewe-presence:PresenceDetectedAtDistance.\n\t?event ewe:sensorID ?sensorID.\n\t?sensorID string:equalIgnoringCase \"" . $new_place . "\".\n\t?event!ewe:distance math:lessThan \"3\".\n}\n=>\n{\n\tewe-twitter:Twitter" . $channel_manager->getN($action_channels[0]) . " rdf:type ewe-twitter:PostTweet;\nov:message \"You are in " . $rule_place . "\".\n}.";
 
     $rule_manager->createNewRule(
         'Import rules ' . $rule_place,

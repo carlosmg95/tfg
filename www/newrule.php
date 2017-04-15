@@ -282,6 +282,9 @@
                                 parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
                                 parameterClass = parameterClass.split(' ');
                                 for (let i in parameterClass) {
+                                    if (parameterClass[i] === '000') {
+                                        continue;
+                                    }
                                     parameter.push(prompt('Set parameter:', parameterClass[i]));
                                 }
                                 break;

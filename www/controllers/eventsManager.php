@@ -11,15 +11,8 @@ include_once('userManager.php');
 $rule_manager = new RuleManager([]);
 $user_manager = new UserManager([]);
 
-$input_event = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .
-@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .
-@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .
-
-ewe-presence:PresenceSensor rdf:type ewe-presence:PresenceDetectedAtDistance.
-ewe-presence:PresenceSensor ewe:sensorID "1a2b3c".
-ewe-presence:PresenceSensor ewe:distance 0.';// $_POST['inputEvent'];
-$user = 'admin';//$_POST['user'];
+$input_event = $_POST['inputEvent'];
+$user = $_POST['user'];
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';
@@ -28,33 +21,9 @@ foreach ($imported_rules as $rule_title) {
     $rules .= $rule['rule'] . "\n";
 }
 
-$rules = '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix string: <http://www.w3.org/2000/10/swap/string#>.
-@prefix math: <http://www.w3.org/2000/10/swap/math#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#> .
-@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe-wifi: <http://gsi.dit.upm.es/ontologies/ewe-wifi/ns/#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#> .
-@prefix ov: <http://vocab.org/open/#> .
-{
-?event rdf:type ewe-presence:PresenceDetectedAtDistance.
-?event ewe:sensorID ?sensorID.
-?sensorID string:equalIgnoringCase "1a2b3c".
-?event!ewe:distance math:lessThan "2". 
-}
-=>
-{
-ewe-wifi:Wifi rdf:type ewe-wifi:ON .
-ewe-twitter:Twitter rdf:type ewe-twitter:PostTweet;
-ov:message "hola, muy buenas".
-}.';
-
 $response = evaluateEvent($input_event, $rules);
 
-echo $response . PHP_EOL . PHP_EOL . PHP_EOL;
+//echo $response . PHP_EOL . PHP_EOL . PHP_EOL;
 
 $responseJSON = parseResponse($input_event, $response);
 
@@ -166,25 +135,18 @@ function parseResponse($input, $response){
         }
         $parameter = trim($parameter);
         $parameter = str_replace(array('".', '"'), '', strstr($parameter, '"'));
-        if (!array_key_exists($channel, $parameters)) {
-            $parameters[$channel] = array();
-        }
-        array_push($parameters[$channel], $parameter);
+        $parameters[$channel] = $parameter;
     }
     foreach ($lines_with_actions as $line) {
         $response = preg_split("/[\s,]+/", trim($line));
-        $action['channel'] = str_replace(':', '', strstr($response[0], ':'));
+        $channel = str_replace(':', '', strstr($response[0], ':'));
+        $action['channel'] = preg_replace('/\d+$/', '', $channel);
         $action['action'] = str_replace([':', '.'], '', strstr($response[2], ':'));
         $action['parameter'] = '';
-        if (array_key_exists($action['channel'], $parameters)) {
-            foreach ($parameters[$action['channel']] as $parameter) {
-                $action['parameter'] = $parameter;
-                array_push($actionsJson['actions'], $action);
-            }
-            unset($parameters[$action['channel']]);
-        } else {
-            array_push($actionsJson['actions'], $action);
+        if (array_key_exists($channel, $parameters)) {
+            $action['parameter'] = $parameters[$channel];
         }
+        array_push($actionsJson['actions'], $action);
     }
 
     return $actionsJson;
