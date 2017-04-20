@@ -184,7 +184,7 @@ class RuleManager
 
         echo '
             <!-- Rule Item -->
-            <div class="row rule-item">
+            <div class="row rule-item ' . $place . '">
                 <!-- Rule title -->
                 <div class="col-md-12">
                     <h2 style="text-align:center;">' . $title . '</h2>

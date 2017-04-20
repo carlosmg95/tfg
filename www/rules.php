@@ -1,5 +1,9 @@
 <?php
-    session_start()
+    session_start();
+    use Ewetasker\Manager\RuleManager;
+    include_once("./controllers/ruleManager.php");
+
+    $rule_manager = new RuleManager([]);
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +81,14 @@
                     Create new rule
                 </button>
             </div>
+            <div class="col-md-2 col-md-offset-3">
+                <select name="place" id="place">
+                    <option value="all">All</option>
+                <?php foreach ($rule_manager->getPlaces() as $place) { ?>
+                    <option value="<?php echo $place ?>"><?php echo $place ?></option>
+                <?php } ?>
+                </select>
+            </div>
         </div>
 
          <!-- Header -->
@@ -90,11 +102,7 @@
         </div>
 
         <?php
-
-        use Ewetasker\Manager\RuleManager;
-        include_once("./controllers/ruleManager.php");
-
-        $rule_manager = new RuleManager([]);
+        
         $rule_manager->viewRulesHTML();
 
         ?>
@@ -108,6 +116,8 @@
 
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- Bootstrap Core JavaScript -->
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -117,6 +127,22 @@
 
     <!-- Theme JavaScript -->
     <script src="js/clean-blog.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('select#place').selectmenu({
+                change: function(event, data) {
+                    const place = data.item.value;
+                    const rules = $('div.rule-item');
+                    rules.css('display', 'block');
+                    if (place !== 'all') {
+                        const rulesPlace = $('div.' + place);
+                        rules.css('display', 'none');
+                        rulesPlace.css('display', 'block');
+                    }
+                }
+            });
+        })
+    </script>
 
 </body>
 </html>
