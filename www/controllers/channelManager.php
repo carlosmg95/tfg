@@ -141,6 +141,13 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $events_aux[$nEvents]['rule'] = $value;
+                $events_aux[$nEvents]['parameters'] = [];
+                while (strpos($value, '#')) {
+                    $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
+                    $param = strstr($param_aux, '#', true);
+                    array_push($events_aux[$nEvents]['parameters'], $param);
+                    $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
+                }
                 $nAux++;
             } else {
                 $events_aux[$nEvents]['prefix'] = $value;
@@ -157,6 +164,14 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $actions_aux[$nActions]['rule'] = $value;
+                while (strpos($value, '#')) {
+                    $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
+                    $param = strstr($param_aux, '#', true);
+                    if ($param !== '000') {
+                        array_push($actions_aux[$nActions]['parameters'], $param);
+                    }
+                    $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
+                }
                 $nAux++;
             } else {
                 $actions_aux[$nActions]['prefix'] = $value;
