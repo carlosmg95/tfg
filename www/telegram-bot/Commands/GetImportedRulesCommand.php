@@ -14,7 +14,7 @@ class GetImportedRulesCommand extends UserCommand
      * {@inheritdoc}
      */
     protected $name = 'getImportedRules';
-    protected $description = 'A command that show your imported rules';
+    protected $description = 'Show your imported rules';
     protected $usage = '/getimportedrules';
     protected $version = '1.0.0';
     /**#@-*/

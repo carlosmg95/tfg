@@ -17,7 +17,7 @@ class ImportRulesCommand extends UserCommand
      * {@inheritdoc}
      */
     protected $name = 'importRules';
-    protected $description = 'A command that allow import rules';
+    protected $description = 'Allow to import rules';
     protected $usage = '/importrules';
     protected $version = '1.0.0';
     /**#@-*/

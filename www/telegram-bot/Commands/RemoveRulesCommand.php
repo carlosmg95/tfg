@@ -16,7 +16,7 @@ class RemoveRulesCommand extends UserCommand
      * {@inheritdoc}
      */
     protected $name = 'removerules';
-    protected $description = 'A command that allow remove rules';
+    protected $description = 'Allow to remove rules';
     protected $usage = '/removerules';
     protected $version = '1.0.0';
     /**#@-*/
