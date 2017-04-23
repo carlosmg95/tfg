@@ -79,9 +79,11 @@ class ImportRulesCommand extends UserCommand
         $no_rules_list = array();
         $username = $user_manager->getUsernameByChatId((string) $chat_id);
 
-        foreach ($rules_list as $rule) {
-            if (!$user_manager->ruleImported($rule, $username)) {
-                array_push($no_rules_list, $rule);
+        foreach ($rules_list as $rule_title) {
+            $rule = $rules_manager->getRule($rule_title);
+            $description = $rule['description'];
+            if (!$user_manager->ruleImported($rule_title, $username) && $description !== 'ADMIN RULE') {
+                array_push($no_rules_list, $rule_title);
             }
         }
 

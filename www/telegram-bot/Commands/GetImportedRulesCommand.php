@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
@@ -44,9 +45,18 @@ class GetImportedRulesCommand extends UserCommand
 
     private function getImportedRules($chat_id)
     {
+        include_once('../controllers/ruleManager.php');
         include_once('../controllers/userManager.php');
+        $rule_manager = new RuleManager([]);
         $user_manager = new UserManager([]);
         $rules_list = $user_manager->getImportedRules('chat_id', (string) $chat_id);
+        foreach ($rules_list as $key => $rule_title) {
+            $rule = $rule_manager->getRule($rule_title);
+            $description = $rule['description'];
+            if ($description === 'ADMIN RULE') {
+                unset($rules_list[$key]);
+            }
+        }
 
         return $rules_list;
     }

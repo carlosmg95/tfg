@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommand;
@@ -15,7 +16,7 @@ class RemoveRulesCommand extends UserCommand
     /**#@+
      * {@inheritdoc}
      */
-    protected $name = 'removerules';
+    protected $name = 'removeRules';
     protected $description = 'Allow to remove rules';
     protected $usage = '/removerules';
     protected $version = '1.0.0';
@@ -69,10 +70,19 @@ class RemoveRulesCommand extends UserCommand
     }
 
     private function getImportedRules($chat_id)
-    {;
+    {
+        include_once('../controllers/ruleManager.php');
         include_once('../controllers/userManager.php');
+        $rule_manager = new RuleManager([]);
         $user_manager = new UserManager([]);
         $imported_rules_list = $user_manager->getImportedRules('chat_id', (string) $chat_id);
+        foreach ($imported_rules_list as $key => $rule_title) {
+            $rule = $rule_manager->getRule($rule_title);
+            $description = $rule['description'];
+            if ($description === 'ADMIN RULE') {
+                unset($imported_rules_list[$key]);
+            }
+        }
 
         return $imported_rules_list;
     }
