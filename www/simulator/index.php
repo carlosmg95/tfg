@@ -80,9 +80,9 @@
                 <p>&#8212; Press arrow keys for moving the user. Depending on the distance to each sensor, the corresponding action will be triggered.
                 </br>&#8212; Place the beacons wherever you want by dragging & dropping them.
                 </br>&#8212; Each beacon has the following id:
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Blue Beacon: A1B2C3
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Green Beacon: D4E5F6
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Purple Beacon: G7H8I9 
+                </br>&nbsp;&nbsp;&nbsp;&#8226; Blue Beacon: 1a2b3c
+                </br>&nbsp;&nbsp;&nbsp;&#8226; Green Beacon: 4d5e6f
+                </br>&nbsp;&nbsp;&nbsp;&#8226; Purple Beacon: 7g8h9i
                 </br>&#8212; Those ids must be the Presence Sensor id parameter of the rules.</p>
             </div>
         </div>

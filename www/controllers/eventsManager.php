@@ -12,6 +12,7 @@ $rule_manager = new RuleManager([]);
 $user_manager = new UserManager([]);
 
 $input_event = $_POST['inputEvent'];
+$input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
 $user = $_POST['user'];
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
