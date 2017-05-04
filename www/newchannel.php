@@ -247,7 +247,15 @@
                     "<div class='row event-fragment'>" +
                         "<div class='col-md-3'><strong>Prefix</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='@prefix : <ppl#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.''></textarea>" +
+                            "<textarea placeholder='@prefix : <ppl#>.\n@prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.'></textarea>" +
+                        "</div>" +
+                    "</div>  <!-- Prefix -->" +
+
+                    "<!-- Event example -->" +
+                    "<div class='row event-fragment'>" +
+                        "<div class='col-md-3'><strong>Example</strong></div>" +
+                        "<div class='col-md-9'>" +
+                            "<textarea placeholder='ewe-presence:PresenceSensor rdf:type ewe-presence:PresenceDetectedAtDistance.\newe-presence:PresenceSensor ewe:sensorID #sensorID#.\newe-presence:PresenceSensor ewe:distance #distance#.' class='form-control' rows='4' name='event-example" + nEvent + "' required data-validation-required-message='Please enter a example for the event.'></textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
                 "</div>  <!-- Item -->"
