@@ -205,7 +205,7 @@
             );
         }
 
-        function addEvent(title, rule, prefix) {
+        function addEvent(title, rule, prefix, example) {
             let eventsList = $("#events-list");
             nEvent = ++nEvents;
             eventsList.append(
@@ -240,6 +240,14 @@
                             "<textarea placeholder='@prefix : <ppl#>. @prefix math: <http://www.w3.org/2000/10/swap/math#>.' class='form-control' rows='4' name='event-prefix" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.'>" + prefix + "</textarea>" +
                         "</div>" +
                     "</div>  <!-- Prefix -->" +
+
+                    "<!-- Event example -->" +
+                    "<div class='row event-fragment'>" +
+                        "<div class='col-md-3'><strong>Example</strong></div>" +
+                        "<div class='col-md-9'>" +
+                            "<textarea placeholder='ewe-presence:PresenceSensor rdf:type ewe-presence:PresenceDetectedAtDistance.\newe-presence:PresenceSensor ewe:sensorID #sensorID#.\newe-presence:PresenceSensor ewe:distance #distance#.' class='form-control' rows='4' name='event-example" + nEvent + "' required data-validation-required-message='Please enter prefixes for the event.'>" + example + "</textarea>" +
+                        "</div>" +
+                    "</div>  <!-- Example -->" +
                 "</div>  <!-- Item -->"
             );
         }
@@ -266,6 +274,7 @@
             foreach ($channel['events'] as $value) { 
                 $rule = preg_split('/[\r\n]+/', $value['rule']);
                 $prefix = preg_split('/[\r\n]+/', $value['prefix']);
+                $example = preg_split('/[\r\n]+/', $value['example']);
 
                 $str_rule = '';
                 foreach ($rule as $value_rule) {
@@ -275,12 +284,18 @@
                 $str_prefix = '';
                 foreach ($prefix as $value_prefix) {
                     $str_prefix = $str_prefix . $value_prefix . '\r\n';
+                } 
+
+                $str_example = '';
+                foreach ($example as $value_example) {
+                    $str_example = $str_example . $value_example . '\r\n';
                 } ?>
 
                 addEvent(
                     '<?php echo $value['title'] ?>',
                     '<?php echo $str_rule ?>',
-                    '<?php echo $str_prefix ?>'
+                    '<?php echo $str_prefix ?>',
+                    '<?php echo $str_example ?>'
                 );
             <?php }
         }
