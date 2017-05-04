@@ -66,8 +66,11 @@ class ChannelManager
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
-            } else {
+            } elseif ($nAux === 2) {
                 $events_aux[$nEvents]['prefix'] = $value;
+                $nAux++;
+            } else {
+                $events_aux[$nEvents]['example'] = $value;
                 $nAux = 0;
                 $nEvents++;
             }
@@ -149,8 +152,11 @@ class ChannelManager
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
-            } else {
+            } elseif ($nAux === 2) {
                 $events_aux[$nEvents]['prefix'] = $value;
+                $nAux++;
+            } else {
+                $events_aux[$nEvents]['example'] = $value;
                 $nAux = 0;
                 $nEvents++;
             }
@@ -229,6 +235,19 @@ class ChannelManager
         return array('actions' => $actions, 'events' => $events);
     }
 
+    public function getExampleAndPrefix($title)
+    {
+        $channel = $this->getChannel($title);
+        $events = array();
+
+        foreach ($channel['events'] as $event) {
+            $events[$event['title']]['example'] = $event['example'];
+            $events[$event['title']]['prefix'] = $event['prefix'];
+        }
+
+        return $events;
+    }
+
     public function getChannel($title)
     {
         $filter = ['title' => $title];
@@ -251,6 +270,7 @@ class ChannelManager
             $events_aux[$nEvents]['rule'] = $event->rule;
             $events_aux[$nEvents]['parameters'] = $event->parameters;
             $events_aux[$nEvents]['prefix'] = $event->prefix;
+            $events_aux[$nEvents]['example'] = $event->example;
             $nEvents++;
         }
 
