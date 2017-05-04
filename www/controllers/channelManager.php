@@ -164,6 +164,7 @@ class ChannelManager
                 $nAux++;
             } elseif ($nAux === 1) {
                 $actions_aux[$nActions]['rule'] = $value;
+                $actions_aux[$nActions]['parameters'] = [];
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);

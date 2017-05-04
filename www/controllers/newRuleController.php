@@ -47,6 +47,11 @@ $event_prefixes = '';
 foreach ($event_channels as $channel_title) {
     $info = $channel_manager->getRulesAndPrefix($channel_title);
     $event_rule = $info['events'][$event_titles[$i]]['rule'];
+    preg_match_all('/\?\w+/', $event_rule, $variables);
+    $variables = array_unique($variables[0]);
+    foreach ($variables as $variable) {
+        $event_rule = preg_replace('/\\' . $variable . '/', $variable . $i, $event_rule);
+    }
     if ($events_parameters[$i] !== '') {
         foreach ($events_parameters[$i] as $parameter) {
             $event_rule = preg_replace('/(#+\w+#)/', '"' . $parameter . '"', $event_rule, 1);
