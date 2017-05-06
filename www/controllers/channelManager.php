@@ -209,43 +209,15 @@ class ChannelManager
         }
     }
 
-    public function getN($title)
-    {
-        $channel = $this->getChannel($title);
-        $n = $channel['n'];
-        $this->manager->update('channels', 'title', $title, ['n' => ++$n]);
-        return $n;
-    }
-
-    public function getRulesAndPrefix($title)
-    {
-        $channel = $this->getChannel($title);
-        $actions = array();
-        $events = array();
-
-        foreach ($channel['actions'] as $action) {
-            $actions[$action['title']]['rule'] = $action['rule'];
-            $actions[$action['title']]['prefix'] = $action['prefix'];
+    public function getActions($title) {
+        $filter = ['title' => $title];
+        $options = ['projection' => ['actions' => 1]];
+        $actions = $this->manager->find('channels', $filter, $options)[0]->actions;
+        $array_actions = array();
+        foreach ($actions as $action) {
+           array_push($array_actions, $action->title);
         }
-        foreach ($channel['events'] as $event) {
-            $events[$event['title']]['rule'] = $event['rule'];
-            $events[$event['title']]['prefix'] = $event['prefix'];
-        }
-
-        return array('actions' => $actions, 'events' => $events);
-    }
-
-    public function getExampleAndPrefix($title)
-    {
-        $channel = $this->getChannel($title);
-        $events = array();
-
-        foreach ($channel['events'] as $event) {
-            $events[$event['title']]['example'] = $event['example'];
-            $events[$event['title']]['prefix'] = $event['prefix'];
-        }
-
-        return $events;
+        return $array_actions;        
     }
 
     public function getChannel($title)
@@ -307,7 +279,8 @@ class ChannelManager
         return $channels_list;
     }
 
-    public function getEvents($title) {
+    public function getEvents($title)
+    {
         $filter = ['title' => $title];
         $options = ['projection' => ['events' => 1]];
         $events = $this->manager->find('channels', $filter, $options)[0]->events;
@@ -318,15 +291,98 @@ class ChannelManager
         return $array_events;        
     }
 
-    public function getActions($title) {
-        $filter = ['title' => $title];
-        $options = ['projection' => ['actions' => 1]];
-        $actions = $this->manager->find('channels', $filter, $options)[0]->actions;
-        $array_actions = array();
-        foreach ($actions as $action) {
-           array_push($array_actions, $action->title);
+    public function getExampleHTML()
+    {
+        $html_str = '';
+        $i = 1;
+        $channels_list = $this->getChannelsList();
+        foreach ($channels_list as $channel_title) {
+            $channel = $this->getChannel($channel_title);
+            $events = $channel['events'];
+            if (empty($channel['events']))
+                continue;
+            $examples = '';
+            foreach ($events as $event) {
+                $examples .= $event['example'];
+            }
+            if ($examples === '') {
+                continue;
+            }
+            $nicename = $channel['nicename'];
+            $html_str .= '
+                <!-- Panel Item -->
+                <div class="panel panel-info">
+                    <!-- Panel Heading -->
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse' . $i . '">
+                                ' . $nicename . '
+                            </a>
+                        </h4>
+                    </div>  <!-- Heading -->
+
+                    <!-- Panel Collapse -->
+                    <div id="collapse' . $i . '" class="panel-collapse collapse">
+                        <!-- Panel Body -->
+                        <div class="panel-body">
+            ';
+            foreach ($events as $event) {
+                $title = $event['title'];
+                $prefix = preg_split('/[\r\n]+/', $event['prefix']);
+                $example = preg_split('/[\r\n]+/', $event['example']);
+                if ($event['example'] === '')
+                    continue;
+                $example = preg_replace('/"/', '&quot;', $example);
+                $str_prefix = '';
+                foreach ($prefix as $value_prefix) {
+                    $str_prefix = $str_prefix . $value_prefix . '\r\n';
+                }
+                $str_example = '';
+                foreach ($example as $value_example) {
+                    $str_example = $str_example . $value_example . '\r\n';
+                } 
+                if ($example !== '') {
+                    $html_str .= '
+                                <div class="row">
+                                    <button class="btn btn-success btn-events" onclick="input(\'' . $str_prefix . '\', \'' . $str_example . '\')">' . $title . '</button>
+                                </div>
+                    ';
+                }
+            }
+            $html_str .= '
+                    </div>  <!-- Body -->
+                </div>  <!-- Collapse -->
+            </div>  <!-- Panel -->
+            ' . PHP_EOL;
+            $i++;
         }
-        return $array_actions;        
+        echo $html_str;
+    }
+
+    public function getN($title)
+    {
+        $channel = $this->getChannel($title);
+        $n = $channel['n'];
+        $this->manager->update('channels', 'title', $title, ['n' => ++$n]);
+        return $n;
+    }
+
+    public function getRulesAndPrefix($title)
+    {
+        $channel = $this->getChannel($title);
+        $actions = array();
+        $events = array();
+
+        foreach ($channel['actions'] as $action) {
+            $actions[$action['title']]['rule'] = $action['rule'];
+            $actions[$action['title']]['prefix'] = $action['prefix'];
+        }
+        foreach ($channel['events'] as $event) {
+            $events[$event['title']]['rule'] = $event['rule'];
+            $events[$event['title']]['prefix'] = $event['prefix'];
+        }
+
+        return array('actions' => $actions, 'events' => $events);
     }
 
     public function viewChannelsHTML()

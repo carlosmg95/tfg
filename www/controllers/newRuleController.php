@@ -19,10 +19,10 @@ $new_place = $_POST['New-place'];
 $author = $_POST['Author'];
 $action_channels = $_POST['Action-channels'];
 $action_titles = $_POST['Actions'];
-$actions_parameters = $_POST['Parameters-actions'];
+$actions_parameters = isset($_POST['Parameters-actions']) ? $_POST['Parameters-actions'] : [];
 $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
-$events_parameters = $_POST['Parameters-events'];
+$events_parameters = isset($_POST['Parameters-events']) ? $_POST['Parameters-events'] : [];
 
 $i = 0;
 $action_rules = '';

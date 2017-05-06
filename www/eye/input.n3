@@ -1,0 +1,7 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#>.
+@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#>.
+
+ewe-presence:PresenceSensor rdf:type ewe-presence:PresenceDetectedAtDistance.
+ewe-presence:PresenceSensor ewe:sensorID "1a2b3c".
+ewe-presence:PresenceSensor ewe:distance 1.

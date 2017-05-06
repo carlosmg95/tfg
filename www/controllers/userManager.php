@@ -63,6 +63,15 @@ class UserManager
         $this->manager->update('users', 'username', $username, $edited_user);
     }
 
+    public function getImportedRules($title, $title_value)
+    {
+        $filter = [$title => $title_value];
+        $options = ['projection' => ['imported_rules' => 1]];
+        $rules_list = $this->manager->find('users', $filter, $options)[0]->imported_rules;
+
+        return $rules_list;
+    }
+
     public function getUsernameByChatId($chat_id)
     {
         $filter = ['chat_id' => $chat_id];
@@ -79,16 +88,7 @@ class UserManager
             array_push($users_list, $user->username);
         }
         return $users_list;
-    }
-
-    public function getImportedRules($title, $title_value)
-    {
-        $filter = [$title => $title_value];
-        $options = ['projection' => ['imported_rules' => 1]];
-        $rules_list = $this->manager->find('users', $filter, $options)[0]->imported_rules;
-
-        return $rules_list;
-    }
+    }    
 
     public function importRule($rule_title, $username)
     {

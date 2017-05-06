@@ -12,5 +12,5 @@ $user_manager = new UserManager([]);
 if ($user_manager->setTelegramId($username, $telegram_id)) {
     header('Location: ../user.php');
 } else {
-    header('Location: ' . $_SERVER["HTTP_REFERER"]);
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
 }

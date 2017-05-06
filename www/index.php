@@ -66,6 +66,7 @@
                         <hr class="small">
                         <span class="subheading">An Intelligent Automation Platform Based On ECA (Event-Condition-Action) Rules</span>
                         <hr class="small">
+                        <button class="btn btn-success" onclick="location.href='./eyetest.php'">Test EYE</button>
                         <button class="btn btn-success" onclick="location.href='./simulator'">Simulator</button>
                     </div>
                 </div>

@@ -234,6 +234,33 @@ class RuleManager
         return $rules_list;
     }
 
+    public function getRulesTest()
+    {
+        $html_str = '';
+        $rules_list = $this->getRulesList();
+        $admin_rules_list = $this->getAdminRulesList();
+        foreach ($rules_list as $rule_title) {
+            if (in_array($rule_title, $admin_rules_list))
+                continue;
+            $rule = $this->getRule($rule_title);
+            $title = $rule['title'];
+            $rule = preg_replace('/"/', '&quot;', $rule['rule']);
+            $rule = preg_replace('/</', '&lt;', $rule);
+            $rule = preg_replace('/>/', '&gt;', $rule);
+            $rule = preg_split('/[\r\n]+/', $rule);
+            $rule_str = '';
+            foreach ($rule as $value_rule) {
+                $rule_str = $rule_str . $value_rule . '\r\n';
+            }
+            $html_str .= '
+            <div class="row">
+                <button class="btn btn-success btn-rules" onclick="rule(\'' . $rule_str . '\')">' . $title . '</button>
+            </div>
+            ' . PHP_EOL;
+        }
+        echo $html_str;
+    }
+
     private function ruleExists($title)
     {
         $filter = ['title' => $title];

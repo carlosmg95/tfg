@@ -1,0 +1,19 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#>.
+@prefix ewe-presence: <http://gsi.dit.upm.es/ontologies/ewe-connected-home-presence/ns/#>.
+@prefix ewe-twitter: <http://gsi.dit.upm.es/ontologies/ewe-twitter/ns/#>.
+@prefix ov: <http://vocab.org/open/#>.
+
+{
+    ?event0 rdf:type ewe-presence:PresenceDetectedAtDistance.
+    ?event0 ewe:sensorID ?sensorID0.
+    ?sensorID0 string:equalIgnoringCase "1a2b3c".
+    ?event0!ewe:distance math:lessThan "2".
+}
+=>
+{
+    ewe-twitter:Twitter23 rdf:type ewe-twitter:PostTweet;
+    ov:message "Ya llegué".
+}.
