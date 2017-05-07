@@ -22,6 +22,8 @@ foreach ($imported_rules as $rule_title) {
     $rules .= $rule['rule'] . "\n";
 }
 
+$rules = isset($_POST['rules']) ? $_POST['rules'] : $rules;
+
 $response = evaluateEvent($input_event, $rules);
 
 //echo $response . PHP_EOL . PHP_EOL . PHP_EOL;

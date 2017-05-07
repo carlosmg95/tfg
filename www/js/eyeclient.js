@@ -87,6 +87,24 @@
   var executeEye = eye.executeEye = function (options) {
     return $.Deferred(function (deferred) {
       $.ajax({
+          // la URL para la petición
+          url : 'controllers/eventsManager.php',
+       
+          // la información a enviar
+          // (también es posible utilizar una cadena de datos)
+          data : {
+              inputEvent : options.data[0],
+              rules : options.data[1],
+              user : 'admin'
+          },
+       
+          // especifica si será una petición POST o GET
+          type : 'POST',
+       
+          // el tipo de información que se espera de respuesta
+          dataType : 'json',
+      });
+      $.ajax({
           url: options.path,
           traditional: true,
           data: {
@@ -100,12 +118,35 @@
         })
         // ajax succes?
         .done(function (n3) {
+          let result = n3;
+          let input = options.data[0];
+          while (input.match(/@prefix/))
+            input = input.replace(/@prefix/, 'PREFIX');
+          while (input.match(/\>\./))
+            input = input.replace(/\>\./, '>');
+          while (input.match(/\>\s\./))
+            input = input.replace(/\>\s\./, '>');
+          input = input.split('\n');
+          for (let i in input) {
+            input[i] = input[i].replace(/rdf:type/, 'a');
+            input[i] = input[i].substring(0, input[i].length - 1).trim();
+          }
+          result = result.split('\n');
+          let parseResult = '';
+
+          for (let i in result) {
+            let result_i = result[i].substring(0, result[i].length - 1).trim();
+            if (input.indexOf(result_i) < 0 && !result[i].match(/^PREFIX/)) 
+              parseResult += result[i].toUpperCase() + '\r\n';
+            else
+              parseResult += result[i] + '\r\n';
+          }
           // EYE failure?
           if (n3.error)
             deferred.reject(n3.error);
           // EYE success!
           else
-            deferred.resolve(n3.trimRight());
+            deferred.resolve(parseResult.trimRight());
         })
         // ajax failure?
         .fail(function (response) {
