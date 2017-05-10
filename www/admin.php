@@ -1,5 +1,10 @@
 <?php
-    session_start()
+    session_start();
+    use Ewetasker\Manager\AdministrationManager;
+
+    include_once('controllers/administrationManager.php');
+
+    $admin_manager = new AdministrationManager([]);
 ?>
 
 <!DOCTYPE html>
@@ -29,9 +34,9 @@
 </head>
 
 <body>
-    <?php if(!isset($_SESSION['user'])) { ?>
+    <?php if(!isset($_SESSION['user']) || $_SESSION['user'] !== 'admin') { ?>
         <script type="text/javascript">
-            const alert = confirm('You have to be logged to access this page.');
+            const alert = confirm('You have to be an admin.');
             if(alert) {
                 window.open("./user.php", '_self');
             } else {
@@ -39,7 +44,6 @@
             }
         </script>
     <?php } ?>
-
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top my-nav">
         <div class="container-fluid">
@@ -62,7 +66,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="./user.php" id="user"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
+                        <a href="./user.php"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
                     </li>
                     <li><a href="./channels.php">Channels</a></li>
                     <li><a href="./rules.php">Rules</a></li>
@@ -76,25 +80,28 @@
 
     <hr><hr><hr>
 
-    <!-- Main content -->
-    <div class="container"> 
-        <div id="canvas-row" class="row">
-            <div id="canvas-div" class="col-md-9">
-                <script src="simulator/js/game.js"></script>
-            </div>
-            <div class="col-md-3">
-                <h2>Instructions:</h2>
-                <p>&#8212; Press arrow keys for moving the user. Depending on the distance to each sensor, the corresponding action will be triggered.
-                </br>&#8212; Place the beacons wherever you want by dragging & dropping them.
-                </br>&#8212; Each beacon has the following id:
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Blue Beacon: 1a2b3c
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Green Beacon: 4d5e6f
-                </br>&nbsp;&nbsp;&nbsp;&#8226; Purple Beacon: 7g8h9i
-                </br>&#8212; Those ids must be the Presence Sensor id parameter of the rules.</p>
-            </div>
-        </div>
-    </div>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Row 1 -->
+        <div class="row">
+            <!-- Most-run Actions -->
+            <div class="col-md-4 col-xs-12 most-runed-actions">
+                <h2>Most-runed Actions</h2>
+                <?php $admin_manager->getOrderedActionsHTML(); ?>
+            </div>  <!-- Most-run Actions -->
 
+            <!-- Col 12 -->
+            <div class="col-md-4 col-xs-12">
+                
+            </div>  <!-- Col 12 -->
+
+            <!-- Col 13 -->
+            <div class="col-md-4 col-xs-12">
+                
+            </div>  <!-- Col 13 -->
+        </div>  <!-- Row 1 -->
+    </div>  <!-- Main Content -->
+    
     <hr>
 
     <!-- Footer -->
@@ -113,6 +120,5 @@
 
     <!-- Theme JavaScript -->
     <script src="js/clean-blog.min.js"></script>
-
 </body>
 </html>

@@ -2,9 +2,11 @@
 
 header('Content-Type: application/json');
 
+use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 
+include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
@@ -45,7 +47,6 @@ function deleteAllBetween($beginning, $end, $string)
 
 function evaluateEvent($input, $rules)
 {
-        
     $data = array(
         'data' => array($rules, $input),
         'query' => '{ ?a ?b ?c. } => { ?a ?b ?c. }.'
@@ -150,6 +151,9 @@ function parseResponse($input, $response){
             $action['parameter'] = $parameters[$channel];
         }
         array_push($actionsJson['actions'], $action);
+        $admin_manager = new AdministrationManager([]);
+        $admin_manager->runAction($action['channel'], $action['action']);
+        unset($admin_manager);
     }
 
     return $actionsJson;

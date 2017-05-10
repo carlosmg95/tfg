@@ -32,10 +32,22 @@ div.eye {
     padding: 10px;
 }
 
+div.most-runed-actions {
+    background-color: rgba(13, 125, 176, 0.3);
+}
+
 .btn-remove {
     border-radius: 50%;
     float: right;
     padding: 0.5px;
+}
+
+.action-runed-item {
+    border-top: solid;  
+    border-color: white; 
+    border-width: 1px;
+    padding-bottom: 5%;
+    padding-top: 5%;
 }
 
 .channel-icon-item {
@@ -53,13 +65,13 @@ div.eye {
     padding-top: 15px;
 }
 
-.rule-info {
+.rule-info, .channel-info {
     text-align: center;
     vertical-align: middle;
     font-size: 1.5ex;
 }
 
-.rule-info p {
+.rule-info p, .channel-info p {
     margin-bottom: -2ex;
     line-height: 100%;
 }

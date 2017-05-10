@@ -57,6 +57,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                        <a href="./admin.php">
+                            <?php if(isset($_SESSION['user']) && $_SESSION['user'] === 'admin') { ?>
+                            Administration
+                            <?php } ?>
+                        </a>
+                    </li>
+                    <li>
                         <a href="./user.php"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
                     </li>
                     <li><a href="./channels.php">Channels</a></li>
