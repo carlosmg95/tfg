@@ -10,12 +10,16 @@ include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
+$admin_manager = new AdministrationManager([]);
 $rule_manager = new RuleManager([]);
 $user_manager = new UserManager([]);
 
 $input_event = $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
 $user = $_POST['user'];
+
+$admin_manager->userRuns($user);
+unset($admin_manager);
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';

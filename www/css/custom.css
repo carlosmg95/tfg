@@ -36,18 +36,45 @@ div.most-runed-actions {
     background-color: rgba(13, 125, 176, 0.3);
 }
 
+div.most-actived-users {
+    background-color: rgba(13, 176, 125, 0.3);
+}
+
+div.most-imported-rules {
+    background-color: rgba(125, 13, 176, 0.3);
+}
+
+div.administration {
+    border: solid;  
+    border-color: white; 
+    border-width: 1px;
+    padding: 0;
+}
+
+div.scroll {
+    height: 550px;
+    overflow: scroll;
+}
+
 .btn-remove {
     border-radius: 50%;
     float: right;
     padding: 0.5px;
 }
 
-.action-runed-item {
+.action-runed-item, .user-active-item, .rule-imported-item {
     border-top: solid;  
     border-color: white; 
     border-width: 1px;
     padding-bottom: 5%;
+    padding-left: 2%;
+    padding-right: 2%;
     padding-top: 5%;
+}
+
+.user-active-item {
+    padding-bottom: 1%;
+    padding-top: 1%;
 }
 
 .channel-icon-item {
@@ -65,7 +92,7 @@ div.most-runed-actions {
     padding-top: 15px;
 }
 
-.rule-info, .channel-info {
+.rule-info, .channel-info, .user-info {
     text-align: center;
     vertical-align: middle;
     font-size: 1.5ex;

@@ -152,7 +152,8 @@
         $('.eye').eye(
             { path: 'http://eye.restdesc.org/' },
             <?php if (isset($_COOKIE['input'])) { ?> '<?php echo $_COOKIE['input']; ?>' <?php } else { ?> undefined <?php } ?>,
-            <?php if (isset($_COOKIE['rule'])) { ?> '<?php echo $_COOKIE['rule']; ?>' <?php } else { ?> undefined <?php } ?>
+            <?php if (isset($_COOKIE['rule'])) { ?> '<?php echo $_COOKIE['rule']; ?>' <?php } else { ?> undefined <?php } ?>,
+            <?php if (isset($_SESSION['user'])) { ?> '<?php echo $_SESSION['user']; ?>' <?php } else { ?> 'public' <?php } ?>
         );
 
         function input(prefix, example) {

@@ -2,10 +2,12 @@
 
 namespace Ewetasker\Manager;
 
+use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\ChannelManager;
 use Ewetasker\Manager\DBHelper;
 use Ewetasker\Manager\UserManager;
 
+include_once('administrationManager.php');
 include_once('channelManager.php');
 include_once('DBHelper.php');
 include_once('userManager.php');
@@ -68,6 +70,8 @@ class RuleManager
         if (in_array($rule_title, $this->getAdminRulesList())) {
             return false;
         }
+        $admin_manager = new AdministrationManager([]);
+        $admin_manager->deleteRule($rule_title);
         $user_manager = new UserManager([]);
         $users = $user_manager->getUsersList();
         foreach ($users as $username) {
@@ -76,6 +80,7 @@ class RuleManager
             }
             $user_manager->removeRule($rule_title, $username);
         }
+        unset($admin_manager);
         unset($user_manager);
         return $this->manager->remove('rules', 'title', $rule_title);
     }

@@ -1,7 +1,7 @@
 (function ($) {
   var tabCount = 0;
   
-  var eye = $.fn.eye = function (options, inputUser, ruleUser) {
+  var eye = $.fn.eye = function (options, inputUser, ruleUser, user) {
     return this.each(function () {
       var resultCount = 0;
       options = options || {};
@@ -60,7 +60,8 @@
           executeEye({
               path: options.path,
               data: data,
-              query: query
+              query: query,
+              user: user
             })
             // EYE succes?
             .done(function (n3) {
@@ -95,7 +96,7 @@
           data : {
               inputEvent : options.data[0],
               rules : options.data[1],
-              user : 'admin'
+              user : options.user
           },
        
           // especifica si será una petición POST o GET

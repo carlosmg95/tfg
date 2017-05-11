@@ -85,20 +85,28 @@
         <!-- Row 1 -->
         <div class="row">
             <!-- Most-run Actions -->
-            <div class="col-md-4 col-xs-12 most-runed-actions">
-                <h2>Most-runed Actions</h2>
-                <?php $admin_manager->getOrderedActionsHTML(); ?>
+            <div class="col-md-4 col-xs-12 most-runed-actions administration">
+                <h2 style="text-align: center;">Most-runed Actions:</h2>
+                <div class="scroll">
+                    <?php $admin_manager->getOrderedActionsHTML(); ?>
+                </div>
             </div>  <!-- Most-run Actions -->
 
-            <!-- Col 12 -->
-            <div class="col-md-4 col-xs-12">
-                
-            </div>  <!-- Col 12 -->
+            <!-- Most-actived Users -->
+            <div class="col-md-4 col-xs-12 most-actived-users administration">
+                <h2 style="text-align: center;">Most-actived Users:</h2>
+                <div class="scroll">
+                    <?php $admin_manager->getOrderedUsersHTML(); ?>
+                </div>
+            </div>  <!-- Most-actived Users -->
 
-            <!-- Col 13 -->
-            <div class="col-md-4 col-xs-12">
-                
-            </div>  <!-- Col 13 -->
+            <!-- Most-imported Rules -->
+            <div class="col-md-4 col-xs-12 most-imported-rules administration">
+                <h2 style="text-align: center;">Most-imported Rules:</h2>
+                <div class="scroll">
+                    <?php $admin_manager->getOrderedRulesHTML(); ?>
+                </div>
+            </div>  <!-- Most-imported Rules -->
         </div>  <!-- Row 1 -->
     </div>  <!-- Main Content -->
     
