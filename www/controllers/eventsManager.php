@@ -30,7 +30,7 @@ $response = evaluateEvent($input_event, $rules);
 
 $responseJSON = parseResponse($input_event, $response);
 
-echo json_encode($responseJSON) . PHP_EOL;
+echo json_encode($responseJSON);
 
 function deleteAllBetween($beginning, $end, $string)
 {
@@ -151,6 +151,10 @@ function parseResponse($input, $response){
         }
         array_push($actionsJson['actions'], $action);
     }
+
+    ob_start();
+    var_dump($actionsJson);
+    $result = ob_get_clean();
 
     return $actionsJson;
 }

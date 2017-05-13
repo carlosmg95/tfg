@@ -268,14 +268,43 @@ class ChannelManager
         return $channel;        
     }
 
-    public function getChannelsList()
+    public function getChannelsList($format='List')
     {
         $channels = $this->manager->getByTitle('channels', 'title');
         $channels_list = array();
-        foreach ($channels as $channel) {
-            array_push($channels_list, $channel->title);
+        if ($format === 'JSON') {
+            foreach ($channels as $channel) {
+                $channel = $this->getChannel($channel->title);
+                $channelJson = array('title' => $channel['title'], 'description' => $channel['description']);
+                $channelJson['events'] = array();
+                $channelJson['actions'] = array();
+                $events = $channel['events'];
+                foreach ($events as $event) {
+                    $eventJson = array(
+                        'title' => $event['title'],
+                        'prefix' => $event['prefix'],
+                        'num_of_params' => sizeof($event['parameters']),
+                        'rule' => $event['rule']
+                    );
+                    array_push($channelJson['events'], $eventJson);
+                }
+                $actions = $channel['actions'];
+                foreach ($actions as $action) {
+                    $actionJson = array(
+                        'title' => $action['title'],
+                        'prefix' => $action['prefix'],
+                        'num_of_params' => sizeof($action['parameters']),
+                        'rule' => $action['rule']
+                    );
+                    array_push($channelJson['actions'], $actionJson);
+                }
+                array_push($channels_list, $channelJson);
+            }
+        } else {
+            foreach ($channels as $channel) {
+                array_push($channels_list, $channel->title);
+            }
         }
-
         return $channels_list;
     }
 
