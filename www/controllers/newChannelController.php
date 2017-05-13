@@ -5,8 +5,7 @@ session_start();
 use Ewetasker\Manager\ChannelManager;
 include_once('channelManager.php');
 
-$config = [];
-$manager = new ChannelManager($config);
+$manager = new ChannelManager();
 
 $title = htmlspecialchars($_POST['title']);
 $description = htmlspecialchars($_POST['description']);
@@ -70,5 +69,3 @@ function is_valid($file) {
 
     return in_array($extension, $extValid) && in_array($type, $validTypes) && $_FILES[$file]['size'] < $maxSize;
 }
-
-?>

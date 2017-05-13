@@ -9,7 +9,6 @@ use Ewetasker\Manager\RuleManager;
 include_once('administrationManager.php');
 include_once('DBHelper.php');
 include_once('ruleManager.php');
-//require_once('./mongoconfig.php');
 
 /**
 * 
@@ -18,19 +17,19 @@ class UserManager
 {
     private $manager;
 
-    function __construct($config)
+    function __construct()
     {
-        $this->connect($config);
+        $this->connect();
     }
 
-    private function connect($config)
+    private function connect()
     {
-        $this->manager = new DBHelper($config);
+        $this->manager = new DBHelper();
     }
 
     public function createNewUser($username, $password)
     {
-        $rule_manager = new RuleManager([]);
+        $rule_manager = new RuleManager();
         $user = array(
             'username' => $username,
             'password' => $password,
@@ -121,7 +120,7 @@ class UserManager
         if ($this->ruleImported($rule_title, $username)) {
             return false;
         }
-        $admin_manager = new AdministrationManager([]);
+        $admin_manager = new AdministrationManager();
         $admin_manager->importRule($rule_title);
         $filter = ['username' => $username];
         $user = $this->manager->find('users', $filter)[0];
@@ -145,7 +144,7 @@ class UserManager
 
     public function insertRule($rule_title, $username)
     {
-        $admin_manager = new AdministrationManager([]);
+        $admin_manager = new AdministrationManager();
         $admin_manager->importRule($rule_title);
         $filter = ['username' => $username];
         $user = $this->manager->find('users', $filter)[0];
@@ -169,12 +168,12 @@ class UserManager
 
     public function removeRule($rule_title, $username)
     {
-        $rule_manager = new RuleManager([]);
+        $rule_manager = new RuleManager();
         $rule = $rule_manager->getRule($rule_title);
         if (!$this->ruleImported($rule_title, $username) || $rule['description'] === 'ADMIN RULE') {
             return false;
         }
-        $admin_manager = new AdministrationManager([]);
+        $admin_manager = new AdministrationManager();
         $admin_manager->removeRule($rule_title);
         $filter = ['username' => $username];
         $user = $this->manager->find('users', $filter)[0];

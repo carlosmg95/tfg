@@ -9,23 +9,36 @@ class DBHelper
 {
     
     private $manager;
+    private $config;
 
-    function __construct($config)
+    function __construct()
     {
-        $this->connect($config);
+        $dbhost = $_ENV['MONGO_HOST'];
+        $dbname = $_ENV['MONGO_DB'];
+        $port = $_ENV['MONGO_PORT'];
+        $username = $_ENV['MONGO_USER'];
+        $password = $_ENV['MONGO_PASS'];
+
+        $this->config = array(
+            'username' => $username,
+            'password' => $password,
+            'dbname'   => $dbname,
+            'connection_string'=> sprintf('mongodb://%s:%d', $dbhost, $port)
+        );
+        $this->connect();
     }
 
-    private function connect($config)
+    private function connect()
     {
         try{
             if (!class_exists('\MongoDB\Driver\Manager')){
-                echo ("The \MongoDB PECL extension has not been installed or enabled");
+                echo ('The \MongoDB PECL extension has not been installed or enabled');
                 return false;
             }
-            $manager = new \MongoDB\Driver\Manager("mongodb://localhost:27017");/*
-                $config['connection_string'],
-                array('username' => $config['username'], 'password' => $config['password'])
-            );*/
+            $manager = new \MongoDB\Driver\Manager(
+                $this->config['connection_string']/*,
+                array('username' => $this->config['username'], 'password' => $this->config['password'])*/
+            );
             return $this->manager = $manager;
         } catch(Exception $e) {
             echo $e;
@@ -36,7 +49,7 @@ class DBHelper
     public function find($collection, $filter=[], $options=[])
     {
         $query = new \MongoDB\Driver\Query($filter, $options);
-        $dbCollection = 'applicationdb.' . $collection;
+        $dbCollection = $this->config['dbname'] . '.' . $collection;
         return $this->manager->executeQuery($dbCollection, $query)->toArray();
     }
 
@@ -60,7 +73,7 @@ class DBHelper
         $_article['createdAt'] = date_format(new \DateTime(), 'Y-m-d H:i:s');
         $bulk->insert($_article);
 
-        $dbCollection = 'applicationdb.' . $collection;
+        $dbCollection = $this->config['dbname'] . '.' . $collection;
         $result = $this->manager->executeBulkWrite($dbCollection, $bulk);
     }
 
@@ -68,7 +81,7 @@ class DBHelper
     {
         $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->delete([$title => $value], ['limit' => 0]);
-        $dbCollection = 'applicationdb.' . $collection;
+        $dbCollection = $this->config['dbname'] . '.' . $collection;
 
         return $this->manager->executeBulkWrite($dbCollection, $bulk);
     }
@@ -80,7 +93,7 @@ class DBHelper
             [$title => $title_value],
             ['$set' => $article]
         );
-        $dbCollection = 'applicationdb.' . $collection;
+        $dbCollection = $this->config['dbname'] . '.' . $collection;
 
         return $this->manager->executeBulkWrite($dbCollection, $bulk);
     }

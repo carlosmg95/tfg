@@ -91,7 +91,7 @@
         use Ewetasker\Manager\ChannelManager;
         include_once("./controllers/channelManager.php");
 
-        $channel_manager = new ChannelManager([]);
+        $channel_manager = new ChannelManager();
         $channel_manager->viewChannelsHTML();
 
         ?>

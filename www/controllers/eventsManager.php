@@ -10,9 +10,9 @@ include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
-$admin_manager = new AdministrationManager([]);
-$rule_manager = new RuleManager([]);
-$user_manager = new UserManager([]);
+$admin_manager = new AdministrationManager();
+$rule_manager = new RuleManager();
+$user_manager = new UserManager();
 
 $input_event = $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
@@ -155,7 +155,7 @@ function parseResponse($input, $response){
             $action['parameter'] = $parameters[$channel];
         }
         array_push($actionsJson['actions'], $action);
-        $admin_manager = new AdministrationManager([]);
+        $admin_manager = new AdministrationManager();
         $admin_manager->runAction($action['channel'], $action['action']);
         unset($admin_manager);
     }

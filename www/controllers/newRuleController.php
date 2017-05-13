@@ -7,10 +7,9 @@ include_once('channelManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
-$config = [];
-$channel_manager = new ChannelManager($config);
-$rule_manager = new RuleManager($config);
-$user_manager = new UserManager($config);
+$channel_manager = new ChannelManager();
+$rule_manager = new RuleManager();
+$user_manager = new UserManager();
 
 $rule_title = htmlspecialchars($_POST['Rule-title']);
 $rule_description = htmlspecialchars($_POST['Rule-description']);
@@ -102,5 +101,3 @@ if ((bool) $new_place) {
 if (!$success) {
     header('Location: ../index.php');
 }
-
-?>

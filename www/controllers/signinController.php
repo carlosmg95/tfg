@@ -5,17 +5,16 @@ session_start();
 use Ewetasker\Manager\UserManager;
 include_once('userManager.php');
 
-$config = [];
-$manager = new UserManager($config);
+$manager = new UserManager();
 
-$username = strtolower(htmlspecialchars($_POST["username"]));
-$password = $_POST["password"];
+$username = strtolower(htmlspecialchars($_POST['username']));
+$password = $_POST['password'];
 
 if($manager->login($username, $password)) {
-    $_SESSION["user"] = $username;
-    header("Location: ../user.php");
+    $_SESSION['user'] = $username;
+    header('Location: ../user.php');
 } else {
-    header("Location: ../user.php?error=userIncorrect");
+    header('Location: ../user.php?error=userIncorrect');
 }
 
 ?>

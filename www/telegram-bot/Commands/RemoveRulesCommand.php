@@ -73,8 +73,8 @@ class RemoveRulesCommand extends UserCommand
     {
         include_once('../controllers/ruleManager.php');
         include_once('../controllers/userManager.php');
-        $rule_manager = new RuleManager([]);
-        $user_manager = new UserManager([]);
+        $rule_manager = new RuleManager();
+        $user_manager = new UserManager();
         $imported_rules_list = $user_manager->getImportedRules('chat_id', (string) $chat_id);
         foreach ($imported_rules_list as $key => $rule_title) {
             $rule = $rule_manager->getRule($rule_title);

@@ -11,7 +11,7 @@ switch ($command) {
 
     case 'getChannels':
         
-        $channel_manager = new ChannelManager([]);
+        $channel_manager = new ChannelManager();
         $result = $channel_manager->getChannelsList('JSON');
 
         echo json_encode($result, JSON_UNESCAPED_SLASHES);

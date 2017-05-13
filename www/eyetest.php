@@ -5,8 +5,8 @@
     include_once("./controllers/channelManager.php");
     include_once("./controllers/ruleManager.php");
 
-    $channel_manager = new ChannelManager([]);
-    $rule_manager = new RuleManager([]);
+    $channel_manager = new ChannelManager();
+    $rule_manager = new RuleManager();
 ?>
 
 <!DOCTYPE html>

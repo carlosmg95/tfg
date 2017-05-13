@@ -5,7 +5,6 @@ namespace Ewetasker\Manager;
 use Ewetasker\Manager\DBHelper;
 
 include_once('DBHelper.php');
-//require_once('./mongoconfig.php');
 
 /**
 * 
@@ -14,9 +13,9 @@ class ChannelManager
 {
     private $manager;
 
-    function __construct($config)
+    function __construct()
     {
-        $this->connect($config);
+        $this->connect();
     }
 
     public function actionHasParameter($channel_title, $action_title)
@@ -36,9 +35,9 @@ class ChannelManager
         return !empty($cursor);
     }
 
-    private function connect($config)
+    private function connect()
     {
-        $this->manager = new DBHelper($config);
+        $this->manager = new DBHelper();
     }
 
     public function createNewChannel($title, $description, $nicename, $image, $events, $actions)

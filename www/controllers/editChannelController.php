@@ -5,12 +5,11 @@ session_start();
 use Ewetasker\Manager\ChannelManager;
 include_once('channelManager.php');
 
-$config = [];
-$manager = new ChannelManager($config);
+$manager = new ChannelManager();
 
-$title = htmlspecialchars($_POST["title"]);
-$description = htmlspecialchars($_POST["description"]);
-$nicename = htmlspecialchars($_POST["nicename"]);
+$title = htmlspecialchars($_POST['title']);
+$description = htmlspecialchars($_POST['description']);
+$nicename = htmlspecialchars($_POST['nicename']);
 
 $events = array();
 $actions = array();
@@ -24,11 +23,9 @@ foreach ($_POST as $key => $value) {
 }
 
 if(empty($events) && empty($actions)) {
-    header("Location: ../editchannel.php?error=neitherActionNorEvent");
+    header('Location: ../editchannel.php?error=neitherActionNorEvent');
 } elseif ($manager->editChannel($title, $description, $nicename, $events, $actions)) {
-    header("Location: ../channels.php");
+    header('Location: ../channels.php');
 } else {
-    header("Location: ../index.php");
+    header('Location: ../index.php');
 }
-
-?>

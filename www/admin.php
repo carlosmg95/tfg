@@ -4,7 +4,7 @@
 
     include_once('controllers/administrationManager.php');
 
-    $admin_manager = new AdministrationManager([]);
+    $admin_manager = new AdministrationManager();
 ?>
 
 <!DOCTYPE html>

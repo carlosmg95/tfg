@@ -11,7 +11,6 @@ include_once('DBHelper.php');
 include_once('channelManager.php');
 include_once('userManager.php');
 include_once('ruleManager.php');
-//require_once('./mongoconfig.php');
 
 /**
 * 
@@ -20,14 +19,14 @@ class AdministrationManager
 {
     private $manager;
 
-    function __construct($config)
+    function __construct()
     {
-        $this->connect($config);
+        $this->connect();
     }
 
-    private function connect($config)
+    private function connect()
     {
-        $this->manager = new DBHelper($config);
+        $this->manager = new DBHelper();
     }
 
     public function deleteRule($rule_title)
@@ -37,7 +36,7 @@ class AdministrationManager
 
     public function getOrderedActionsHTML()
     {
-        $channel_manager = new ChannelManager([]);
+        $channel_manager = new ChannelManager();
         $channels = $this->manager->find('admin');
         $channels_aux = array();
         foreach ($channels as $channel) {
@@ -81,8 +80,8 @@ class AdministrationManager
 
     public function getOrderedRulesHTML()
     {
-        $channel_manager = new ChannelManager([]);
-        $rule_manager = new RuleManager([]);
+        $channel_manager = new ChannelManager();
+        $rule_manager = new RuleManager();
         $rules = $this->manager->find('importedRules');
         $rules_aux = array();
         foreach ($rules as $rule) {
@@ -192,7 +191,7 @@ class AdministrationManager
 
     public function getOrderedUsersHTML()
     {
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $usernames = $user_manager->getUsersList();
         $users = array();
         foreach ($usernames as $username) {
@@ -223,7 +222,7 @@ class AdministrationManager
 
     public function importRule($rule_title)
     {
-        $rule_manager = new RuleManager([]);        
+        $rule_manager = new RuleManager();
         $admin_rules = $rule_manager->getAdminRulesList();
         if (in_array($rule_title, $admin_rules)) {
             return false;
@@ -257,7 +256,7 @@ class AdministrationManager
 
     public function removeRule($rule_title)
     {
-        $rule_manager = new RuleManager([]);        
+        $rule_manager = new RuleManager();  
         $admin_rules = $rule_manager->getAdminRulesList();
         if (in_array($rule_title, $admin_rules)) {
             return false;
@@ -311,7 +310,7 @@ class AdministrationManager
 
     public function userRuns($username)
     {
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $user = $user_manager->getUser($username);
         $user['n']++;
         unset($user_manager);

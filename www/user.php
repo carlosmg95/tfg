@@ -183,7 +183,7 @@
 
             include_once('./controllers/ruleManager.php');
 
-            $rule_manager = new RuleManager([]);
+            $rule_manager = new RuleManager();
 
             $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'imported_rules');
 

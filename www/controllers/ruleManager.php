@@ -11,7 +11,6 @@ include_once('administrationManager.php');
 include_once('channelManager.php');
 include_once('DBHelper.php');
 include_once('userManager.php');
-//require_once('./mongoconfig.php');
 
 /**
 * 
@@ -20,19 +19,19 @@ class RuleManager
 {
     private $manager;
 
-    function __construct($config)
+    function __construct()
     {
-        $this->connect($config);
+        $this->connect();
     }
 
-    private function connect($config)
+    private function connect()
     {
-        $this->manager = new DBHelper($config);
+        $this->manager = new DBHelper();
     }
 
     public function createNewRule($rule_title, $rule_description, $rule_place, $author, $action_channels, $action_titles, $event_channels, $event_titles, $rule)
     {
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
 
         if ($this->ruleExists($rule_title)) {
             return false;
@@ -70,9 +69,9 @@ class RuleManager
         if (in_array($rule_title, $this->getAdminRulesList())) {
             return false;
         }
-        $admin_manager = new AdministrationManager([]);
+        $admin_manager = new AdministrationManager();
         $admin_manager->deleteRule($rule_title);
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $users = $user_manager->getUsersList();
         foreach ($users as $username) {
             if ($username === $this->getAuthor($rule_title)) {
@@ -149,7 +148,7 @@ class RuleManager
 
     private function getRuleHTML($rule, $imported)
     {
-        $channel_manager = new ChannelManager([]);
+        $channel_manager = new ChannelManager();
 
         if ($imported) {
             $importButton = 'remove';
@@ -334,7 +333,7 @@ class RuleManager
 
     public function viewRulesHTML()
     {
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $options = ['sort' => ['title' => 1]];
         $rules = $this->manager->find('rules', [], $options);
 
@@ -347,7 +346,7 @@ class RuleManager
     }
 
     public function viewRulesHTMLByUser($username, $kind) {
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $filter = ['username' => $username];
         $options = ['projection' => [$kind => 1]];
         $rules_title = $this->manager->find('users', $filter, $options)[0]->$kind;

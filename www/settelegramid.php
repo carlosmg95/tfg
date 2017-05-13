@@ -1,6 +1,5 @@
 <?php
     session_start();
-    use Ewetasker\Manager\RuleManager;
 ?>
 
 <!DOCTYPE html>

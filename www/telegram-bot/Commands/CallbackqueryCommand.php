@@ -53,7 +53,7 @@ class CallbackqueryCommand extends SystemCommand
     private function importRule($chat_id, $rule_title)
     {
         include_once('../controllers/userManager.php');
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $username = $user_manager->getUsernameByChatId($chat_id);
         return $user_manager->importRule($rule_title, $username);
     }
@@ -61,7 +61,7 @@ class CallbackqueryCommand extends SystemCommand
     private function removeRule($chat_id, $rule_title)
     {
         include_once('../controllers/userManager.php');
-        $user_manager = new UserManager([]);
+        $user_manager = new UserManager();
         $username = $user_manager->getUsernameByChatId($chat_id);
         return $user_manager->removeRule($rule_title, $username);
     }

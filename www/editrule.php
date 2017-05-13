@@ -1,5 +1,5 @@
 <?php
-    session_start()
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +120,7 @@
         use Ewetasker\Manager\ChannelManager;
         include_once("./controllers/channelManager.php");
 
-        $channelManager = new ChannelManager([]);
+        $channelManager = new ChannelManager();
         $channelManager->viewChannelsIconHTML();
 
         ?>

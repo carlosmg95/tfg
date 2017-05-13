@@ -7,7 +7,7 @@ include_once('./userManager.php');
 
 $username = $_SESSION['user'];
 $telegram_id = $_POST['telegram-id'];
-$user_manager = new UserManager([]);
+$user_manager = new UserManager();
 
 if ($user_manager->setTelegramId($username, $telegram_id)) {
     header('Location: ../user.php');

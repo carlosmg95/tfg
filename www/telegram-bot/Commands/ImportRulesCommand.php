@@ -73,8 +73,8 @@ class ImportRulesCommand extends UserCommand
     {
         include_once('../controllers/ruleManager.php');
         include_once('../controllers/userManager.php');
-        $user_manager = new UserManager([]);
-        $rules_manager = new RuleManager([]);
+        $user_manager = new UserManager();
+        $rules_manager = new RuleManager();
         $rules_list = $rules_manager->getRulesList();
         $no_rules_list = array();
         $username = $user_manager->getUsernameByChatId((string) $chat_id);
