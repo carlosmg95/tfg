@@ -414,6 +414,25 @@ class ChannelManager
         return array('actions' => $actions, 'events' => $events);
     }
 
+    public function getTitleByText($text)
+    {
+        $channels_list = $this->getChannelsList();
+        foreach ($channels_list as $channel_title) {
+            $channel = $this->getChannel($channel_title);
+            foreach ($channel['events'] as $event) {
+                if (preg_match('/' . $text . '/', $event['rule'])) {
+                    return $channel_title;
+                }
+            }
+            foreach ($channel['actions'] as $action) {
+                if (preg_match('/' . $text . '/', $action['rule'])) {
+                    return $channel_title;
+                }
+            }
+        }
+        return '';
+    }
+
     public function viewChannelsHTML()
     {
         $options = ['sort' => ['title' => 1]];

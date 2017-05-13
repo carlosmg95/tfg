@@ -2,18 +2,24 @@
 
 header('Content-Type: application/json');
 
+use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 
+include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
+$admin_manager = new AdministrationManager([]);
 $rule_manager = new RuleManager([]);
 $user_manager = new UserManager([]);
 
 $input_event = $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
 $user = $_POST['user'];
+
+$admin_manager->userRuns($user);
+unset($admin_manager);
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';
@@ -45,7 +51,6 @@ function deleteAllBetween($beginning, $end, $string)
 
 function evaluateEvent($input, $rules)
 {
-        
     $data = array(
         'data' => array($rules, $input),
         'query' => '{ ?a ?b ?c. } => { ?a ?b ?c. }.'
@@ -150,6 +155,9 @@ function parseResponse($input, $response){
             $action['parameter'] = $parameters[$channel];
         }
         array_push($actionsJson['actions'], $action);
+        $admin_manager = new AdministrationManager([]);
+        $admin_manager->runAction($action['channel'], $action['action']);
+        unset($admin_manager);
     }
 
     ob_start();

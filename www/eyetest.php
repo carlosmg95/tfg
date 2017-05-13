@@ -54,6 +54,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                        <a href="./admin.php">
+                            <?php if(isset($_SESSION['user']) && $_SESSION['user'] === 'admin') { ?>
+                            Administration
+                            <?php } ?>
+                        </a>
+                    </li>
+                    <li>
                         <a href="./user.php"><?php if(!isset($_SESSION['user'])) { ?>User<?php } else echo $_SESSION["user"] ?></a>
                     </li>
                     <li><a href="./channels.php">Channels</a></li>
@@ -145,7 +152,8 @@
         $('.eye').eye(
             { path: 'http://eye.restdesc.org/' },
             <?php if (isset($_COOKIE['input'])) { ?> '<?php echo $_COOKIE['input']; ?>' <?php } else { ?> undefined <?php } ?>,
-            <?php if (isset($_COOKIE['rule'])) { ?> '<?php echo $_COOKIE['rule']; ?>' <?php } else { ?> undefined <?php } ?>
+            <?php if (isset($_COOKIE['rule'])) { ?> '<?php echo $_COOKIE['rule']; ?>' <?php } else { ?> undefined <?php } ?>,
+            <?php if (isset($_SESSION['user'])) { ?> '<?php echo $_SESSION['user']; ?>' <?php } else { ?> 'public' <?php } ?>
         );
 
         function input(prefix, example) {
