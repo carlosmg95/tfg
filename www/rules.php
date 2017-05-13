@@ -138,10 +138,11 @@
         $(function() {
             $('select#place').selectmenu({
                 change: function(event, data) {
-                    const place = data.item.value;
+                    let place = data.item.value;
                     const rules = $('div.rule-item');
                     rules.css('display', 'block');
                     if (place !== 'all') {
+                        place = place.replace(/\s+/, '');
                         const rulesPlace = $('div.' + place);
                         rules.css('display', 'none');
                         rulesPlace.css('display', 'block');

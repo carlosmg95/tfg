@@ -167,12 +167,13 @@ class RuleManager
             array_push($event_channels, $channel_manager->getChannel($event_channel));
         }
 
-        $actions = $this->viewEventsHTML($action_channels, $rule->action_titles);
+        $actions = $this->viewActionsHTML($action_channels, $rule->action_titles);
         $events = $this->viewEventsHTML($event_channels, $rule->event_titles);
         $title = $rule->title;
         $description = $rule->description;
         $author = $rule->author;
         $place = $rule->place;
+        $place_class = preg_replace('/\s+/', '', $place);
         $date = date_format(new \DateTime($rule->createdAt), 'H:m d/m/Y');
         $buttons = '';
 
@@ -189,7 +190,7 @@ class RuleManager
 
         echo '
             <!-- Rule Item -->
-            <div class="row rule-item ' . $place . '">
+            <div class="row rule-item ' . $place_class . '">
                 <!-- Rule title -->
                 <div class="col-md-12">
                     <h2 style="text-align:center;">' . $title . '</h2>

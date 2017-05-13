@@ -94,96 +94,201 @@
         </div>
 
         <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
+        <div class="row rule-item Meeting room">
+            <!-- Rule title -->
+            <div class="col-md-12">
+                <h2 style="text-align:center;">Meeting</h2>
+            </div>  <!-- Title -->
             
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/presence.png" />
-            </div>
+            <!-- Events info -->
+            <div class="col-md-2 col-md-offset-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/Calendar.png" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Event Start</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->
+        
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/smartPlace.png" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Inside Of</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->
+            </div>  <!-- Info -->
 
             <div class="col-md-1 rule-fragment">
                 <img class="img img-responsive img-arrow" src="img/arrow.png" />
             </div>
 
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/door.png" />
-            </div>
+            <!-- Actions info -->
+            <div class="col-md-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/audio.png" />
+                        </div>
 
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Silence</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->        
+            </div>  <!-- Info -->
+
+            <!-- Rule info -->
             <div class="col-md-3 rule-fragment rule-info">
-                <p>If I'm near the door then open it.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:23 12/12/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
+                <p>Silence mobile in the meeting room if it is meeting time.</p>
+                <p>carlos</p>
+                <p>Meeting room</p>
+                <p>10:05 13/05/2017</p>
+            </div>  <!-- Info -->
         </div>  <!-- row -->
-
+    
         <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
+        <div class="row rule-item Lab GSI">
+            <!-- Rule title -->
+            <div class="col-md-12">
+                <h2 style="text-align:center;">Welcome</h2>
+            </div>  <!-- Title -->
             
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/door.png" />
-            </div>
+            <!-- Events info -->
+            <div class="col-md-2 col-md-offset-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/smartPlace.png" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Inside Of</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->        
+            </div>  <!-- Info -->
 
             <div class="col-md-1 rule-fragment">
                 <img class="img img-responsive img-arrow" src="img/arrow.png" />
             </div>
 
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/tv.png" />
-            </div>
+            <!-- Actions info -->
+            <div class="col-md-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/chromecast.png" />
+                        </div>
 
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Welcome</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->        
+            </div>  <!-- Info -->
+
+            <!-- Rule info -->
             <div class="col-md-3 rule-fragment rule-info">
-                <p>If the door is opened, then switch on TV.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:56 12/01/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
+                <p>Welcome message in the TV.</p>
+                <p>carlos</p>
+                <p>Lab GSI</p>
+                <p>10:05 13/05/2017</p>
+            </div>  <!-- Info -->
         </div>  <!-- row -->
-
+    
         <!-- Rule Item -->
-        <div class="row rule-item">
-            <div class="col-md-1 col-md-offset-1 rule-fragment">
-                <button type="button" class="btn btn-primary btn-activate">Active</button>
-            </div>
+        <div class="row rule-item Lab GSI">
+            <!-- Rule title -->
+            <div class="col-md-12">
+                <h2 style="text-align:center;">Working</h2>
+            </div>  <!-- Title -->
             
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/tv.png" />
-            </div>
+            <!-- Events info -->
+            <div class="col-md-2 col-md-offset-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/presence.png" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Presence Detected At Distance Less Than</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->        
+            </div>  <!-- Info -->
 
             <div class="col-md-1 rule-fragment">
                 <img class="img img-responsive img-arrow" src="img/arrow.png" />
             </div>
 
-            <div class="col-md-2 rule-fragment">
-                <img class="img img-circle img-responsive img-channel" src="img/NotificationModule.png" />
-            </div>
+            <!-- Actions info -->
+            <div class="col-md-2 rule-fragment">                
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/twitter.png" />
+                        </div>
 
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Post Tweet</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->
+        
+                <!-- Event info -->
+                <div class="row">
+                    <div class="col-md-12 rule-fragment">
+                        <!-- Event-Channel image -->
+                        <div class="row">
+                            <img class="img img-circle img-responsive img-channel" src="../img/WiFi.png" />
+                        </div>
+
+                        <!-- Event title -->
+                        <div class="row">
+                            <h4 style="text-align:center;">Turn ON</h4>
+                        </div>
+                    </div>
+                </div>  <!-- Info -->        
+            </div>  <!-- Info -->
+
+            <!-- Rule info -->
             <div class="col-md-3 rule-fragment rule-info">
-                <p>If the TV is on, then show a Notification.</p>
-                <p>Sergio</p>
-                <p>GSI Lab</p>
-                <p>11:23 12/12/2016</p>
-            </div>
-
-            <div class="col-md-2 rule-fragment">
-                <button type="button" class="btn btn-info btn-rules-action">Edit</button>
-                <button type="button" class="btn btn-danger btn-rules-action">Delete</button>
-            </div>
+                <p>Turn on WiFi and post a tweet in working place.</p>
+                <p>carlos</p>
+                <p>Lab GSI</p>
+                <p>10:05 13/05/2017</p>
+            </div>  <!-- Info -->
         </div>  <!-- row -->
     </div>
     

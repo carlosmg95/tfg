@@ -92,8 +92,8 @@ class AdministrationManager
         $i = 1;
         foreach ($rules as $rule) {
             $n = $rule['n'];
-            if ($n > 0) {
-                $rule = $rule_manager->getRule($rule['title']);
+            $rule = $rule_manager->getRule($rule['title']);
+            if ($n > 0 && $rule['description'] !== 'ADMIN RULE') {
                 $title = $rule['title'];
                 $events = '';
                 $j = 0;
