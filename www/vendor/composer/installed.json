@@ -366,32 +366,32 @@
     },
     {
         "name": "longman/telegram-bot",
-        "version": "0.40.1",
-        "version_normalized": "0.40.1.0",
+        "version": "0.44.1",
+        "version_normalized": "0.44.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/akalongman/php-telegram-bot.git",
-            "reference": "b0833a890be48c8f32dda6e2eb8143fc8aab5d70"
+            "url": "https://github.com/php-telegram-bot/core.git",
+            "reference": "e522050a5e2ac73a4c0fa47705896da0df37de3a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/akalongman/php-telegram-bot/zipball/b0833a890be48c8f32dda6e2eb8143fc8aab5d70",
-            "reference": "b0833a890be48c8f32dda6e2eb8143fc8aab5d70",
+            "url": "https://api.github.com/repos/php-telegram-bot/core/zipball/e522050a5e2ac73a4c0fa47705896da0df37de3a",
+            "reference": "e522050a5e2ac73a4c0fa47705896da0df37de3a",
             "shasum": ""
         },
         "require": {
             "ext-curl": "*",
             "ext-mbstring": "*",
             "ext-pdo": "*",
-            "guzzlehttp/guzzle": "~6.0",
-            "monolog/monolog": "^1.19",
-            "php": ">=5.5.0"
+            "guzzlehttp/guzzle": "^6.2",
+            "monolog/monolog": "^1.22",
+            "php": "^5.5|^7.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~4.8",
-            "squizlabs/php_codesniffer": "~2.5"
+            "phpunit/phpunit": "^4.8|^5.7|^6.1",
+            "squizlabs/php_codesniffer": "^2.8"
         },
-        "time": "2017-03-07T08:55:09+00:00",
+        "time": "2017-04-25T21:28:23+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -412,11 +412,63 @@
             }
         ],
         "description": "PHP telegram bot",
-        "homepage": "https://github.com/akalongman/php-telegram-bot",
+        "homepage": "https://github.com/php-telegram-bot/core",
         "keywords": [
             "api",
             "bot",
             "telegram"
+        ]
+    },
+    {
+        "name": "unreal4u/telegram-api",
+        "version": "v2.3.1",
+        "version_normalized": "2.3.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/unreal4u/telegram-api.git",
+            "reference": "fe93f5c63fe27ee0959cb9d25ac49e0ed27d430e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/unreal4u/telegram-api/zipball/fe93f5c63fe27ee0959cb9d25ac49e0ed27d430e",
+            "reference": "fe93f5c63fe27ee0959cb9d25ac49e0ed27d430e",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "~6.0",
+            "php": ">=7.0.0",
+            "psr/log": "~1.0"
+        },
+        "require-dev": {
+            "monolog/monolog": "~1.17",
+            "phpunit/php-code-coverage": "~5.0",
+            "phpunit/phpunit": ">=6.0",
+            "squizlabs/php_codesniffer": "~2.3"
+        },
+        "time": "2017-02-22T23:16:15+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "unreal4u\\TelegramAPI\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Camilo Sperberg",
+                "email": "me@unreal4u.com",
+                "homepage": "https://github.com/unreal4u/telegram-api/graphs/contributors"
+            }
+        ],
+        "description": "A complete Telegram bot API implementation written in PHP, with support for inline bots!",
+        "keywords": [
+            "api",
+            "telegram",
+            "telegram bot"
         ]
     }
 ]

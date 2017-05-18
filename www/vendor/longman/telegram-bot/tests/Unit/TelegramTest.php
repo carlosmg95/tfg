@@ -17,13 +17,13 @@ use Longman\TelegramBot\Telegram;
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class TelegramTest extends TestCase
 {
     /**
-    * @var \Longman\TelegramBot\Telegram
-    */
+     * @var \Longman\TelegramBot\Telegram
+     */
     private $telegram;
 
     /**
@@ -35,12 +35,9 @@ class TelegramTest extends TestCase
         '/tmp/php-telegram-bot-custom-commands-3',
     ];
 
-    /**
-    * setUp
-    */
     protected function setUp()
     {
-        $this->telegram = new Telegram('apikey', 'testbot');
+        $this->telegram = new Telegram(self::$dummy_api_key, 'testbot');
 
         // Create a few dummy custom commands paths.
         foreach ($this->custom_commands_paths as $custom_path) {
@@ -48,9 +45,6 @@ class TelegramTest extends TestCase
         }
     }
 
-    /**
-     * tearDown
-     */
     protected function tearDown()
     {
         // Clean up the custom commands paths.
@@ -61,6 +55,7 @@ class TelegramTest extends TestCase
 
     /**
      * @expectedException \Longman\TelegramBot\Exception\TelegramException
+     * @expectedExceptionMessage API KEY not defined!
      */
     public function testNewInstanceWithoutApiKeyParam()
     {
@@ -69,20 +64,21 @@ class TelegramTest extends TestCase
 
     /**
      * @expectedException \Longman\TelegramBot\Exception\TelegramException
+     * @expectedExceptionMessage Invalid API KEY defined!
      */
-    public function testNewInstanceWithoutBotNameParam()
+    public function testNewInstanceWithInvalidApiKeyParam()
     {
-        new Telegram('apikey', null);
+        new Telegram('invalid-api-key-format', null);
     }
 
     public function testGetApiKey()
     {
-        $this->assertEquals('apikey', $this->telegram->getApiKey());
+        $this->assertEquals(self::$dummy_api_key, $this->telegram->getApiKey());
     }
 
-    public function testGetBotName()
+    public function testGetBotUsername()
     {
-        $this->assertEquals('testbot', $this->telegram->getBotName());
+        $this->assertEquals('testbot', $this->telegram->getBotUsername());
     }
 
     public function testEnableAdmins()
@@ -147,11 +143,5 @@ class TelegramTest extends TestCase
         $commands = $this->telegram->getCommandsList();
         $this->assertInternalType('array', $commands);
         $this->assertNotCount(0, $commands);
-    }
-
-    public function testGetHelpCommandObject()
-    {
-        $command = $this->telegram->getCommandObject('help');
-        $this->assertInstanceOf('Longman\TelegramBot\Commands\UserCommands\HelpCommand', $command);
     }
 }

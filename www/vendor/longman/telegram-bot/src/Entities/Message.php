@@ -79,11 +79,11 @@ class Message extends Entity
      * Message constructor
      *
      * @param array  $data
-     * @param string $bot_name
+     * @param string $bot_username
      *
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    public function __construct(array $data, $bot_name = '')
+    public function __construct(array $data, $bot_username = '')
     {
         //Retro-compatibility
         if (isset($data['new_chat_participant'])) {
@@ -95,7 +95,7 @@ class Message extends Entity
             unset($data['left_chat_participant']);
         }
 
-        parent::__construct($data, $bot_name);
+        parent::__construct($data, $bot_username);
     }
 
     /**
@@ -183,7 +183,7 @@ class Message extends Entity
             $split_cmd = explode('@', $full_command);
             if (isset($split_cmd[1])) {
                 //command is followed by name check if is addressed to me
-                if (strtolower($split_cmd[1]) === strtolower($this->getBotName())) {
+                if (strtolower($split_cmd[1]) === strtolower($this->getBotUsername())) {
                     return $split_cmd[0];
                 }
             } else {
@@ -226,7 +226,7 @@ class Message extends Entity
     {
         $member = $this->getNewChatMember();
 
-        return $member !== null && $member->getUsername() === $this->getBotName();
+        return $member !== null && $member->getUsername() === $this->getBotUsername();
     }
 
     /**

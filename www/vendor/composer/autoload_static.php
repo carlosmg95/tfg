@@ -13,6 +13,10 @@ class ComposerStaticInitf692eca7db1d0168dacd71fca03fa058
     );
 
     public static $prefixLengthsPsr4 = array (
+        'u' => 
+        array (
+            'unreal4u\\TelegramAPI\\' => 21,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -35,6 +39,10 @@ class ComposerStaticInitf692eca7db1d0168dacd71fca03fa058
     );
 
     public static $prefixDirsPsr4 = array (
+        'unreal4u\\TelegramAPI\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unreal4u/telegram-api/src',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',

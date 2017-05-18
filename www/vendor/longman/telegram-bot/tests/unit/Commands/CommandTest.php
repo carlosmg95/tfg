@@ -10,16 +10,16 @@
 
 namespace Longman\TelegramBot\Tests\Unit\Commands;
 
+use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Tests\Unit\TestCase;
 use Longman\TelegramBot\Tests\Unit\TestHelpers;
-use Longman\TelegramBot\Telegram;
 
 /**
  * @package         TelegramTest
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class CommandTest extends TestCase
 {
@@ -51,15 +51,15 @@ class CommandTest extends TestCase
     public function setUp()
     {
         //Default command object
-        $this->telegram = new Telegram('apikey', 'testbot');
+        $this->telegram     = new Telegram(self::$dummy_api_key, 'testbot');
         $this->command_stub = $this->getMockForAbstractClass($this->command_namespace, [$this->telegram]);
 
         //Create separate command object that contain a command config
-        $this->telegram_with_config = new Telegram('apikey', 'testbot');
+        $this->telegram_with_config = new Telegram(self::$dummy_api_key, 'testbot');
         $this->telegram_with_config->setCommandConfig('command_name', ['config_key' => 'config_value']);
         $this->command_stub_with_config = $this->getMockBuilder($this->command_namespace)
-             ->disableOriginalConstructor()
-             ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         //Set a name for the object property so that the constructor can set the config correctly
         TestHelpers::setObjectProperty($this->command_stub_with_config, 'name', 'command_name');
         $this->command_stub_with_config->__construct($this->telegram_with_config);
@@ -69,7 +69,7 @@ class CommandTest extends TestCase
     public function testCommandConstructorNeedsTelegramObject()
     {
         $exception_count = 0;
-        $params_to_test = [
+        $params_to_test  = [
             [],
             [null],
             [12345],
@@ -127,6 +127,12 @@ class CommandTest extends TestCase
         $this->assertTrue($this->command_stub->isEnabled());
     }
 
+    public function testDefaultCommandShownInHelp()
+    {
+        $this->assertAttributeEquals(true, 'show_in_help', $this->command_stub);
+        $this->assertTrue($this->command_stub->showInHelp());
+    }
+
     public function testDefaultCommandNeedsMysql()
     {
         $this->assertAttributeEquals(false, 'need_mysql', $this->command_stub);
@@ -154,7 +160,7 @@ class CommandTest extends TestCase
         $this->assertEquals(null, $stub->getUpdate());
         $this->assertEquals(null, $stub->getMessage());
 
-        $update = TestHelpers::getFakeUpdateObject();
+        $update  = TestHelpers::getFakeUpdateObject();
         $message = $update->getMessage();
         $stub->setUpdate($update);
         $this->assertAttributeEquals($update, 'update', $stub);

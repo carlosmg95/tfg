@@ -17,16 +17,29 @@ use Longman\TelegramBot\Entities\Update;
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class ReplyToMessageTest extends TestCase
 {
     public function testChatType()
     {
-        $json = '
-{"update_id":137809335,
-"message":{"message_id":4479,"from":{"id":123,"first_name":"John","username":"MJohn"},"chat":{"id":-123,"title":"MyChat","type":"group"},"date":1449092987,"reply_to_message":{"message_id":11,"from":{"id":121,"first_name":"Myname","username":"mybot"},"chat":{"id":-123,"title":"MyChat","type":"group"},"date":1449092984,"text":"type some text"},"text":"some text"}}
-';
+        $json = '{
+            "update_id":137809335,
+            "message":{
+                "message_id":4479,
+                "from":{"id":123,"first_name":"John","username":"MJohn"},
+                "chat":{"id":-123,"title":"MyChat","type":"group"},
+                "date":1449092987,
+                "reply_to_message":{
+                    "message_id":11,
+                    "from":{"id":121,"first_name":"Myname","username":"mybot"},
+                    "chat":{"id":-123,"title":"MyChat","type":"group"},
+                    "date":1449092984,
+                    "text":"type some text"
+                },
+                "text":"some text"
+            }
+        }';
 
         $update           = new Update(json_decode($json, true), 'mybot');
         $reply_to_message = $update->getMessage()->getReplyToMessage();

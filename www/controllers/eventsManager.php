@@ -5,9 +5,13 @@ header('Content-Type: application/json');
 use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
+use Ewetasker\Performer\ChromecastPerformer;
+use Ewetasker\Performer\TelegramPerformer;
 
 include_once('administrationManager.php');
 include_once('ruleManager.php');
+include_once('../performers/chromecastPerformer.php');
+include_once('../performers/telegramPerformer.php');
 include_once('userManager.php');
 
 $admin_manager = new AdministrationManager();
@@ -34,9 +38,46 @@ $response = evaluateEvent($input_event, $rules);
 
 //echo $response . PHP_EOL . PHP_EOL . PHP_EOL;
 
-$responseJSON = parseResponse($input_event, $response);
+$responseJSON = parseResponse($input_event, $response, $user);
 
 echo json_encode($responseJSON);
+
+function actionTrigger($channel, $action, $parameter, $user)
+{
+    switch ($channel) {
+        case 'Telegram':
+            $telegram = new TelegramPerformer();
+            switch ($action) {
+                case 'SendMessage':
+                    $telegram->sendMessage($parameter, $user);
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            unset($telegram);
+            break;
+
+        case 'Chromecast':
+            $chromecast = new ChromecastPerformer();
+            switch ($action) {
+                case 'PlayVideo':
+                    $chromecast->playVideo();
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            unset($chromecast);
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+}
 
 function deleteAllBetween($beginning, $end, $string)
 {
@@ -86,7 +127,7 @@ function deleteInputFromResponse($input, $response)
     return $response;
 }
 
-function parseResponse($input, $response){
+function parseResponse($input, $response, $user){
     
     // REMOVE PREFIXES.
     while(strpos($response, 'PREFIX') !== false){
@@ -157,12 +198,9 @@ function parseResponse($input, $response){
         array_push($actionsJson['actions'], $action);
         $admin_manager = new AdministrationManager();
         $admin_manager->runAction($action['channel'], $action['action']);
+        actionTrigger($action['channel'], $action['action'], $action['parameter'], $user);
         unset($admin_manager);
     }
-
-    ob_start();
-    var_dump($actionsJson);
-    $result = ob_get_clean();
 
     return $actionsJson;
 }

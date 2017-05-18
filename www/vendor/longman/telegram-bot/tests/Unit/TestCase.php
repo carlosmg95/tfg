@@ -10,8 +10,13 @@
 
 namespace Longman\TelegramBot\Tests\Unit;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    public static $dummy_api_key = '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11';
+
     protected function skip64BitTest()
     {
         if (PHP_INT_SIZE === 4) {

@@ -18,7 +18,7 @@ use Longman\TelegramBot\Telegram;
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class ConversationTest extends TestCase
 {
@@ -27,9 +27,6 @@ class ConversationTest extends TestCase
      */
     private $telegram;
 
-    /**
-     * setUp
-     */
     protected function setUp()
     {
         $credentials = [
@@ -39,11 +36,11 @@ class ConversationTest extends TestCase
             'password' => PHPUNIT_DB_PASS,
         ];
 
-        $this->telegram = new Telegram('apikey', 'testbot');
+        $this->telegram = new Telegram(self::$dummy_api_key, 'testbot');
         $this->telegram->enableMySql($credentials);
 
         //Make sure we start with an empty DB for each test.
-        TestHelpers::emptyDB($credentials);
+        TestHelpers::emptyDb($credentials);
     }
 
     public function testConversationThatDoesntExistPropertiesSetCorrectly()

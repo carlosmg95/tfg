@@ -12,7 +12,7 @@ namespace Longman\TelegramBot\Entities;
 
 use Exception;
 use Longman\TelegramBot\Entities\InlineQuery\InlineEntity;
-use ReflectionObject;
+use Longman\TelegramBot\TelegramLog;
 
 /**
  * Class Entity
@@ -21,22 +21,22 @@ use ReflectionObject;
  *
  * @link https://core.telegram.org/bots/api#available-types
  *
- * @method array  getRawData() Get the raw data passed to this entity
- * @method string getBotName() Return the bot name passed to this entity
+ * @method array  getRawData()     Get the raw data passed to this entity
+ * @method string getBotUsername() Return the bot name passed to this entity
  */
 abstract class Entity
 {
     /**
      * Entity constructor.
      *
-     * @todo Get rid of the $bot_name, it shouldn't be here!
+     * @todo Get rid of the $bot_username, it shouldn't be here!
      *
      * @param array  $data
-     * @param string $bot_name
+     * @param string $bot_username
      *
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    public function __construct($data, $bot_name = '')
+    public function __construct($data, $bot_username = '')
     {
         //Make sure we're not raw_data inception-ing
         if (array_key_exists('raw_data', $data)) {
@@ -47,7 +47,7 @@ abstract class Entity
             $data['raw_data'] = $data;
         }
 
-        $data['bot_name'] = $bot_name;
+        $data['bot_username'] = $bot_username;
         $this->assignMemberVariables($data);
         $this->validate();
     }
@@ -131,7 +131,7 @@ abstract class Entity
     public function __call($method, $args)
     {
         //Convert method to snake_case (which is the name of the property)
-        $property_name = ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', substr($method, 3))), '_');
+        $property_name = strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', substr($method, 3)), '_'));
 
         $action = substr($method, 0, 3);
         if ($action === 'get') {
@@ -142,7 +142,7 @@ abstract class Entity
                 $sub_entities = $this->subEntities();
 
                 if (isset($sub_entities[$property_name])) {
-                    return new $sub_entities[$property_name]($property, $this->getProperty('bot_name'));
+                    return new $sub_entities[$property_name]($property, $this->getProperty('bot_username'));
                 }
 
                 return $property;
@@ -223,7 +223,7 @@ abstract class Entity
         }
 
         //Try with the username first...
-        $name = $this->getProperty('username');
+        $name        = $this->getProperty('username');
         $is_username = $name !== null;
 
         if ($name === null) {
@@ -240,5 +240,18 @@ abstract class Entity
         }
 
         return ($is_username ? '@' : '') . $name;
+    }
+
+    /**
+     * Get Bot name
+     *
+     * @todo: Left for backwards compatibility, remove in the future
+     *
+     * @return string
+     */
+    public function getBotName()
+    {
+        TelegramLog::debug('Usage of deprecated method getBotName() detected, please use getBotUsername() instead!');
+        return $this->getBotUsername();
     }
 }

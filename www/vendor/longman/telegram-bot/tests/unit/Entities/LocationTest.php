@@ -17,75 +17,38 @@ use Longman\TelegramBot\Entities\Location;
  * @author          Baev Nikolay <gametester3d@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class LocationTest extends TestCase
 {
-    
-   /**
-    * lat, long data
-    *
-    * @var array
-    *
-    */
-    public $coordinates;
+    private $coordinates;
 
-   /**
-    *
-    * Set Up
-    *
-    */
     public function setUp()
     {
         $this->coordinates = [
-            'longitude' => (float)mt_rand(10, 69),
-            'latitude'  => (float)mt_rand(10, 48)           
+            'longitude' => (float) mt_rand(10, 69),
+            'latitude'  => (float) mt_rand(10, 48),
         ];
     }
 
-   /**
-    *
-    * TearDown 
-    *
-    */
-    public function tearDown()
-    {
-        //pass
-    }
-
-   /**
-    *
-    * Testing base stage with data object creating
-    *
-    */
     public function testBaseStageLocation()
     {
         $location = new Location($this->coordinates);
         $this->assertInstanceOf('Longman\TelegramBot\Entities\Location', $location);
     }
 
-    /**
-    *
-    * Testing getLongitude
-    *
-    */
     public function testGetLongitude()
     {
         $location = new Location($this->coordinates);
-        $long = $location->getLongitude();
+        $long     = $location->getLongitude();
         $this->assertInternalType('float', $long);
         $this->assertEquals($this->coordinates['longitude'], $long);
     }
-    
-   /**
-    *
-    * Testing getLatitude
-    *
-    */
+
     public function testGetLatitude()
     {
         $location = new Location($this->coordinates);
-        $lat = $location->getLatitude();
+        $lat      = $location->getLatitude();
         $this->assertInternalType('float', $lat);
         $this->assertEquals($this->coordinates['latitude'], $lat);
     }

@@ -21,7 +21,7 @@ use Longman\TelegramBot\Request;
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class ServerResponseTest extends TestCase
 {
@@ -60,8 +60,8 @@ class ServerResponseTest extends TestCase
         self::assertEquals('Mjohn', $server_result->getChat()->getUsername());
         self::assertEquals('1441378360', $server_result->getDate());
         self::assertEquals('hello', $server_result->getText());
-        //... they are not finished...
 
+        //... they are not finished...
     }
 
     public function sendMessageFail()

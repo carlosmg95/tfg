@@ -173,29 +173,37 @@ class DB
      * Fetch update(s) from DB
      *
      * @param int $limit Limit the number of updates to fetch
+     * @param int $id    Check for unique update id
      *
      * @return array|bool Fetched data or false if not connected
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    public static function selectTelegramUpdate($limit = null)
+    public static function selectTelegramUpdate($limit = null, $id = null)
     {
         if (!self::isDbConnected()) {
             return false;
         }
 
         try {
-            $sql = '
-                SELECT `id`
-                FROM `' . TB_TELEGRAM_UPDATE . '`
-                ORDER BY `id` DESC
-            ';
+            $sql = 'SELECT `id` FROM `' . TB_TELEGRAM_UPDATE . '`';
+
+            if ($id !== null) {
+                $sql .= ' WHERE `id` = :id';
+            }
+
+            $sql .= ' ORDER BY `id` DESC';
 
             if ($limit !== null) {
-                $sql .= 'LIMIT :limit';
+                $sql .= ' LIMIT :limit';
             }
 
             $sth = self::$pdo->prepare($sql);
             $sth->bindParam(':limit', $limit, PDO::PARAM_INT);
+
+            if ($id !== null) {
+                $sth->bindParam(':id', $id, PDO::PARAM_INT);
+            }
+
             $sth->execute();
 
             return $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -471,8 +479,16 @@ class DB
      */
     public static function insertRequest(Update $update)
     {
+        if (!self::isDbConnected()) {
+            return false;
+        }
+
         $update_id   = $update->getUpdateId();
         $update_type = $update->getUpdateType();
+
+        if (count(self::selectTelegramUpdate(1, $update_id)) === 1) {
+            throw new TelegramException('Duplicate update received!');
+        }
 
         if ($update_type === 'message') {
             $message = $update->getMessage();
@@ -1089,7 +1105,7 @@ class DB
                 (SELECT COUNT(*) FROM `' . TB_REQUEST_LIMITER . '` WHERE `chat_id` = :chat_id AND `created_at` >= :date_minute) as LIMIT_PER_MINUTE
             ');
 
-            $date = self::getTimestamp(time());
+            $date = self::getTimestamp();
             $date_minute = self::getTimestamp(strtotime('-1 minute'));
 
             $sth->bindParam(':chat_id', $chat_id, \PDO::PARAM_STR);

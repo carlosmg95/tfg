@@ -69,6 +69,8 @@ class HelpCommand extends UserCommand
             );
 
             foreach ($command_objs as $command) {
+                if ($command->getName() === 'sendMessage')
+                    continue;
                 $text .= sprintf(
                     '/%s - %s' . PHP_EOL,
                     $command->getName(),

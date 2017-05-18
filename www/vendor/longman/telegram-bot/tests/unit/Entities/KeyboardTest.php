@@ -18,7 +18,7 @@ use Longman\TelegramBot\Entities\KeyboardButton;
  * @author          Avtandil Kikabidze <akalongman@gmail.com>
  * @copyright       Avtandil Kikabidze <akalongman@gmail.com>
  * @license         http://opensource.org/licenses/mit-license.php  The MIT License (MIT)
- * @link            http://www.github.com/akalongman/php-telegram-bot
+ * @link            https://github.com/php-telegram-bot/core
  */
 class KeyboardTest extends TestCase
 {
@@ -115,9 +115,9 @@ class KeyboardTest extends TestCase
 
     public function testKeyboardWithDataArray()
     {
-        $resize_keyboard   = (bool)mt_rand(0, 1);
-        $one_time_keyboard = (bool)mt_rand(0, 1);
-        $selective         = (bool)mt_rand(0, 1);
+        $resize_keyboard   = (bool) mt_rand(0, 1);
+        $one_time_keyboard = (bool) mt_rand(0, 1);
+        $selective         = (bool) mt_rand(0, 1);
 
         $keyboard_obj = new Keyboard([
             'resize_keyboard'   => $resize_keyboard,

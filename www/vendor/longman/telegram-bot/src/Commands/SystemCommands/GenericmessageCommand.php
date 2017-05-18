@@ -63,6 +63,7 @@ class GenericmessageCommand extends SystemCommand
             $this->getMessage()->getFrom()->getId(),
             $this->getMessage()->getChat()->getId()
         );
+
         //Fetch conversation command if it exists and execute it
         if ($conversation->exists() && ($command = $conversation->getCommand())) {
             return $this->telegram->executeCommand($command);
