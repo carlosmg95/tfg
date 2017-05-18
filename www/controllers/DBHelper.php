@@ -13,15 +13,15 @@ class DBHelper
 
     function __construct()
     {
-        $dbhost = $_ENV['MONGO_HOST'];
-        $dbname = $_ENV['MONGO_DB'];
-        $port = $_ENV['MONGO_PORT'];
-        $username = $_ENV['MONGO_USER'];
-        $password = $_ENV['MONGO_PASS'];
+        $dbhost = '127.0.0.1';//$_ENV['MONGO_HOST'];
+        $dbname = 'applicationdb';//$_ENV['MONGO_DB'];
+        $port = '27017';//$_ENV['MONGO_PORT'];
+        //$username = $_ENV['MONGO_USER'];
+        //$password = $_ENV['MONGO_PASS'];
 
         $this->config = array(
-            'username' => $username,
-            'password' => $password,
+            //'username' => $username,
+            //'password' => $password,
             'dbname'   => $dbname,
             'connection_string'=> sprintf('mongodb://%s:%d', $dbhost, $port)
         );
@@ -36,8 +36,8 @@ class DBHelper
                 return false;
             }
             $manager = new \MongoDB\Driver\Manager(
-                $this->config['connection_string']/*,
-                array('username' => $this->config['username'], 'password' => $this->config['password'])*/
+                $this->config['connection_string']//,
+                //array('username' => $this->config['username'], 'password' => $this->config['password'])
             );
             return $this->manager = $manager;
         } catch(Exception $e) {

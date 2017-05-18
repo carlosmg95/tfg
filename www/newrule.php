@@ -327,7 +327,7 @@
                 },
                 buttons: {
                     'Save': function() {
-                        $(this).dialog( "close" );
+                        $(this).dialog('close');
                     }
                 },
                 hide: {

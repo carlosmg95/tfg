@@ -1,4 +1,9 @@
 <?php
+
+session_start();
+if(!isset($_SESSION['user']) || $_SESSION['user'] !== 'admin')
+    header('Location: ../index.php');
+    
 //Composer Loader
 $loader = require __DIR__.'/../vendor/autoload.php';
 
