@@ -13,9 +13,9 @@ class DBHelper
 
     function __construct()
     {
-        $dbhost = '127.0.0.1';//$_ENV['MONGO_HOST'];
-        $dbname = 'applicationdb';//$_ENV['MONGO_DB'];
-        $port = '27017';//$_ENV['MONGO_PORT'];
+        $dbhost = $_ENV['MONGO_HOST'];
+        $dbname = $_ENV['MONGO_DB'];
+        $port = $_ENV['MONGO_PORT'];
         //$username = $_ENV['MONGO_USER'];
         //$password = $_ENV['MONGO_PASS'];
 
