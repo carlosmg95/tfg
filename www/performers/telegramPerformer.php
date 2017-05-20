@@ -4,7 +4,7 @@ namespace Ewetasker\Performer;
 
 use Ewetasker\Manager\UserManager;
 
-include_once('userManager.php');
+include_once('../controllers/userManager.php');
 
 /**
 * 
@@ -22,7 +22,7 @@ class TelegramPerformer
     {
         $user_manager = new UserManager();
         $user = $user_manager->getUser($user);
-        $url = 'http://localhost:8888/telegram-bot/hook.php';
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/telegram-bot/hook.php';
         $data = array(
             'update_id' => 273066490,
             'message' => array(
@@ -50,14 +50,17 @@ class TelegramPerformer
                 ]
             )
         );
+        
         $content = json_encode($data);
         unset($user_manager);
 
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER,
                 array('Content-type: application/json'));
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
 

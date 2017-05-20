@@ -1,1 +1,0 @@
-curl --data "mecago=entodo" http://localhost:8080/telegram-bot/hook.php;

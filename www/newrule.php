@@ -401,7 +401,7 @@
                         break;
                     }
                 }
-                $.post({
+                $.ajax({
                     type: 'POST',
                     url: './controllers/newRuleController.php',
                     data: {
