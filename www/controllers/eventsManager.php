@@ -5,13 +5,9 @@ header('Content-Type: application/json');
 use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
-use Ewetasker\Performer\ChromecastPerformer;
-use Ewetasker\Performer\TelegramPerformer;
 
 include_once('administrationManager.php');
 include_once('ruleManager.php');
-include_once('../performers/chromecastPerformer.php');
-include_once('../performers/telegramPerformer.php');
 include_once('userManager.php');
 
 $admin_manager = new AdministrationManager();
@@ -40,44 +36,22 @@ $response = evaluateEvent($input_event, $rules);
 
 $responseJSON = parseResponse($input_event, $response, $user);
 
+$url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php';
+$ch = curl_init($url);
+
+$postString = http_build_query($responseJSON, '', '&');
+$postString .= '&user=' . $user;
+
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+curl_exec($ch);
+curl_close($ch);
+
 echo json_encode($responseJSON);
-
-function actionTrigger($channel, $action, $parameter, $user)
-{
-    switch ($channel) {
-        case 'Telegram':
-            $telegram = new TelegramPerformer();
-            switch ($action) {
-                case 'SendMessage':
-                    $telegram->sendMessage($parameter, $user);
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            }
-            unset($telegram);
-            break;
-
-        case 'Chromecast':
-            $chromecast = new ChromecastPerformer();
-            switch ($action) {
-                case 'PlayVideo':
-                    $chromecast->playVideo();
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            }
-            unset($chromecast);
-            break;
-        
-        default:
-            # code...
-            break;
-    }
-}
 
 function deleteAllBetween($beginning, $end, $string)
 {
@@ -198,7 +172,6 @@ function parseResponse($input, $response, $user){
         array_push($actionsJson['actions'], $action);
         $admin_manager = new AdministrationManager();
         $admin_manager->runAction($action['channel'], $action['action']);
-        actionTrigger($action['channel'], $action['action'], $action['parameter'], $user);
         unset($admin_manager);
     }
 
