@@ -2,11 +2,13 @@
 
 use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Performer\ChromecastPerformer;
+use Ewetasker\Performer\HueLightPerformer;
 use Ewetasker\Performer\TelegramPerformer;
 use Ewetasker\Performer\TwitterPerformer;
 
 include_once('administrationManager.php');
 include_once('../performers/chromecastPerformer.php');
+include_once('../performers/hueLightPerformer.php');
 include_once('../performers/telegramPerformer.php');
 include_once('../performers/twitterPerformer.php');
 
@@ -58,6 +60,26 @@ foreach ($actions as $action) {
                     break;
             }
             unset($twitter);
+            break;
+
+        case 'HueLight':
+            $huelight = new HueLightPerformer();
+            switch ($action['action']) {
+                case 'TurnOn':
+                    $huelight->turnOn();
+                    break;
+                case 'TurnOff':
+                    $huelight->turnOff();
+                    break;
+                case 'SetBrightness':
+                    $huelight->setBrightness($action['parameter']);
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            unset($huelight);
             break;
         
         default:
