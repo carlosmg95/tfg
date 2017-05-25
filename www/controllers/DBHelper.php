@@ -13,17 +13,17 @@ class DBHelper
 
     function __construct()
     {
-        $dbhost = $_ENV['MONGO_HOST'];
-        $dbname = $_ENV['MONGO_DB'];
-        $port = $_ENV['MONGO_PORT'];
-        //$username = $_ENV['MONGO_USER'];
-        //$password = $_ENV['MONGO_PASS'];
+        $dbhost = '127.0.0.1';//$_ENV['MONGO_HOST'];
+        $dbname = 'applicationdb';//$_ENV['MONGO_DB'];
+        $port = '27017';//$_ENV['MONGO_PORT'];
+        $username = 'client';//$_ENV['MONGO_USER'];
+        $password = 'gsimongodb2015';//$_ENV['MONGO_PASS'];
 
         $this->config = array(
-            //'username' => $username,
-            //'password' => $password,
+            'username' => $username,
+            'password' => $password,
             'dbname'   => $dbname,
-            'connection_string'=> sprintf('mongodb://%s:%d', $dbhost, $port)
+            'connection_string'=> sprintf('mongodb://%s:%s@%s:%d/%s', $username, $password, $dbhost, $port, $dbname)
         );
         $this->connect();
     }
@@ -35,10 +35,7 @@ class DBHelper
                 echo ('The \MongoDB PECL extension has not been installed or enabled');
                 return false;
             }
-            $manager = new \MongoDB\Driver\Manager(
-                $this->config['connection_string']//,
-                //array('username' => $this->config['username'], 'password' => $this->config['password'])
-            );
+            $manager = new \MongoDB\Driver\Manager($this->config['connection_string']);
             return $this->manager = $manager;
         } catch(Exception $e) {
             echo $e;

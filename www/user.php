@@ -209,17 +209,26 @@
             <?php $rule_manager->viewRulesHTMLByUser($_SESSION['user'], 'created_rules'); ?>
 
             <div class="row">
+                <!-- Telegram button -->
                 <div class="col-md-2 col-xs-2">
                     <button type="button" class="btn btn-info btn-telegram" onclick="location.href='./settelegramid.php'">
                         Set Telegram Id
                     </button>
-                </div>
+                </div>  <!-- Button -->
 
-                <div class="col-md-1 col-xs-1 col-xs-offset-5 col-md-offset-8">
+                <!-- Twitter button -->
+                <div class="col-md-2 col-xs-2">
+                    <button type="button" class="btn btn-info btn-twitter" onclick="location.href='./twitterconnect.php'">
+                        Connect with Twitter
+                    </button>
+                </div>  <!-- Button -->
+
+                <!-- Logout button -->
+                <div class="col-md-1 col-xs-1 col-xs-offset-5 col-md-offset-6">
                     <button type="button" class="btn btn-danger btn-logout" onclick="location.href='./controllers/logout.php'">
                         Logout
                     </button>
-                </div>
+                </div>  <!-- Button -->
             </div>
         </div>  <!-- Session -->
     <?php } ?>

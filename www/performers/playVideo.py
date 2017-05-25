@@ -44,7 +44,7 @@ if not cast.is_idle:
 
 print('Playing media')
 if 'relax' in sys.argv:
-    cast.play_media(('http://6febb0fc.ngrok.io/chromecast/videos/relax.mp4'), 'video/mp4')
+    cast.play_media(('http://13beef6c.ngrok.io/chromecast/videos/relax.mp4'), 'video/mp4')
 else:
     cast.play_media(
     ('http://commondatastorage.googleapis.com/gtv-videos-bucket/'

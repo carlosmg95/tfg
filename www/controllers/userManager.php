@@ -84,6 +84,8 @@ class UserManager
         $created_rules = $array_user->created_rules;
         $chat_id = $array_user->chat_id;
         $n = isset($array_user->n) ? $array_user->n : 0;
+        $twitter_access_token = isset($array_user->twitteraccesstoken) ? $array_user->twitteraccesstoken : 0;
+        $twitter_secret_token = isset($array_user->twittersecrettoken) ? $array_user->twittersecrettoken : 0;
 
         $user = array(
             'username' => $username,
@@ -91,7 +93,9 @@ class UserManager
             'imported_rules' => $imported_rules,
             'created_rules' => $created_rules,
             'chat_id' => $chat_id,
-            'n' => $n
+            'n' => $n,
+            'twitteraccesstoken' => $twitter_access_token,
+            'twittersecrettoken' => $twitter_secret_token
         );
 
         return $user;        
@@ -205,6 +209,12 @@ class UserManager
     public function setTelegramId($username, $chat_id)
     {
         return $this->manager->update('users', 'username', $username, ['chat_id' => $chat_id]);
+    }
+
+    public function updateTwitter($username, $accesstoken, $secrettoken)
+    {
+        $edited_user = array('twitteraccesstoken' => $accesstoken, 'twittersecrettoken' => $secrettoken);
+        $this->manager->update('users', 'username', $username, $edited_user);
     }
 
     private function userExists($username)
