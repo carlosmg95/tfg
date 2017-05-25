@@ -2,24 +2,18 @@
 
 header('Content-Type: application/json');
 
-use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 
-include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
-$admin_manager = new AdministrationManager();
 $rule_manager = new RuleManager();
 $user_manager = new UserManager();
 
 $input_event = isset($argv[1]) ? $argv[1]: $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
 $user = isset($argv[2]) ? $argv[2]: $_POST['user'];
-
-$admin_manager->userRuns($user);
-unset($admin_manager);
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';
@@ -34,7 +28,7 @@ $response = evaluateEvent($input_event, $rules);
 
 //echo $response . PHP_EOL . PHP_EOL . PHP_EOL;
 
-$responseJSON = parseResponse($input_event, $response, $user);
+$responseJSON = parseResponse($input_event, $response);
 
 $url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php';
 $ch = curl_init($url);
@@ -101,7 +95,7 @@ function deleteInputFromResponse($input, $response)
     return $response;
 }
 
-function parseResponse($input, $response, $user){
+function parseResponse($input, $response){
     
     // REMOVE PREFIXES.
     while(strpos($response, 'PREFIX') !== false){
@@ -170,9 +164,6 @@ function parseResponse($input, $response, $user){
             $action['parameter'] = $parameters[$channel];
         }
         array_push($actionsJson['actions'], $action);
-        $admin_manager = new AdministrationManager();
-        $admin_manager->runAction($action['channel'], $action['action']);
-        unset($admin_manager);
     }
 
     return $actionsJson;

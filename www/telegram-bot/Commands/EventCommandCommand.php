@@ -13,7 +13,7 @@ class EventCommandCommand extends UserCommand
      * {@inheritdoc}
      */
     protected $name = 'eventCommand';
-    protected $description = 'Send a command as a event';
+    protected $description = 'Send a command as an event';
     protected $usage = '/eventcommand <command>';
     protected $version = '1.0.0';
     /**#@-*/

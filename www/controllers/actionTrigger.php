@@ -1,14 +1,20 @@
 <?php
 
+use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Performer\ChromecastPerformer;
 use Ewetasker\Performer\TelegramPerformer;
 
+include_once('administrationManager.php');
 include_once('../performers/chromecastPerformer.php');
 include_once('../performers/telegramPerformer.php');
 
 $actions = isset($_POST['actions']) ? $_POST['actions'] : [];
 
-foreach ($actions as $action) {    
+foreach ($actions as $action) {
+    $admin_manager = new AdministrationManager();
+    $admin_manager->runAction($action['channel'], $action['action']);
+    $admin_manager->userRuns($_POST['user']);
+    unset($admin_manager); 
     switch ($action['channel']) {
         case 'Telegram':
             $telegram = new TelegramPerformer();
@@ -28,7 +34,7 @@ foreach ($actions as $action) {
             $chromecast = new ChromecastPerformer();
             switch ($action['action']) {
                 case 'PlayVideo':
-                    $chromecast->playVideo();
+                    $chromecast->playVideo($action['parameter']);
                     break;
                 
                 default:

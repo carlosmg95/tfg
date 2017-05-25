@@ -30,7 +30,7 @@ foreach ($action_channels as $channel_title) {
     $info = $channel_manager->getRulesAndPrefix($channel_title);
     $action_rule = $info['actions'][$action_titles[$i]]['rule'];
     if ($actions_parameters[$i] !== []) {
-        $action_rule = preg_replace('/#000#/', $channel_manager->getN($channel_title), $action_rule);
+        $action_rule = preg_replace('/\s/', $channel_manager->getN($channel_title) . ' ', $action_rule, 1);
         foreach ($actions_parameters[$i] as $parameter) {
             $action_rule = preg_replace('/(#+\w+#)/', '"' . $parameter . '"', $action_rule, 1);
         }

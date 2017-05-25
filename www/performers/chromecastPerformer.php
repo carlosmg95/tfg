@@ -14,8 +14,8 @@ class ChromecastPerformer
         return $this->chromecast_perfomer;
     }
 
-    function playVideo()
+    function playVideo($parameter)
     {
-        shell_exec('python ../performers/prueba.py');
+        shell_exec('python ../performers/playVideo.py ' . $parameter);
     }
 }
