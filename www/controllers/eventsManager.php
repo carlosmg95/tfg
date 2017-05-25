@@ -11,9 +11,9 @@ include_once('userManager.php');
 $rule_manager = new RuleManager();
 $user_manager = new UserManager();
 
-$input_event = isset($argv[1]) ? $argv[1]: $_POST['inputEvent'];
+$input_event = $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
-$user = isset($argv[2]) ? $argv[2]: $_POST['user'];
+$user = $_POST['user'];
 
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';

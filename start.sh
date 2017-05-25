@@ -11,8 +11,8 @@ docker build -t carlosmg95/ewetasker .
 
 #Create network and ewemongo
 docker network create ewetaskernet
-docker run -d --name ewemongo -v $PWD/mongodb-data:/data/db --net ewetaskernet mongo
-sleep 3
+#docker run -d --name ewemongo -v $PWD/mongodb-data:/data/db --net ewetaskernet mongo
+#sleep 3
 
 #Config mongo database
 #cat <<EOF | docker run --net ewetaskernet --rm mongo mongo applicationdb --host ewemongo applicationdb

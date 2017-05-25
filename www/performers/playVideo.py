@@ -43,8 +43,14 @@ if not cast.is_idle:
     time.sleep(5)
 
 print('Playing media')
-if 'relax' in sys.argv:
-    cast.play_media(('http://13beef6c.ngrok.io/chromecast/videos/relax.mp4'), 'video/mp4')
+if 'rain' in sys.argv:
+    cast.play_media(('http://res.cloudinary.com/carlosmg95/video/upload/v1495465448/chromecast/videos/rain.mp4'), 'video/mp4')
+elif 'space' in sys.argv:
+    cast.play_media(('http://res.cloudinary.com/carlosmg95/video/upload/v1495464576/chromecast/videos/space.mp4'), 'video/mp4')
+elif 'fire' in sys.argv:
+    cast.play_media(('http://res.cloudinary.com/carlosmg95/video/upload/v1495463544/chromecast/videos/fire.mp4'), 'video/mp4')
+elif 'snow' in sys.argv:
+    cast.play_media(('http://trailers.divx.com/divx_prod/profiles/WiegelesHeliSki_DivXPlus_19Mbps.mkv'), 'video/mkv')
 else:
     cast.play_media(
     ('http://commondatastorage.googleapis.com/gtv-videos-bucket/'

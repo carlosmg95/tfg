@@ -10,6 +10,6 @@ ENV MONGO_HOST "127.0.0.1"
 ENV MONGO_DB "applicationdb"
 ENV MONGO_PORT "27017"
 ENV MONGO_USER "client"
-ENV MONGO_PASS "gsimongodb2015"
+ENV MONGO_PASS "gsimongodb2017"
 
 ADD www /var/www/html/

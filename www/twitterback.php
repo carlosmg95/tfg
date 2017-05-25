@@ -4,7 +4,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use Ewetasker\Manager\UserManager;
 
 require_once('./controllers/userManager.php');
-require('twitteroauth/autoload.php');
+require('vendor/twitteroauth/autoload.php');
 
     
 session_start();
