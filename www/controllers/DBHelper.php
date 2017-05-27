@@ -13,11 +13,11 @@ class DBHelper
 
     function __construct()
     {
-        $dbhost = $_ENV['MONGO_HOST'];
-        $dbname = $_ENV['MONGO_DB'];
-        $port = $_ENV['MONGO_PORT'];
-        $username = $_ENV['MONGO_USER'];
-        $password = $_ENV['MONGO_PASS'];
+        $dbhost = /*'127.0.0.1';//*/$_ENV['MONGO_HOST'];
+        $dbname = /*'applicationdb';//*/$_ENV['MONGO_DB'];
+        $port = /*'27017';//*/$_ENV['MONGO_PORT'];
+        $username = /*'client';//*/$_ENV['MONGO_USER'];
+        $password = /*'gsimongodb2015';//*/$_ENV['MONGO_PASS'];
 
         $this->config = array(
             'username' => $username,
