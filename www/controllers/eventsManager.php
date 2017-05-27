@@ -107,6 +107,8 @@ function parseResponse($input, $response){
         $input = deleteAllBetween('@prefix', '>.', $input);
     }
 
+    $input = str_replace('\'', '"', $input);
+
     // REMOVE COMMENTS.
     while(strpos($input, '#C') !== false){
         $input = deleteAllBetween('#C', 'C#', $input);

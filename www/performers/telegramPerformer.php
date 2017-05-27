@@ -29,14 +29,14 @@ class TelegramPerformer
                 'message_id' => 1439,
                 'from' => array(
                     'id' => $user['chat_id'],
-                    'first_name' => 'Carlos',
-                    'username' => 'carlosmg95',
+                    'first_name' => $user['username'],
+                    'username' => $user['username'],
                     'language_code' => 'en-US'
                 ),
                 'chat' => array(
                     'id' => $user['chat_id'],
-                    'first_name' => 'Carlos',
-                    'username' => 'carlosmg95',
+                    'first_name' => $user['username'],
+                    'username' => $user['username'],
                     'type' => 'private'
                 ),
                 'date' => date('U'),
