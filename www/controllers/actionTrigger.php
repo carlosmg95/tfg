@@ -14,6 +14,14 @@ include_once('../performers/twitterPerformer.php');
 
 $actions = isset($_POST['actions']) ? $_POST['actions'] : [];
 
+if (isset($_POST['channel']) && isset($_POST['action'])) {
+    $action = array();
+    $action['channel'] = $_POST['channel'];
+    $action['action'] = $_POST['action'];
+    $action['parameter'] = isset($_POST['parameter']) ? $_POST['parameter'] : "";
+    array_push($actions, $action);
+}
+
 foreach ($actions as $action) {
     $admin_manager = new AdministrationManager();
     $admin_manager->runAction($action['channel'], $action['action']);
