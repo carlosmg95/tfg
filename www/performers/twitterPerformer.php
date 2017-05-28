@@ -31,7 +31,7 @@ class TwitterPerformer
         // The TwitterOAuth instance
         $connection = new TwitterOAuth('pxMR6sbn6wQPjU406yBqO8zdC', '5LCBELROUBJCn1gFNM3xKd4HTnyIRWdgr9LhLljhbrgYr0gdxA', $user['twitteraccesstoken'], $user['twittersecrettoken']);
 
-        $statues = $connection->post('statuses/update', ['status' => $message]);
+        $statues = $connection->post('statuses/update', ['status' => $message . "\n\n" . date_format(new \DateTime(), 'd-m-Y H:i:s')]);
 
         unset($user_manager);
     }

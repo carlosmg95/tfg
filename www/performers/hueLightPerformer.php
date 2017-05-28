@@ -23,10 +23,13 @@ class HueLightPerformer
         );
         $content = json_encode($data);
 
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_PUT, true);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+            );
         curl_exec($curl);
         curl_close($curl);
     }
@@ -40,10 +43,13 @@ class HueLightPerformer
         );
         $content = json_encode($data);
 
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_PUT, true);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+            );            
         curl_exec($curl);
         curl_close($curl);
     }
@@ -60,9 +66,13 @@ class HueLightPerformer
         $content = json_encode($data);
 
         $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_PUT, true);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+            );
         curl_exec($curl);
         curl_close($curl);
     }
