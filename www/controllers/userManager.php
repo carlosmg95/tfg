@@ -64,6 +64,25 @@ class UserManager
         $this->manager->update('users', 'username', $username, $edited_user);
     }
 
+    public function getEvents($user)
+    {
+        $filter = ['username' => $user];
+        $array_user = $this->manager->find('users', $filter)[0];
+        $events = array();
+        if (isset($array_user->events)) {
+            foreach ($array_user->events as $event) {
+                if ((getdate()[0] - $event->date) < 30) {
+                    preg_match('/ewe-\w+:[a-zA-Z]+/', $event->event, $variable);
+                    preg_match('/ewe-\w+:\w+/', $event->event, $variable1);
+                    $event_aux = preg_replace('/' . $variable1[0] . '/', $variable[0] . $event->date, $event->event);
+                    $event = array('date' => $event->date, 'event' => $event_aux);
+                    array_push($events, $event);
+                }
+            }
+        }
+        return $events;
+    }
+
     public function getImportedRules($title, $title_value)
     {
         $filter = [$title => $title_value];
@@ -204,6 +223,15 @@ class UserManager
         $imported_rules = $this->manager->find('users', $filter, $options)[0]->imported_rules;
 
         return in_array($rule_title, $imported_rules);
+    }
+
+    public function setEvent($input, $user)
+    {
+        $events = $this->getEvents($user);
+        $event = array('date' => getdate()[0], 'event' => $input);
+        array_push($events, $event);
+
+        $this->manager->update('users', 'username', $user, array('events' => $events));
     }
 
     public function setTelegramId($username, $chat_id)

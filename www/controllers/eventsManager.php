@@ -15,6 +15,12 @@ $input_event = $_POST['inputEvent'];
 $input_event = preg_replace("/\.(\s+)/", ".\n", $input_event);
 $user = $_POST['user'];
 
+$user_manager->setEvent($input_event, $user);
+$input_event = '';
+foreach ($user_manager->getEvents($user) as $event) {
+    $input_event .= $event['event'] . PHP_EOL;
+}
+
 $imported_rules = $user_manager->getImportedRules('username', $user);
 $rules = '';
 foreach ($imported_rules as $rule_title) {

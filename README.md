@@ -69,24 +69,3 @@ If you experienced any error following the previous steps, the try to stop/remov
 sh reset.sh
 
 ```
-
-# Telegram Chatbot configuration
-Create a user whose name is "admin"
-
-Visit the url:
-
-```
-
-http://<my-ewetasker-server-path>/telegram-bot/unset.php
-
-```
-
-Visit the url:
-
-```
-
-http://<my-ewetasker-server-path>/telegram-bot/set.php?host=https://<my-ewetasker-server-public-path>
-
-```
-
-my-ewetasker-server-public-path can't be localhost, I recommend to use "ngrok"

@@ -31,7 +31,7 @@ class EventCommandCommand extends UserCommand
         $url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/eventsManager.php';
         $data = array(
             'user' => $user_manager->getUsernameByChatId((string) $chat_id),
-            'inputEvent' => '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>. @prefix ewe-telegram: <http://gsi.dit.upm.es/ontologies/ewe-telegram/ns/#>. @prefix string: <http://www.w3.org/2000/10/swap/string#>. @prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#>. ewe-telegram:Telegram rdf:type ewe-telegram:EventCommand. ewe-telegram:Telegram ewe:eventCommand "' . $text . '".'
+            'inputEvent' => '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>. @prefix ewe-telegram: <http://gsi.dit.upm.es/ontologies/ewe-telegram/ns/#>. @prefix string: <http://www.w3.org/2000/10/swap/string#>. @prefix ewe: <http://gsi.dit.upm.es/ontologies/ewe/ns/#>. ewe-telegram:Telegram rdf:type ewe-telegram:EventCommand. ewe-telegram:Telegram ewe:text "' . $text . '".'
         );
         unset($user_manager);
 
