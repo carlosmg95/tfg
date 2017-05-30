@@ -53,7 +53,7 @@ docker run --net ewetaskernet --rm -v $PWD/mongo-example:/mongo-example  mongo m
 
 Finally, run in port 8080 setting up the *MONGO_HOST* env variable and link with your mongodb docker instance created before.
 ```
-docker run -d --name ewetasker --net ewetaskernet -e MONGO_HOST=ewemongo -p 8080:80 carlosmg95/ewetasker
+docker run -d --name ewetasker -v $PWD/www/img:/var/www/html/img --net ewetaskernet -e MONGO_HOST=ewemongo -p 8080:80 carlosmg95/ewetasker
 
 ```
 Access your own Ewe Tasker server

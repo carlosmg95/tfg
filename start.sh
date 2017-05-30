@@ -23,4 +23,4 @@ docker network create ewetaskernet
 
 #Run carlosmg95/ewetasker localhost:8080
 docker run --net ewetaskernet --rm -v $PWD/mongo-example:/mongo-example  mongo mongorestore --host ewemongo /mongo-example
-docker run -d --name ewetasker --net ewetaskernet -e MONGO_HOST=ewemongo -p 8080:80 carlosmg95/ewetasker
+docker run -d --name ewetasker -v $PWD/www/img:/var/www/html/img --net ewetaskernet -e MONGO_HOST=ewemongo -p 8080:80 carlosmg95/ewetasker
