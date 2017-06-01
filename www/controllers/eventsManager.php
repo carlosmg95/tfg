@@ -36,22 +36,35 @@ $response = evaluateEvent($input_event, $rules);
 
 $responseJSON = parseResponse($input_event, $response);
 
-$url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php';
-$ch = curl_init($url);
-
-$postString = http_build_query($responseJSON, '', '&');
-$postString .= '&user=' . $user;
-
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-curl_exec($ch);
-curl_close($ch);
+$urls = array();
+array_push($urls, 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php');
+array_push($urls, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
 
 echo json_encode($responseJSON);
+
+if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Apache-HttpClient/UNAVAILABLE (Java/0)') {
+    foreach ($responseJSON['actions'] as $key => $action) {
+        if ($action['channel'] === 'Chromecast') {
+            unset($responseJSON['actions'][$key]);
+        }
+    }
+}
+
+foreach ($urls as $url) {
+    $ch = curl_init($url);
+
+    $postString = http_build_query($responseJSON, '', '&');
+    $postString .= '&user=' . $user;
+
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_exec($ch);
+    curl_close($ch);
+}
 
 function deleteAllBetween($beginning, $end, $string)
 {
