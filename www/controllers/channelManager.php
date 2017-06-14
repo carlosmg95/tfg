@@ -87,9 +87,7 @@ class ChannelManager
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    if ($param !== '000') {
-                        array_push($actions_aux[$nActions]['parameters'], $param);
-                    }
+                    array_push($actions_aux[$nActions]['parameters'], $param);
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
@@ -106,8 +104,7 @@ class ChannelManager
             'nicename' => $nicename,
             'image' => $image,
             'events' => $events_aux,
-            'actions' => $actions_aux,
-            'n' => 0
+            'actions' => $actions_aux
         );
 
         $this->manager->insert('channels', $channel);
@@ -173,9 +170,7 @@ class ChannelManager
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    if ($param !== '000') {
-                        array_push($actions_aux[$nActions]['parameters'], $param);
-                    }
+                    array_push($actions_aux[$nActions]['parameters'], $param);
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
@@ -385,14 +380,6 @@ class ChannelManager
             $i++;
         }
         echo $html_str;
-    }
-
-    public function getN($title)
-    {
-        $channel = $this->getChannel($title);
-        $n = $channel['n'];
-        $this->manager->update('channels', 'title', $title, ['n' => ++$n]);
-        return $n;
     }
 
     public function getRulesAndPrefix($title)
