@@ -23,19 +23,24 @@ foreach ($user_manager->getEvents($user) as $event) {
     $input_event .= $event['event'] . PHP_EOL;
 }
 
+$actionsJson = array('success' => 1);
+$actionsJson['actions'] = array();
+
 $imported_rules = $user_manager->getImportedRules('username', $user);
-$rules = '';
 foreach ($imported_rules as $rule_title) {
     $rule = $rule_manager->getRule($rule_title);
-    $rules .= $rule['rule'] . "\n";
+    $placeURL = $rule_manager->getURLPlace($rule['place']);
+
+    $response = evaluateEvent($input_event, $rule['rule']);
+    $responseJSON = parseResponse($input_event, $response, $user, $placeURL);
+    if (!empty($responseJSON['actions'])) {
+        foreach ($responseJSON['actions'] as $actionJson) {
+            array_push($actionsJson['actions'], $actionJson);
+        }
+    }
 }
 
-$rules = isset($_POST['rules']) ? $_POST['rules'] : $rules;
-
-$response = evaluateEvent($input_event, $rules);
-$responseJSON = parseResponse($input_event, $response, $user);
-
-echo json_encode($responseJSON);
+echo json_encode($actionsJson);
 
 function deleteAllBetween($beginning, $end, $string)
 {
@@ -85,7 +90,7 @@ function deleteInputFromResponse($input, $response)
     return $response;
 }
 
-function parseResponse($input, $response, $user)
+function parseResponse($input, $response, $user, $placeURL)
 {
     // REMOVE PREFIXES.
     while(strpos($response, 'PREFIX') !== false){
@@ -161,13 +166,13 @@ function parseResponse($input, $response, $user)
         if (array_key_exists($key_param, $parameters)) {
             foreach ($parameters[$key_param] as $parameter) {
                 $action['parameter'] = $parameter;
-                postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user)
+                postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user, $placeURL);
                 array_push($actionsJson['actions'], $action);
                 $admin_manager->runAction($action['channel'], $action['action']);
                 $admin_manager->userRuns($user);
             }
         } else {
-            postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user)
+            postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user, $placeURL);
             array_push($actionsJson['actions'], $action);
             $admin_manager->runAction($action['channel'], $action['action']);
             $admin_manager->userRuns($user);
@@ -178,7 +183,7 @@ function parseResponse($input, $response, $user)
     return $actionsJson;
 }
 
-function postToActionTrigger($channel, $action, $parameter, $user)
+function postToActionTrigger($channel, $action, $parameter, $user, $placeURL)
 {
     switch ($channel) {
         case 'Telegram':
@@ -192,7 +197,7 @@ function postToActionTrigger($channel, $action, $parameter, $user)
         case 'HueLight':
         case 'apiai':
         case 'RobotMip':
-            $url = 'http://irouter.gsi.dit.upm.es/actionTrigger.php';
+            $url = $placeURL;
             break;
         
         default:

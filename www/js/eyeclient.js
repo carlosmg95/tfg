@@ -88,24 +88,6 @@
   var executeEye = eye.executeEye = function (options) {
     return $.Deferred(function (deferred) {
       $.ajax({
-          // la URL para la petición
-          url : 'controllers/eventsManager.php',
-       
-          // la información a enviar
-          // (también es posible utilizar una cadena de datos)
-          data : {
-              inputEvent : options.data[0],
-              rules : options.data[1],
-              user : options.user
-          },
-       
-          // especifica si será una petición POST o GET
-          type : 'POST',
-       
-          // el tipo de información que se espera de respuesta
-          dataType : 'json',
-      });
-      $.ajax({
           url: options.path,
           traditional: true,
           data: {

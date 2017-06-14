@@ -266,6 +266,22 @@ class RuleManager
         echo $html_str;
     }
 
+    public function getURLPlace($place)
+    {
+        $filter = ['place' => $place];
+        $array_place = $this->manager->find('places', $filter)[0];
+
+        return isset($array_place->url) ? $array_place->url : '';
+    }
+
+    public function newPlace($place, $url)
+    {
+        $filter = ['place' => $place];
+        $cursor = $this->manager->find('places', $filter);
+        if (empty($cursor))
+            $this->manager->insert('places', array('place' => $place, 'url' => $url));
+    }
+
     private function ruleExists($title)
     {
         $filter = ['title' => $title];

@@ -23,6 +23,8 @@ $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
 $events_parameters = isset($_POST['Parameters-events']) ? $_POST['Parameters-events'] : [];
 
+$rule_manager->newPlace($rule_place, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
+
 $i = 0;
 $action_rules = '';
 $action_prefixes = '';
