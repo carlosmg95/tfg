@@ -2,9 +2,11 @@
 
 header('Content-Type: application/json');
 
+use Ewetasker\Manager\AdministrationManager;
 use Ewetasker\Manager\RuleManager;
 use Ewetasker\Manager\UserManager;
 
+include_once('administrationManager.php');
 include_once('ruleManager.php');
 include_once('userManager.php');
 
@@ -31,40 +33,9 @@ foreach ($imported_rules as $rule_title) {
 $rules = isset($_POST['rules']) ? $_POST['rules'] : $rules;
 
 $response = evaluateEvent($input_event, $rules);
-
-//echo $response . PHP_EOL . PHP_EOL . PHP_EOL;
-
-$responseJSON = parseResponse($input_event, $response);
-
-$urls = array();
-//array_push($urls, 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php');
-//array_push($urls, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
+$responseJSON = parseResponse($input_event, $response, $user);
 
 echo json_encode($responseJSON);
-
-if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Apache-HttpClient/UNAVAILABLE (Java/0)') {
-    foreach ($responseJSON['actions'] as $key => $action) {
-        if ($action['channel'] === 'Chromecast') {
-            unset($responseJSON['actions'][$key]);
-        }
-    }
-}
-
-foreach ($urls as $url) {
-    $ch = curl_init($url);
-
-    $postString = http_build_query($responseJSON, '', '&');
-    $postString .= '&user=' . $user;
-
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    curl_exec($ch);
-    curl_close($ch);
-}
 
 function deleteAllBetween($beginning, $end, $string)
 {
@@ -114,7 +85,7 @@ function deleteInputFromResponse($input, $response)
     return $response;
 }
 
-function parseResponse($input, $response)
+function parseResponse($input, $response, $user)
 {
     // REMOVE PREFIXES.
     while(strpos($response, 'PREFIX') !== false){
@@ -186,15 +157,58 @@ function parseResponse($input, $response)
         $key_param = trim(substr($response[2], 0, strlen($response[2]) - 1));;
         $action['action'] = str_replace([':', '.'], '', strstr($response[2], ':'));
         $action['parameter'] = '';
+        $admin_manager = new AdministrationManager();
         if (array_key_exists($key_param, $parameters)) {
             foreach ($parameters[$key_param] as $parameter) {
                 $action['parameter'] = $parameter;
+                postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user)
                 array_push($actionsJson['actions'], $action);
+                $admin_manager->runAction($action['channel'], $action['action']);
+                $admin_manager->userRuns($user);
             }
         } else {
+            postToActionTrigger($action['channel'], $action['action'], $action['parameter'], $user)
             array_push($actionsJson['actions'], $action);
+            $admin_manager->runAction($action['channel'], $action['action']);
+            $admin_manager->userRuns($user);
         }
+        unset($admin_manager);
     }
 
     return $actionsJson;
+}
+
+function postToActionTrigger($channel, $action, $parameter, $user)
+{
+    switch ($channel) {
+        case 'Telegram':
+        case 'Twitter':
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php';
+            break;
+
+        case 'Chromecast':
+            if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Apache-HttpClient/UNAVAILABLE (Java/0)')
+                return;
+        case 'HueLight':
+        case 'apiai':
+        case 'RobotMip':
+            $url = 'http://irouter.gsi.dit.upm.es/actionTrigger.php';
+            break;
+        
+        default:
+            return;
+    }
+
+    $ch = curl_init($url);
+
+    $postString = 'channel=' . $channel . '&action=' . $action . '&parameter=' . $parameter . '&user=' . $user;
+
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_exec($ch);
+    curl_close($ch);
 }
