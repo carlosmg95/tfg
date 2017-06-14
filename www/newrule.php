@@ -301,7 +301,7 @@
                                     fieldset.appendChild(input);
                                 }
                                 parameter = true;
-                                $('#parameter-action-dialog').append(fieldset);
+                                $('#parameter-action-dialog').html(fieldset);
                                 $('#parameter-action-dialog').dialog('open');
                                 break;
                             }
@@ -309,6 +309,7 @@
                     }
                     actions.push(value);
                     if (!parameter) {
+                        parametersActions.push([]);
                         $('.actions').append('<div class="action-box droppable-action new-droppable-action"></div>');
                         $('.new-droppable-action').droppable({
                             accept: '.hasAction',
@@ -365,7 +366,7 @@
                                     fieldset.appendChild(input);
                                 }
                                 parameter = true;
-                                $('#parameter-event-dialog').append(fieldset);
+                                $('#parameter-event-dialog').html(fieldset);
                                 $('#parameter-event-dialog').dialog('open');
                                 break;
                             }
@@ -373,6 +374,7 @@
                     }
                     events.push(value);
                     if (!parameter) {
+                        parametersEvents.push([]);
                         $('.events').append('<div class="event-box droppable-event new-droppable-event"></div>');
                         $('.new-droppable-event').droppable({
                             accept: '.hasEvent',
@@ -469,57 +471,65 @@
             });
 
             submit = function() {
-                let actionChannels = new Array();
-                let eventChannels = new Array();
-                let place;
+                if (
+                    !$('#parameter-action-dialog').is(':hidden') ||
+                    !$('#action-options-dialog').is(':hidden') ||
+                    !$('#event-options-dialog').is(':hidden') ||
+                    !$('#parameter-event-dialog').is(':hidden')) {
+                    alert('Close all dialogs');
+                } else {
+                    let actionChannels = new Array();
+                    let eventChannels = new Array();
+                    let place;
 
-                for (let i in $('.event-box > img')) {
-                    if(!$('.event-box > img')[i].id){
-                        break;
-                    }
-                    eventChannels.push($('.event-box > img')[i].id);
-                }
-                for (let i in $('.action-box > img')) {
-                    if(!$('.action-box > img')[i].id){
-                        break;
-                    }
-                    actionChannels.push($('.action-box > img')[i].id);
-                }
-
-                let placeButton = $('input[name=place]');
-                let newPlace;
-                for (let i in placeButton) {                    
-                    if (placeButton[i].checked) {
-                        if (placeButton[i] === placeButton[placeButton.length - 2]) {
-                            newPlace = prompt('Set sensorID of the place:','');;
-                            place = placeButton[placeButton.length - 1].value;
-                        } else {
-                            newPlace = '';
-                            place = placeButton[i].value;
+                    for (let i in $('.event-box > img')) {
+                        if(!$('.event-box > img')[i].id){
+                            break;
                         }
-                        break;
+                        eventChannels.push($('.event-box > img')[i].id);
                     }
+                    for (let i in $('.action-box > img')) {
+                        if(!$('.action-box > img')[i].id){
+                            break;
+                        }
+                        actionChannels.push($('.action-box > img')[i].id);
+                    }
+
+                    let placeButton = $('input[name=place]');
+                    let newPlace;
+                    for (let i in placeButton) {                    
+                        if (placeButton[i].checked) {
+                            if (placeButton[i] === placeButton[placeButton.length - 2]) {
+                                newPlace = prompt('Set sensorID of the place:','');;
+                                place = placeButton[placeButton.length - 1].value;
+                            } else {
+                                newPlace = '';
+                                place = placeButton[i].value;
+                            }
+                            break;
+                        }
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: './controllers/newRuleController.php',
+                        data: {
+                            'Rule-title' : $('input#title').val(),
+                            'Rule-place' : place,
+                            'New-place' : newPlace,
+                            'Rule-description' : $('input#description').val(),
+                            'Author' : '<?php echo $_SESSION['user'] ?>',
+                            'Event-channels': eventChannels,
+                            'Action-channels': actionChannels,
+                            'Events' : events,
+                            'Actions' : actions,
+                            'Parameters-actions' : parametersActions,
+                            'Parameters-events' : parametersEvents
+                        },
+                        success: function(output){
+                            window.open('./rules.php', '_self');
+                        }
+                    });
                 }
-                $.ajax({
-                    type: 'POST',
-                    url: './controllers/newRuleController.php',
-                    data: {
-                        'Rule-title' : $('input#title').val(),
-                        'Rule-place' : place,
-                        'New-place' : newPlace,
-                        'Rule-description' : $('input#description').val(),
-                        'Author' : '<?php echo $_SESSION['user'] ?>',
-                        'Event-channels': eventChannels,
-                        'Action-channels': actionChannels,
-                        'Events' : events,
-                        'Actions' : actions,
-                        'Parameters-actions' : parametersActions,
-                        'Parameters-events' : parametersEvents
-                    },
-                    success: function(output){
-                        window.open('./rules.php', '_self');
-                    }
-                });
             }
         });
     </script>

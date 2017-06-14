@@ -37,8 +37,8 @@ $response = evaluateEvent($input_event, $rules);
 $responseJSON = parseResponse($input_event, $response);
 
 $urls = array();
-array_push($urls, 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php');
-array_push($urls, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
+//array_push($urls, 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php');
+//array_push($urls, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
 
 echo json_encode($responseJSON);
 
@@ -114,8 +114,8 @@ function deleteInputFromResponse($input, $response)
     return $response;
 }
 
-function parseResponse($input, $response){
-    
+function parseResponse($input, $response)
+{
     // REMOVE PREFIXES.
     while(strpos($response, 'PREFIX') !== false){
         $response = deleteAllBetween('PREFIX', '>', $response);
@@ -166,25 +166,34 @@ function parseResponse($input, $response){
     $parameters = array();
     foreach ($lines_with_parameters as $line) {
         $response = preg_split("/[\s]+/", trim($line));
-        $channel = str_replace(':', '', strstr($response[0], ':'));
+        $key_param = $response[0];
         $parameter = '';
         for ($i = 2; $i < count($response); $i++) { 
             $parameter .= $response[$i] . ' ';  # It is neccesary if the parameter is a string with spaces.
         }
         $parameter = trim($parameter);
         $parameter = str_replace(array('".', '"'), '', strstr($parameter, '"'));
-        $parameters[$channel] = $parameter;
+        if (array_key_exists($key_param, $parameters)) {
+            array_push($parameters[$key_param], $parameter);
+        } else {
+            $parameters[$key_param] = array();
+            array_push($parameters[$key_param], $parameter);
+        }
     }
     foreach ($lines_with_actions as $line) {
         $response = preg_split("/[\s,]+/", trim($line));
-        $channel = str_replace(':', '', strstr($response[0], ':'));
-        $action['channel'] = preg_replace('/\d+$/', '', $channel);
+        $action['channel'] = str_replace(':', '', strstr($response[0], ':'));
+        $key_param = trim(substr($response[2], 0, strlen($response[2]) - 1));;
         $action['action'] = str_replace([':', '.'], '', strstr($response[2], ':'));
         $action['parameter'] = '';
-        if (array_key_exists($channel, $parameters)) {
-            $action['parameter'] = $parameters[$channel];
+        if (array_key_exists($key_param, $parameters)) {
+            foreach ($parameters[$key_param] as $parameter) {
+                $action['parameter'] = $parameter;
+                array_push($actionsJson['actions'], $action);
+            }
+        } else {
+            array_push($actionsJson['actions'], $action);
         }
-        array_push($actionsJson['actions'], $action);
     }
 
     return $actionsJson;
