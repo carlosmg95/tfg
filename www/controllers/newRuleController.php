@@ -15,6 +15,7 @@ $rule_title = htmlspecialchars($_POST['Rule-title']);
 $rule_description = htmlspecialchars($_POST['Rule-description']);
 $rule_place = htmlspecialchars($_POST['Rule-place']);
 $new_place = $_POST['New-place'];
+$url_place = $_POST['URL-place'];
 $author = $_POST['Author'];
 $action_channels = $_POST['Action-channels'];
 $action_titles = $_POST['Actions'];
@@ -23,7 +24,8 @@ $event_channels = $_POST['Event-channels'];
 $event_titles = $_POST['Events'];
 $events_parameters = isset($_POST['Parameters-events']) ? $_POST['Parameters-events'] : [];
 
-$rule_manager->newPlace($rule_place, 'http://irouter.gsi.dit.upm.es/actionTrigger.php');
+if ((bool) $new_place)
+    $rule_manager->newPlace($rule_place, $url_place);
 
 $i = 0;
 $action_rules = '';
@@ -78,7 +80,7 @@ $success = $rule_manager->createNewRule(
     $rule
 );
 
-if ((bool) $new_place) {
+if ((bool) $new_place && $success) {
     $action_channels = ['twitter'];
     $action_titles = ['Post a tweet'];
     $event_channels = ['presence'];

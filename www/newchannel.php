@@ -207,7 +207,7 @@
                     "<div class='row action-fragment'>" +
                         "<div class='col-md-3'><strong>Rule</strong></div>" +
                         "<div class='col-md-9'>" +
-                            "<textarea placeholder='?b :knows ?a' rows='4' name='action-rule" + nAction + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
+                            "<textarea placeholder='ewe-chromecast:Chromecast ewe:providesAction ewe-chromecast:PlayVideo.\newe-chromecast:PlayVideo ov:video #video#.' rows='4' name='action-rule" + nAction + "' required data-validation-required-message='Please enter a rule for the action.' class='form-control'></textarea>" +
                         "</div>" +
                     "</div>  <!-- Rule -->" +
 

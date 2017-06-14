@@ -500,7 +500,8 @@
                     for (let i in placeButton) {                    
                         if (placeButton[i].checked) {
                             if (placeButton[i] === placeButton[placeButton.length - 2]) {
-                                newPlace = prompt('Set sensorID of the place:','');;
+                                newPlace = prompt('Set sensorID of the place:','');
+                                urlPlace = prompt('Set url of the place: (including http://)','');
                                 place = placeButton[placeButton.length - 1].value;
                             } else {
                                 newPlace = '';
@@ -516,6 +517,7 @@
                             'Rule-title' : $('input#title').val(),
                             'Rule-place' : place,
                             'New-place' : newPlace,
+                            'URL-place' : urlPlace,
                             'Rule-description' : $('input#description').val(),
                             'Author' : '<?php echo $_SESSION['user'] ?>',
                             'Event-channels': eventChannels,
