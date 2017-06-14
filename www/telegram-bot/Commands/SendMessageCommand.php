@@ -16,7 +16,7 @@ class SendMessageCommand extends UserCommand
      */
     protected $name = 'sendMessage';
     protected $description = 'Show a message';
-    protected $usage = '/sendmessage';
+    protected $usage = '/sendmessage <message>';
     protected $version = '1.0.0';
     /**#@-*/
 

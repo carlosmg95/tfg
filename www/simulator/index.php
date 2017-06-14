@@ -33,9 +33,9 @@
         <script type="text/javascript">
             const alert = confirm('You have to be logged to access this page.');
             if(alert) {
-                window.open("./user.php", '_self');
+                window.open("../user.php", '_self');
             } else {
-                window.open("./index.php", '_self');
+                window.open("../index.php", '_self');
             }
         </script>
     <?php } ?>

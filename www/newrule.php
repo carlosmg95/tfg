@@ -147,6 +147,8 @@
         <div id="myModal" class="modal">
             <div id="action-options-dialog" class="modal-content"></div>
             <div id="event-options-dialog" class="modal-content"></div>
+            <div id="parameter-action-dialog" class="modal-content"></div>
+            <div id="parameter-event-dialog" class="modal-content"></div>
         </div>
     </div>
 
@@ -264,14 +266,13 @@
                 autoOpen: false,
                 modal: true,
                 width: 500,
-                height: 130,
                 show: {
                     effect: 'puff',
                     duration: 1000
                 },
                 buttons: {
                     'Save': function() {
-                        $(this).dialog( "close" );
+                        $(this).dialog('close');
                     }
                 },
                 hide: {
@@ -279,7 +280,7 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let parameter = [];
+                    let parameter = false;
                     const value = $('select#action').val().replace(/\[Need parameter\]$/, '').trim();
                     if ($('select#action').val().match(/\[Need parameter\]$/)) {
                         for (let i in $('select#action').children()) {
@@ -288,17 +289,129 @@
                                 parameterClass = parameterClass.replace(/<option class=\"/, '');
                                 parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
                                 parameterClass = parameterClass.split(' ');
+                                let fieldset = document.createElement('fieldset');
+                                let legend = document.createElement('legend');
+                                var title = document.createTextNode('Parameters:');
+                                legend.appendChild(title);
+                                fieldset.appendChild(legend);
                                 for (let i in parameterClass) {
-                                    if (parameterClass[i] === '000') {
-                                        continue;
-                                    }
-                                    parameter.push(prompt('Set parameter:', parameterClass[i]));
+                                    let input = document.createElement('input');
+                                    input.setAttribute('class', 'parameters-actions');
+                                    input.setAttribute('placeholder', parameterClass[i]);
+                                    fieldset.appendChild(input);
                                 }
+                                parameter = true;
+                                $('#parameter-action-dialog').append(fieldset);
+                                $('#parameter-action-dialog').dialog('open');
                                 break;
                             }
                         }
                     }
                     actions.push(value);
+                    if (!parameter) {
+                        $('.actions').append('<div class="action-box droppable-action new-droppable-action"></div>');
+                        $('.new-droppable-action').droppable({
+                            accept: '.hasAction',
+                            drop: function(event, ui) {
+                                $('#event-options-dialog').dialog('close');
+                                $(this).append(ui.draggable.prop('outerHTML'));
+                                $(this).droppable({ disabled: true });
+                                let select = actionsFunctions[ui.draggable.prop('id')];
+                                $('#action-options-dialog').html(select);
+                                $('#action-options-dialog').attr('title', 'Actions');
+                                $('#action-options-dialog').dialog('open');
+                            }
+                        });
+                    }
+                }
+            });
+
+            $('#event-options-dialog').dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: 'puff',
+                    duration: 1000
+                },
+                buttons: {
+                    'Save': function() {
+                        $(this).dialog('close');
+                    }
+                },
+                hide: {
+                    effect: 'explode',
+                    duration: 1000
+                },
+                close: function(event, ui) {
+                    let parameter = false;
+                    const value = $('select#event').val().replace(/\[Need parameter\]$/, '').trim();
+                    if ($('select#event').val().match(/\[Need parameter\]$/)) {
+                        for (let i in $('select#event').children()) {
+                            if ($('select#event').children()[i].innerHTML === $('select#event').val()) {
+                                let parameterClass = $('select#event').children()[i].outerHTML;
+                                parameterClass = parameterClass.replace(/<option class=\"/, '');
+                                parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
+                                parameterClass = parameterClass.split(' ');
+                                let fieldset = document.createElement('fieldset');
+                                let legend = document.createElement('legend');
+                                var title = document.createTextNode('Parameters:');
+                                legend.appendChild(title);
+                                fieldset.appendChild(legend);
+                                for (let i in parameterClass) {
+                                    let input = document.createElement('input');
+                                    input.setAttribute('class', 'parameters-events');
+                                    input.setAttribute('placeholder', parameterClass[i]);
+                                    fieldset.appendChild(input);
+                                }
+                                parameter = true;
+                                $('#parameter-event-dialog').append(fieldset);
+                                $('#parameter-event-dialog').dialog('open');
+                                break;
+                            }
+                        }
+                    }
+                    events.push(value);
+                    if (!parameter) {
+                        $('.events').append('<div class="event-box droppable-event new-droppable-event"></div>');
+                        $('.new-droppable-event').droppable({
+                            accept: '.hasEvent',
+                            drop: function(event, ui) {
+                                $('#action-options-dialog').dialog('close');
+                                $(this).append(ui.draggable.prop('outerHTML'));
+                                $(this).droppable({ disabled: true });
+                                let select = eventsFunctions[ui.draggable.prop('id')];
+                                $('#event-options-dialog').html(select);
+                                $('#event-options-dialog').attr('title', 'Events');
+                                $('#event-options-dialog').dialog('open');
+                            }
+                        });
+                    }
+                }
+            });
+
+            $('#parameter-action-dialog').dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                show: {
+                    effect: 'puff',
+                    duration: 1000
+                },
+                buttons: {
+                    'Save': function() {
+                        $(this).dialog('close');
+                    }
+                },
+                hide: {
+                    effect: 'explode',
+                    duration: 1000
+                },
+                close: function(event, ui) {
+                    parameter = [];
+                    for(let i = 0; i < $('.parameters-actions').length; i++) {
+                        parameter.push($('.parameters-actions')[i].value);
+                    }
                     parametersActions.push(parameter);
                     $('.actions').append('<div class="action-box droppable-action new-droppable-action"></div>');
                     $('.new-droppable-action').droppable({
@@ -316,11 +429,10 @@
                 }
             });
 
-            $('#event-options-dialog').dialog({
+            $('#parameter-event-dialog').dialog({
                 autoOpen: false,
                 modal: true,
                 width: 500,
-                height: 130,
                 show: {
                     effect: 'puff',
                     duration: 1000
@@ -335,23 +447,10 @@
                     duration: 1000
                 },
                 close: function(event, ui) {
-                    let parameter = [];
-                    const value = $('select#event').val().replace(/\[Need parameter\]$/, '').trim();
-                    if ($('select#event').val().match(/\[Need parameter\]$/)) {
-                        for (let i in $('select#event').children()) {
-                            if ($('select#event').children()[i].innerHTML === $('select#event').val()) {
-                                let parameterClass = $('select#event').children()[i].outerHTML;
-                                parameterClass = parameterClass.replace(/<option class=\"/, '');
-                                parameterClass = parameterClass.substring(0, parameterClass.indexOf('"'));
-                                parameterClass = parameterClass.split(' ');
-                                for (let i in parameterClass) {
-                                    parameter.push(prompt('Set parameter:', parameterClass[i]));
-                                }
-                                break;
-                            }
-                        }
+                    parameter = [];
+                    for(let i = 0; i < $('.parameters-events').length; i++) {
+                        parameter.push($('.parameters-events')[i].value);
                     }
-                    events.push(value);
                     parametersEvents.push(parameter);
                     $('.events').append('<div class="event-box droppable-event new-droppable-event"></div>');
                     $('.new-droppable-event').droppable({

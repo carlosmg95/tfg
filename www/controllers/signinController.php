@@ -8,7 +8,7 @@ include_once('userManager.php');
 $manager = new UserManager();
 
 $username = strtolower(htmlspecialchars($_POST['username']));
-$password = $_POST['password'];
+$password = hash('sha1', $_POST['password']);
 
 if($manager->login($username, $password)) {
     $_SESSION['user'] = $username;

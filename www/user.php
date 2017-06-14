@@ -255,20 +255,20 @@
     <!-- SHA1 -->
     <script src="js/sha1.js"></script>
     <script>
-        function encode(){
+        /*function encode(){
             let input_pass = $("#password1");
             if(input_pass.val().length !== 0) {
                 input_pass.val(sha1(input_pass.val()));
             }
-        }
+        }*/
 
         function confirmPassword() {
             let input_pass = $('#password2');
             let input_pass_repeated = $('#repeated_password2');
 
             if(input_pass.val().length !== 0 && input_pass_repeated.val().length !== 0) {
-                input_pass.val(sha1(input_pass.val()));
-                input_pass_repeated.val(sha1(input_pass_repeated.val()));
+                //input_pass.val(sha1(input_pass.val()));
+                //input_pass_repeated.val(sha1(input_pass_repeated.val()));
             }
             
             if (input_pass.val() === input_pass_repeated.val()) {

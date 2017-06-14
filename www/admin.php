@@ -86,7 +86,7 @@
         <div class="row">
             <!-- Most-run Actions -->
             <div class="col-md-4 col-xs-12 most-runed-actions administration">
-                <h2 style="text-align: center;">Most-runned Actions:</h2>
+                <h2 style="text-align: center;">Most-run Actions:</h2>
                 <div class="scroll">
                     <?php $admin_manager->getOrderedActionsHTML(); ?>
                 </div>
