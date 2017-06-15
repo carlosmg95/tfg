@@ -225,7 +225,6 @@ class ChannelManager
         $image = $array_channel->image;
         $events = $array_channel->events;
         $actions = $array_channel->actions;
-        $n = $array_channel->n;
 
         $events_aux = array();
         $actions_aux = array();
@@ -255,8 +254,7 @@ class ChannelManager
             'nicename' => $nicename,
             'image' => $image,
             'events' => $events_aux,
-            'actions' => $actions_aux,
-            'n' => $n
+            'actions' => $actions_aux
         );
 
         return $channel;        

@@ -24,6 +24,10 @@
     white-space: pre-wrap;
 }
 
+.btn-user {
+    margin-bottom: 5%;
+}
+
 div.events-test, div.rules-test {
     padding: 1px;
 }
