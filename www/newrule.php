@@ -505,6 +505,7 @@
                                 place = placeButton[placeButton.length - 1].value;
                             } else {
                                 newPlace = '';
+                                urlPlace = '';
                                 place = placeButton[i].value;
                             }
                             break;
