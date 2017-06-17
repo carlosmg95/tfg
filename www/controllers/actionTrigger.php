@@ -24,6 +24,9 @@ foreach ($actions as $action) {
                 case 'SendMessage':
                     $telegram->sendMessage($action['parameter'], $_POST['user']);
                     break;
+                case 'ImportRules':
+                    $telegram->importRules($action['parameter'], $_POST['user']);
+                    break;
                 
                 default:
                     # code...
