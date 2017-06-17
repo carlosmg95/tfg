@@ -71,9 +71,8 @@ class UserManager
         $events = array();
         if (isset($array_user->events)) {
             foreach ($array_user->events as $event) {
-                if ((getdate()[0] - $event->date) < 10) {
-                    preg_match('/ewe-\w+:[a-zA-Z]+/', $event->event, $variable);
-                    preg_match('/ewe-\w+:\w+/', $event->event, $variable1);
+                if ((getdate()[0] - $event->date) < 10) {preg_match('/\w+:[a-zA-Z]+/', $event->event, $variable);
+                    preg_match('/\w+:\w+/', $event->event, $variable1);
                     $event_aux = preg_replace('/' . $variable1[0] . '/', $variable[0] . $event->date, $event->event);
                     $event = array('date' => $event->date, 'event' => $event_aux);
                     array_push($events, $event);

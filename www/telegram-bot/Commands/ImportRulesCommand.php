@@ -18,7 +18,7 @@ class ImportRulesCommand extends UserCommand
      */
     protected $name = 'importRules';
     protected $description = 'Allow to import rules';
-    protected $usage = '/importrules';
+    protected $usage = '/importrules or /importrules <place>';
     protected $version = '1.0.0';
     /**#@-*/
 
@@ -47,7 +47,8 @@ class ImportRulesCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $rules_list = $this->getNoImportedRules($chat_id);
+        $place = trim($message->getText(true));
+        $rules_list = $this->getNoImportedRules($chat_id, $place);
 
         if (empty($rules_list)) {
             $data = [
@@ -58,9 +59,12 @@ class ImportRulesCommand extends UserCommand
             $keyboard = $this->createKeyboard($rules_list, 1, $chat_id);
             $inline_keyboard = new InlineKeyboard(...$keyboard);
 
+            $text = (bool) $place ? 'These rules are the availabe rules of ' . $place : 'Choose a rule';
+            $text .= PHP_EOL . PHP_EOL . '⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇️';
+
             $data = [
                 'chat_id' => $chat_id,
-                'text' => 'Choose a rule' . PHP_EOL . PHP_EOL . '⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇⬇️',
+                'text' => $text,
                 'reply_markup' => $inline_keyboard
             ];
         }
@@ -69,7 +73,7 @@ class ImportRulesCommand extends UserCommand
         return Request::sendMessage($data);
     }
 
-    private function getNoImportedRules($chat_id)
+    private function getNoImportedRules($chat_id, $place)
     {
         include_once('../controllers/ruleManager.php');
         include_once('../controllers/userManager.php');
@@ -82,8 +86,15 @@ class ImportRulesCommand extends UserCommand
         foreach ($rules_list as $rule_title) {
             $rule = $rules_manager->getRule($rule_title);
             $description = $rule['description'];
-            if (!$user_manager->ruleImported($rule_title, $username) && $description !== 'ADMIN RULE') {
-                array_push($no_rules_list, $rule_title);
+            $rule_place = $rule['place'];
+            if ((bool) $place) {
+                if (!$user_manager->ruleImported($rule_title, $username) && $description !== 'ADMIN RULE' && $place === $rule_place) {
+                    array_push($no_rules_list, $rule_title);
+                }
+            } else {
+                if (!$user_manager->ruleImported($rule_title, $username) && $description !== 'ADMIN RULE') {
+                    array_push($no_rules_list, $rule_title);
+                }
             }
         }
 
