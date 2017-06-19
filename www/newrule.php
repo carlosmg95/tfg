@@ -129,7 +129,7 @@
 
             <!-- Arrow -->
             <div class="col-md-1 col-md-offset-1 col-xs-12 rule-fragment">
-                <img class="img img-responsive img-arrow" src="img/arrow.png" />
+                <img class="img img-responsive img-arrow" src="img/arrow.png" style="margin-top: 100px" />
             </div>  <!-- Arrow -->
 
             <!-- Action Box -->
@@ -140,7 +140,9 @@
         </div>  <!-- Boxes -->
 
         <div class="row">
-            <button type="button" onclick="submit()" class="btn btn-success" id="send" style="float: right;">Send</button>
+            <div class="col-md-1 col-md-offset-6">
+                <button type="button" onclick="submit()" class="btn btn-success" id="send">Send</button>
+            </div>
         </div>
 
         <!-- Options dialog -->

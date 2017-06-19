@@ -188,9 +188,6 @@ function postToActionTrigger($channel, $action, $parameter, $user, $placeURL)
     switch ($channel) {
         case 'Telegram':
         case 'Twitter':
-            $url = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/controllers/actionTrigger.php';
-            break;
-
         case 'Chromecast':
             if (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Apache-HttpClient/UNAVAILABLE (Java/0)')
                 return;

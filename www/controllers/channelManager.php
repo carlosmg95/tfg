@@ -87,7 +87,9 @@ class ChannelManager
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    array_push($actions_aux[$nActions]['parameters'], $param);
+                    if (!preg_match('/^C/', $param_aux) && !preg_match('/C#/', $param_aux)) {
+                        array_push($events_aux[$nEvents]['parameters'], $param);
+                    }
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
@@ -144,7 +146,9 @@ class ChannelManager
                 while (strpos($value, '#')) {
                     $param_aux = substr(strstr($value, '#'), 1, strlen(strstr($value, '#')) - 1);
                     $param = strstr($param_aux, '#', true);
-                    array_push($events_aux[$nEvents]['parameters'], $param);
+                    if (!preg_match('/^C/', $param_aux) && !preg_match('/C#/', $param_aux)) {
+                        array_push($events_aux[$nEvents]['parameters'], $param);
+                    }                    
                     $value = substr(strstr($param_aux, '#'), 1, strlen(strstr($param_aux, '#')) - 1);
                 }
                 $nAux++;
